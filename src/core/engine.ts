@@ -3,6 +3,7 @@ import path from "node:path";
 import ts from "typescript";
 import { FileContext } from "./context.ts";
 import { maxTier, tierRank } from "./fix.ts";
+import { DEFAULT_OPTIONS } from "./project.ts";
 import type { Edit, Finding, Rule, Severity, Tier } from "./types.ts";
 
 export interface RuleSetting {
@@ -40,27 +41,6 @@ export interface FileResult {
   output: string;
   findings: Finding[];
   fixesApplied: number;
-}
-
-const DEFAULT_OPTIONS: ts.CompilerOptions = {
-  target: ts.ScriptTarget.ESNext,
-  module: ts.ModuleKind.ESNext,
-  moduleResolution: ts.ModuleResolutionKind.Bundler,
-  jsx: ts.JsxEmit.Preserve,
-  lib: ["lib.esnext.d.ts", "lib.dom.d.ts"],
-  strict: true,
-  skipLibCheck: true,
-};
-
-/** Compiler options and ambient declaration files from the nearest tsconfig.json, if any. */
-export function loadProject(cwd: string, project?: string) {
-  const configPath = project ? path.resolve(cwd, project) : ts.findConfigFile(cwd, ts.sys.fileExists);
-  if (!configPath) return { options: DEFAULT_OPTIONS, ambient: [] as string[], configPath };
-  const { config, error } = ts.readConfigFile(configPath, ts.sys.readFile);
-  if (error) throw new Error(ts.flattenDiagnosticMessageText(error.messageText, "\n"));
-  const parsed = ts.parseJsonConfigFileContent(config, ts.sys, path.dirname(configPath));
-  const ambient = parsed.fileNames.filter((f) => f.endsWith(".d.ts"));
-  return { options: { ...DEFAULT_OPTIONS, ...parsed.options }, ambient, configPath };
 }
 
 /** Lint (and optionally fix) files. `sources` overrides file contents, e.g. for tests or stdin. */

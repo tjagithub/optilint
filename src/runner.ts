@@ -3,8 +3,9 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { type CliLayer, type Config, ConfigError, findConfig, loadConfig } from "./config.ts";
-import { type FileResult, lint, loadProject } from "./core/engine.ts";
+import { type FileResult, lint } from "./core/engine.ts";
 import { TIERS } from "./core/fix.ts";
+import { type Project, ProjectResolver } from "./core/project.ts";
 import { allRules } from "./rules/index.ts";
 import type { Impact, Rule, Tier } from "./core/types.ts";
 import { IMPACTS, validateNames } from "./validate.ts";
@@ -100,13 +101,22 @@ export function run(req: Request): Run {
     if (!files.length) throw new UsageError("no JavaScript or TypeScript files found");
   }
 
-  // A buffer belongs to the tsconfig nearest to it, which in a monorepo is not the root one.
-  const project = loadProject(bufferFile ? path.dirname(bufferFile) : cwd, req.project && path.resolve(cwd, req.project));
+  // Each file belongs to the tsconfig nearest to it (in a monorepo, its package's), so lint per project.
+  const resolver = new ProjectResolver(req.project && path.resolve(cwd, req.project));
+  const byProject = new Map<Project, string[]>();
+  for (const f of files) {
+    const p = resolver.forFile(f);
+    const group = byProject.get(p);
+    if (group) group.push(f);
+    else byProject.set(p, [f]);
+  }
   const errors = new Set<string>();
-  const results = lint(files, {
+  const results = [...byProject].flatMap(([project, group]) => lint(group, {
     rules, fix: req.fix, settings: (f) => config.settingsFor(f), compilerOptions: project.options, extraRoots: project.ambient,
     onRuleError: (rule, file, e) => errors.add(`${rule} crashed on ${path.relative(cwd, file)}: ${(e as Error).message}`),
-  }, sources);
+  }, sources));
+  const order = new Map(files.map((f, i) => [f, i]));
+  results.sort((a, b) => order.get(a.file)! - order.get(b.file)!);
   return { results, rules, config, errors: [...errors], excluded: false };
 }
 

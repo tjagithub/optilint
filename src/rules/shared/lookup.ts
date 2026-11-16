@@ -4,11 +4,14 @@ import {
   repeatingAncestor, unwrap,
 } from "../../core/ast.ts";
 import { fix } from "../../core/fix.ts";
+import { knownSmall } from "../../core/size.ts";
 import type { RuleContext, RuleDef } from "../../core/types.ts";
 
 const K = ts.SyntaxKind;
 const SEARCH = new Set(["includes", "indexOf", "lastIndexOf", "find", "findIndex", "findLast", "findLastIndex", "some"]);
 const STRINGY = new Set(["includes", "indexOf", "lastIndexOf"]);
+// Up to this many elements a linear scan costs about what a Set or Map lookup does.
+const SMALL = 16;
 
 function rootOf(expr: ts.Expression): ts.Expression {
   const e = unwrap(expr);
@@ -52,7 +55,7 @@ export const lookupInLoop: RuleDef = {
     const arr = ctx.isArray(m.object);
     if (arr === "no" || (arr === "maybe" && STRINGY.has(m.name))) return;
     if (!STRINGY.has(m.name) && !isEqualityPredicate(m.args[0])) return;
-    if (ts.isArrayLiteralExpression(unwrap(m.object)) || !invariant(m.object, loop, ctx)) return;
+    if (ts.isArrayLiteralExpression(unwrap(m.object)) || !invariant(m.object, loop, ctx) || knownSmall(m.object, ctx, SMALL)) return;
     const what = STRINGY.has(m.name) ? "a Set" : "a Map keyed by what you match on";
     ctx.report(node, `\`.${m.name}()\` scans the array on every iteration (O(n·m)); build ${what} once outside the loop.`);
   },

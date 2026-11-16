@@ -127,6 +127,15 @@ declare const s: string;
 for (const y of ys) { s.includes("a"); }`;
     expect(rulesHit(code, { rule: "lookup-in-loop" })).toEqual(["lookup-in-loop", "lookup-in-loop"]);
   });
+  test("lookup-in-loop skips arrays known to be small", () => {
+    const code = `declare const ys: number[];
+const FEW = [1, 2, 3];
+const GROWN = [1, 2]; GROWN.push(3);
+declare const pair: [number, number];
+function f(...names: number[]) { for (const y of ys) names.includes(y); }
+for (const y of ys) { FEW.includes(y); pair.includes(y); GROWN.includes(y); }`;
+    expect(run(code, { rule: "lookup-in-loop" }).findings.map((f) => f.line)).toEqual([6]);
+  });
   test("lookup-in-loop skips throw paths and non-equality predicates", () => {
     const code = `${ARR}declare const ys: number[];
 for (const y of ys) { if (y < 0) throw new Error(String(xs.indexOf(y))); }

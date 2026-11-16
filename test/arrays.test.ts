@@ -84,6 +84,7 @@ describe("report-only array rules", () => {
   });
   test("math-minmax-spread", () => {
     expect(rulesHit(`${ARR}Math.max(...xs); Math.max(1, 2);`, { rule: "math-minmax-spread" })).toEqual(["math-minmax-spread"]);
+    expect(rulesHit("const ROUNDS = [3, 5, 8] as const;\nMath.max(...ROUNDS); Math.min(...[1, 2]);", { rule: "math-minmax-spread" })).toEqual([]);
   });
 });
 

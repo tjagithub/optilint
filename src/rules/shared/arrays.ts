@@ -1,6 +1,7 @@
 import ts from "typescript";
 import { asMemberTarget, isBooleanContext, isDense, isFunction, isNumber, methodCall, staticCall, unwrap } from "../../core/ast.ts";
 import { byType, fix } from "../../core/fix.ts";
+import { knownSmall } from "../../core/size.ts";
 import type { RuleContext, RuleDef } from "../../core/types.ts";
 
 const K = ts.SyntaxKind;
@@ -229,7 +230,9 @@ export const minMaxSpread: RuleDef = {
   kinds: [K.CallExpression],
   check(node, ctx) {
     const m = staticCall(node, "Math", "max") ?? staticCall(node, "Math", "min");
-    if (!m || m.args.length !== 1 || !ts.isSpreadElement(m.args[0]!)) return;
+    const spread = m?.args.length === 1 ? m.args[0] : undefined;
+    // A list of known, modest size cannot overflow the stack; arrays built from input can.
+    if (!m || !spread || !ts.isSpreadElement(spread) || knownSmall(spread.expression, ctx, 1000)) return;
     ctx.report(node, `\`Math.${m.name}(...xs)\` passes every element as an argument; use a loop for large arrays.`);
   },
 };

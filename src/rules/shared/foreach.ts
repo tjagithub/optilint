@@ -2,9 +2,9 @@ import ts from "typescript";
 import {
   asMemberTarget, asStatements, boundNames, identifiersIn, isAssignedIn, isFunction, isLoop, isSimpleRef,
   methodCall, unwrap, walk,
-} from "../ast.ts";
-import { byType, fix } from "../fix.ts";
-import type { RuleContext, RuleDef } from "../types.ts";
+} from "../../core/ast.ts";
+import { byType, fix } from "../../core/fix.ts";
+import type { RuleContext, RuleDef } from "../../core/types.ts";
 
 const K = ts.SyntaxKind;
 const ITERATORS = new Set(["entries", "keys", "values", "matchAll"]);

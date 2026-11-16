@@ -1,13 +1,14 @@
-import type { Rule, RuleDef } from "../types.ts";
-import { accumulateRules } from "./accumulate.ts";
-import { arrayRules } from "./arrays.ts";
-import { asyncRules } from "./async.ts";
-import { forEachToFor } from "./foreach.ts";
-import { indexedRules } from "./indexed.ts";
-import { lookupRules } from "./lookup.ts";
-import { miscRules } from "./misc.ts";
-import { objectRules } from "./objects.ts";
-import { stringRules } from "./strings.ts";
+import type { Rule, RuleDef } from "../core/types.ts";
+import { accumulateRules } from "./shared/accumulate.ts";
+import { arrayRules } from "./shared/arrays.ts";
+import { asyncRules } from "./shared/async.ts";
+import { forEachToFor } from "./shared/foreach.ts";
+import { indexedRules } from "./shared/indexed.ts";
+import { lookupRules } from "./shared/lookup.ts";
+import { domInLoop } from "./browser/dom.ts";
+import { argumentsObject, bitwiseTrunc, dateNow, dynamicCode, powToMul } from "./shared/misc.ts";
+import { objectRules } from "./shared/objects.ts";
+import { stringRules } from "./shared/strings.ts";
 
 // Group names share the config namespace with rule names, so none may equal a rule name.
 const GROUPS: Record<string, readonly RuleDef[]> = {
@@ -18,7 +19,7 @@ const GROUPS: Record<string, readonly RuleDef[]> = {
   loops: [forEachToFor, ...indexedRules],
   strings: stringRules,
   objects: objectRules,
-  misc: miscRules,
+  misc: [dateNow, powToMul, bitwiseTrunc, dynamicCode, domInLoop, argumentsObject],
 };
 
 export const allRules: readonly Rule[] = Object.entries(GROUPS).flatMap(([group, rules]) => rules.map((r) => ({ ...r, group })));

@@ -1,4 +1,4 @@
-import { TIERS } from "./fix.ts";
+import { TIERS } from "./core/fix.ts";
 import { allRules, groups } from "./rules/index.ts";
 
 export const TOP_KEYS = ["$schema", "extends", "files", "ignore", "tier", "obscure", "minImpact", "rules", "overrides"];

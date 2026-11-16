@@ -3,7 +3,7 @@ import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { globMatch } from "../src/glob.ts";
+import { globMatch } from "../src/core/glob.ts";
 
 describe("globMatch", () => {
   const cases: [string, string, boolean][] = [

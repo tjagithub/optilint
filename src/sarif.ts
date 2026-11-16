@@ -1,8 +1,8 @@
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import type { FileResult } from "./engine.ts";
+import type { FileResult } from "./core/engine.ts";
 import { TOOL } from "./report.ts";
-import type { Finding, Rule } from "./types.ts";
+import type { Finding, Rule } from "./core/types.ts";
 
 const LEVEL = { error: "error", warn: "warning", info: "note" } as const;
 const IMPACT_LEVEL = { high: "warning", medium: "warning", low: "note" } as const;

@@ -1,0 +1,6 @@
+{
+  // Engine, rule context and shared helpers. Runs on Node 24+ (VS Code's Electron), so no Bun types.
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": { "types": ["node"], "tsBuildInfoFile": "../../.tsbuild/core.tsbuildinfo" },
+  "include": ["*.ts"]
+}

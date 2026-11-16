@@ -2,12 +2,12 @@
 import fs from "node:fs";
 import path from "node:path";
 import readline from "node:readline";
-import type { FileResult } from "./engine.ts";
-import { TIERS } from "./fix.ts";
+import type { FileResult } from "./core/engine.ts";
+import { TIERS } from "./core/fix.ts";
 import { formatExplain, TOOL } from "./report.ts";
 import { allRules, ruleByName } from "./rules/index.ts";
 import { layer, type Request, run, unifiedDiff, UsageError } from "./runner.ts";
-import type { Finding } from "./types.ts";
+import type { Finding } from "./core/types.ts";
 import { IMPACTS, validateNames } from "./validate.ts";
 
 export const PROTOCOL_VERSIONS = ["2025-11-25", "2025-06-18", "2025-03-26", "2024-11-05"];

@@ -1,8 +1,8 @@
 import path from "node:path";
-import type { FileResult } from "./engine.ts";
+import type { FileResult } from "./core/engine.ts";
 import pkg from "../package.json" with { type: "json" };
-import { applies, DEFAULT_SETTINGS, type FileSettings } from "./engine.ts";
-import type { Finding, Impact, Rule, Tier } from "./types.ts";
+import { applies, DEFAULT_SETTINGS, type FileSettings } from "./core/engine.ts";
+import type { Finding, Impact, Rule, Tier } from "./core/types.ts";
 
 export const TOOL = { name: "optilint", version: pkg.version };
 

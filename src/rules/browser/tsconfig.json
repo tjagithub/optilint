@@ -1,0 +1,7 @@
+{
+  // Rules for browser targets. They may import core only.
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": { "tsBuildInfoFile": "../../../.tsbuild/rules-browser.tsbuildinfo" },
+  "include": ["*.ts"],
+  "references": [{ "path": "../../core" }]
+}

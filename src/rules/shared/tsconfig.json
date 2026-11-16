@@ -1,0 +1,7 @@
+{
+  // Rules for every target. They may import core only.
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": { "tsBuildInfoFile": "../../../.tsbuild/rules-shared.tsbuildinfo" },
+  "include": ["*.ts"],
+  "references": [{ "path": "../../core" }]
+}

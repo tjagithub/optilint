@@ -2,9 +2,9 @@ import ts from "typescript";
 import {
   enclosingStatement, insideFunction, isFunction, isNumber, isSimpleRef, isStringLit, methodCall, needsParens,
   repeatingAncestor, unwrap,
-} from "../ast.ts";
-import { fix } from "../fix.ts";
-import type { RuleContext, RuleDef } from "../types.ts";
+} from "../../core/ast.ts";
+import { fix } from "../../core/fix.ts";
+import type { RuleContext, RuleDef } from "../../core/types.ts";
 
 const K = ts.SyntaxKind;
 const SEARCH = new Set(["includes", "indexOf", "lastIndexOf", "find", "findIndex", "findLast", "findLastIndex", "some"]);

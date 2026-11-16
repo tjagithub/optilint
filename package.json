@@ -10,15 +10,16 @@
   "license": "MIT",
   "scripts": {
     "bundle": "bun scripts/bundle.ts",
-    "lint:self": "bun src/cli.ts src",
+    "lint:self": "bun src/cli.ts src --project src/tsconfig.json",
     "schema": "bun src/cli.ts --print-schema config > schema.json && bun src/cli.ts --print-schema output > output.schema.json",
     "test": "bun test",
-    "typecheck": "tsc --noEmit -p ."
+    "typecheck": "tsc -b"
   },
   "dependencies": {
     "typescript": "6.0.3"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/node": "^24"
   }
 }

@@ -3,10 +3,10 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { type CliLayer, type Config, ConfigError, findConfig, loadConfig } from "./config.ts";
-import { type FileResult, lint, loadProject } from "./engine.ts";
-import { TIERS } from "./fix.ts";
+import { type FileResult, lint, loadProject } from "./core/engine.ts";
+import { TIERS } from "./core/fix.ts";
 import { allRules } from "./rules/index.ts";
-import type { Impact, Rule, Tier } from "./types.ts";
+import type { Impact, Rule, Tier } from "./core/types.ts";
 import { IMPACTS, validateNames } from "./validate.ts";
 
 /** A bad request: the CLI exits with 2, the MCP server returns a tool error. */

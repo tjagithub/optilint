@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { applyFixes } from "../src/engine.ts";
-import type { Finding } from "../src/types.ts";
+import { applyFixes } from "../src/core/engine.ts";
+import type { Finding } from "../src/core/types.ts";
 import { rulesHit, run } from "./helpers.ts";
 
 const ARR = "declare const xs: number[];\n";

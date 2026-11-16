@@ -1,0 +1,6 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": { "types": ["bun"], "tsBuildInfoFile": "../.tsbuild/test.tsbuildinfo" },
+  "include": ["*.ts", "../package.json"],
+  "references": [{ "path": "../src" }, { "path": "../src/core" }]
+}

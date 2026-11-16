@@ -2,10 +2,10 @@ import ts from "typescript";
 import {
   asMemberTarget, insideFunction, isBooleanContext, isNumber, isStringLit, methodCall, needsParens,
   repeatingAncestor, unwrap,
-} from "../ast.ts";
-import { hasNestedQuantifier, plainPattern, splitLiteral, toLiteralBody } from "../regex.ts";
-import { byType, fix } from "../fix.ts";
-import type { RuleContext, RuleDef } from "../types.ts";
+} from "../../core/ast.ts";
+import { hasNestedQuantifier, plainPattern, splitLiteral, toLiteralBody } from "../../core/regex.ts";
+import { byType, fix } from "../../core/fix.ts";
+import type { RuleContext, RuleDef } from "../../core/types.ts";
 
 const STRING = "the receiver is a string";
 

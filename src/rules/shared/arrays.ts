@@ -1,7 +1,7 @@
 import ts from "typescript";
-import { asMemberTarget, isBooleanContext, isFunction, isNumber, methodCall, staticCall, unwrap } from "../ast.ts";
-import { byType, fix } from "../fix.ts";
-import type { RuleContext, RuleDef } from "../types.ts";
+import { asMemberTarget, isBooleanContext, isFunction, isNumber, methodCall, staticCall, unwrap } from "../../core/ast.ts";
+import { byType, fix } from "../../core/fix.ts";
+import type { RuleContext, RuleDef } from "../../core/types.ts";
 
 const K = ts.SyntaxKind;
 

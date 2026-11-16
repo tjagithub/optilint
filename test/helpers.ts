@@ -1,6 +1,6 @@
 import type ts from "typescript";
-import { lint } from "../src/engine.ts";
-import type { Tier } from "../src/types.ts";
+import { lint } from "../src/core/engine.ts";
+import type { Tier } from "../src/core/types.ts";
 
 /** The highest tier to apply; obscure fixes are included. */
 type FixMode = Tier | "none";

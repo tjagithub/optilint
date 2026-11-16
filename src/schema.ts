@@ -1,6 +1,6 @@
-import { TIERS } from "./fix.ts";
+import { TIERS } from "./core/fix.ts";
 import { allRules, groups } from "./rules/index.ts";
-import type { Rule } from "./types.ts";
+import type { Rule } from "./core/types.ts";
 import { FLOORS, IMPACTS, LEVELS, PRESETS } from "./validate.ts";
 
 const ref = (name: string) => ({ $ref: `#/$defs/${name}` });

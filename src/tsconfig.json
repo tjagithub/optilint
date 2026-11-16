@@ -1,0 +1,7 @@
+{
+  // CLI, MCP server, config and output, and the rule registry. Node 24+, no Bun types.
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": { "types": ["node"], "tsBuildInfoFile": "../.tsbuild/app.tsbuildinfo" },
+  "include": ["*.ts", "rules/index.ts", "../package.json"],
+  "references": [{ "path": "core" }, { "path": "rules/shared" }, { "path": "rules/browser" }]
+}

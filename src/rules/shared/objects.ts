@@ -1,7 +1,7 @@
 import ts from "typescript";
-import { isBooleanContext, isNumber, isSimpleRef, isStringLit, staticCall, unwrap } from "../ast.ts";
-import { fix } from "../fix.ts";
-import type { RuleDef } from "../types.ts";
+import { isBooleanContext, isNumber, isSimpleRef, isStringLit, staticCall, unwrap } from "../../core/ast.ts";
+import { fix } from "../../core/fix.ts";
+import type { RuleDef } from "../../core/types.ts";
 
 const K = ts.SyntaxKind;
 

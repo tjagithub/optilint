@@ -1,9 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { FileSettings, RuleSetting } from "./engine.ts";
-import { globMatch } from "./glob.ts";
+import type { FileSettings, RuleSetting } from "./core/engine.ts";
+import { globMatch } from "./core/glob.ts";
 import { allRules, groups } from "./rules/index.ts";
-import type { Impact, Severity, Tier } from "./types.ts";
+import type { Impact, Severity, Tier } from "./core/types.ts";
 import { validate } from "./validate.ts";
 
 export type Level = "off" | "on" | Severity;

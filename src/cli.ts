@@ -23,6 +23,8 @@ Selecting:
   --rule a,b         run only these rules or groups
   --disable a,b      turn rules or groups off
   --min-impact LVL   only report high | medium | low (default: low)
+  --max-slowdown PCT skip rules whose fix measured more than PCT slower on some
+                     engine or tier (default: 10%; 0%: never slower; any: no limit)
   --ignore GLOB      skip matching paths (repeatable)
   --config PATH      config file (default: nearest optilint.json or package.json "optilint")
   --project PATH     tsconfig.json to read compiler options from
@@ -79,7 +81,7 @@ function parseOptions() {
     options: {
       fix: { type: "boolean" }, "fix-unsafe": { type: "boolean" }, diff: { type: "boolean" },
       tier: { type: "string" }, obscure: { type: "boolean" },
-      rule: { type: "string" }, disable: { type: "string" }, "min-impact": { type: "string" },
+      rule: { type: "string" }, disable: { type: "string" }, "min-impact": { type: "string" }, "max-slowdown": { type: "string" },
       format: { type: "string" }, project: { type: "string" }, config: { type: "string" },
       "list-rules": { type: "boolean" }, explain: { type: "string" }, "print-schema": { type: "string" },
       help: { type: "boolean", short: "h" }, mcp: { type: "boolean" }, version: { type: "boolean" },
@@ -119,7 +121,7 @@ function main() {
     config: values.config, project: values.project,
     layer: layer({
       only: list(values.rule), disable: list(values.disable), ignore: values.ignore,
-      tier: values["fix-unsafe"] ? "assumed" : values.tier, obscure: values.obscure, minImpact: values["min-impact"],
+      tier: values["fix-unsafe"] ? "assumed" : values.tier, obscure: values.obscure, minImpact: values["min-impact"], maxSlowdown: values["max-slowdown"],
     }),
   }));
   for (const e of errors) console.error(`optilint: internal error: ${e}`);

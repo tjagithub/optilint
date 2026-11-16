@@ -3,6 +3,8 @@ import type { FileResult } from "./core/engine.ts";
 import pkg from "../package.json" with { type: "json" };
 import { applies, DEFAULT_SETTINGS, type FileSettings } from "./core/engine.ts";
 import type { Finding, Impact, Rule, Tier } from "./core/types.ts";
+import { DEFAULT_MAX_SLOWDOWN, offByDefault, percent, worstSlowdown } from "./slowdown.ts";
+import { MEASURED, SPEEDUPS } from "./speedups.ts";
 
 export const TOOL = { name: "optilint", version: pkg.version };
 
@@ -65,14 +67,27 @@ export function formatJson(results: readonly FileResult[], describe?: (rule: str
   return JSON.stringify({ version: 1, tool: TOOL, findings }, null, 2);
 }
 
-export const ruleMeta = ({ kinds: _k, check: _c, ...meta }: Rule) => meta;
+export const ruleMeta = ({ kinds: _k, check: _c, ...meta }: Rule) => ({ ...meta, ...(SPEEDUPS[meta.name] && { speedup: SPEEDUPS[meta.name] }) });
+
+/** "Measured 2026-11-16 (...): V8 0.99–3.51x, JSC 1.25–4.22x. At worst 2% slower ..." */
+function measured(r: Rule) {
+  const s = SPEEDUPS[r.name];
+  if (!s) return "";
+  const range = (e: { worst: number; best: number }) => `${e.worst.toFixed(2)}–${e.best.toFixed(2)}x`;
+  const text = `Measured ${MEASURED.date} (before ÷ after time over every tier): V8 ${range(s.v8)}, JSC ${range(s.jsc)}.`;
+  const slow = worstSlowdown(r.name) ?? 0;
+  if (!slow) return text;
+  const worse = `${text} At worst ${percent(slow)} slower than the original on some tier.`;
+  return offByDefault(r.name) ? `${worse} So it is off by default (maxSlowdown ${DEFAULT_MAX_SLOWDOWN}); set maxSlowdown to ${percent(slow)} or more to run it.` : worse;
+}
 const tiersText = (r: Rule) => (r.tiers.length ? `fix: ${r.tiers.join("/")}${r.obscure ? ", obscure" : ""}` : "");
 
 export function formatRules(rules: readonly Rule[]) {
   const pad = Math.max(...rules.map((r) => r.name.length));
   return rules.map((r) => {
     const fix = r.tiers.length ? c.green(` [${tiersText(r)}]`) : "";
-    const off = r.recommended === false ? c.dim(" (not recommended)") : "";
+    const off = offByDefault(r.name) ? c.dim(` (up to ${percent(worstSlowdown(r.name)!)} slower on some tier: off unless maxSlowdown allows it)`)
+      : r.recommended === false ? c.dim(" (not recommended)") : "";
     return `${c.cyan(r.name.padEnd(pad))}  ${IMPACT_COLOR[r.impact](r.impact.padEnd(6))}  ${r.description}${fix}${off}`;
   }).join("\n");
 }
@@ -87,5 +102,5 @@ export function formatExplain(r: Rule) {
   const fix = r.tiers.length ? `Fixes: ${TIER_TEXT.filter(([t]) => r.tiers.includes(t)).map(([, s]) => s).join("; ")}.` : "No fix; report only.";
   if (r.retired) return `${c.bold(r.name)}  ${c.dim("retired")} · group ${r.group}\n\n${r.description}\n\n${r.why}\n\n${c.dim(`Retired, so it never runs: ${r.retired}`)}`;
   const notes = [r.obscure ? "Its fixes are obscure: --fix applies them only with --obscure." : "", r.recommended === false ? "Not in the recommended preset." : ""];
-  return `${c.bold(r.name)}  ${IMPACT_COLOR[r.impact](r.impact)} impact · group ${r.group}\n\n${r.description}\n\n${r.why}\n\n${c.dim([fix, ...notes].filter(Boolean).join(" "))}`;
+  return `${c.bold(r.name)}  ${IMPACT_COLOR[r.impact](r.impact)} impact · group ${r.group}\n\n${r.description}\n\n${r.why}\n\n${c.dim([fix, ...notes, measured(r)].filter(Boolean).join(" "))}`;
 }

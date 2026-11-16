@@ -38,7 +38,7 @@ describe("cli", () => {
   });
 
   test("stdin with --fix prints the multi-pass result", () => {
-    const r = cli(["--stdin-filename", "buf.js", "--fix"], "const xs = [1];\nxs.map((x) => console.log(x));\n");
+    const r = cli(["--stdin-filename", "buf.js", "--fix", "--max-slowdown", "any"], "const xs = [1];\nxs.map((x) => console.log(x));\n");
     expect(r.code).toBe(0);
     expect(r.out).toContain("for (let i = 0, len = xs.length; i < len; i++) {");
   });
@@ -137,7 +137,7 @@ describe("config", () => {
   test("the recommended preset leaves some rules out; all brings them in", () => {
     const code = "declare const x: number;\nexport const a = Math.floor(x);\n";
     expect(rules(project({ "a.ts": code }))).toEqual([]);
-    expect(rules(project({ "a.ts": code, "optilint.json": '{ "rules": { "preset": "all" } }' }))).toEqual(["a.ts:bitwise-trunc"]);
+    expect(rules(project({ "a.ts": code, "optilint.json": '{ "rules": { "preset": "all" }, "maxSlowdown": "any" }' }))).toEqual(["a.ts:bitwise-trunc"]);
   });
 
   test("invalid config is a usage error naming the path", () => {

@@ -46,6 +46,10 @@ export function configSchema() {
       tier,
       obscure,
       minImpact: enumOf(IMPACTS, "Only report rules with at least this impact. Default: low."),
+      maxSlowdown: {
+        type: "string", pattern: "^(\\d+(\\.\\d+)?%|any)$",
+        description: "Skip rules whose fix measured more than this much slower than the original code on some engine, compiler tier or input size the bench covers. Default \"10%\", to allow for measurement noise; \"0%\" drops every fix that was slower anywhere; \"any\" runs them all. Rules without a measured fix always run.",
+      },
       rules: ref("Rules"),
       overrides: {
         description: "Settings for some files, applied in order after the rest of the config.",

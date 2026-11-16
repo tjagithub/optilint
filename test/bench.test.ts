@@ -21,6 +21,8 @@ const jobs = loaded.flatMap(({ file, cases }) => generate(file, cases, outDir).m
 
 test.each(jobs.map(({ job, c }) => [job.id, job, c] as const))("%s: the fix keeps every result", async (_, job, c) => {
   type Fn = (x: unknown) => unknown;
+  // Load the case as child.ts does, through the job's URL.
+  expect(((await import(job.caseUrl)) as { cases: unknown[] }).cases[job.index]).toBe(c);
   const before = ((await import(job.before)) as { run: Fn }).run;
   const after = ((await import(job.after)) as { run: Fn }).run;
   for (const size of c.sizes) for (const x of c.inputs(size)) expect(after(x)).toEqual(before(x));

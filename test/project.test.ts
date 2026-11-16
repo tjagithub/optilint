@@ -16,7 +16,7 @@ function pkg(dir: string, tsconfig: object) {
 }
 
 const tierOf = (cwd: string, paths: string[], project?: string) => {
-  const { results } = run({ cwd, paths, fix: false, layer: { only: ["foreach-to-for"] }, project });
+  const { results } = run({ cwd, paths, fix: false, layer: { only: ["foreach-to-for"], maxSlowdown: Infinity }, project });
   return results.flatMap((r) => r.findings.map((f) => f.fix?.tier));
 };
 

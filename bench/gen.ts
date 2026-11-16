@@ -13,6 +13,8 @@ export const SKIPPED: Record<string, string> = {
 };
 
 export const CASES_DIR = path.join(import.meta.dirname, "cases");
+/** A result whose rounds differ by more than this factor is unsteady: shown with `?`, left out of `src/speedups.ts`. */
+export const UNSTEADY = 1.2;
 
 export interface Job {
   id: string;
@@ -48,11 +50,11 @@ export function generate(file: string, cases: readonly Case[], outDir: string, p
     // The engine directly, not the runner: retired rules never run there, but they keep their benches.
     const rule = [...allRules, ...retiredRules].find((r) => r.name === c.rule);
     if (!rule) throw new Error(`${id}: no rule named ${c.rule}`);
-    const file = `${base}.ts`;
-    const [result] = lint([file], {
+    const virtual = `${base}.ts`;
+    const [result] = lint([virtual], {
       rules: [rule], fix: true, settings: () => ({ tier: "assumed", obscure: true }),
       onRuleError: (_r, _f, e) => { throw new Error(`${id}: ${(e as Error).message}`); },
-    }, new Map([[file, before]]));
+    }, new Map([[virtual, before]]));
     const after = result?.output ?? before;
     if (after === before) throw new Error(`${id}: optilint made no fix, so the case no longer matches the rule`);
     const emit = (kind: string, text: string) => {

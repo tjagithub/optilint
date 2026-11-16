@@ -26,12 +26,17 @@ const target = {
 };
 const object = (properties: object, required?: string[]) => ({ type: "object", properties, additionalProperties: false, ...(required ? { required } : {}) });
 
+const maxSlowdown = {
+  type: "string", pattern: "^(\\d+(\\.\\d+)?%|any)$",
+  description: "Skip rules whose fix measured more than this much slower on some engine or tier, such as \"10%\"; \"any\" for no limit. Default: the config's (normally 10%).",
+};
+
 export const TOOLS = [
   {
     name: "lint",
     title: "Find performance problems",
     description: "Reports performance findings for files or a code snippet. Each finding names its rule, impact and, when it has a fix, the fix's tier and what an assumed fix assumes.",
-    inputSchema: object({ ...target, minImpact: { type: "string", enum: IMPACTS, description: "Hide findings with less impact. Default: the config's." } }),
+    inputSchema: object({ ...target, minImpact: { type: "string", enum: IMPACTS, description: "Hide findings with less impact. Default: the config's." }, maxSlowdown }),
     annotations: { readOnlyHint: true, openWorldHint: false },
   },
   {
@@ -42,6 +47,7 @@ export const TOOLS = [
       ...target,
       tier: { type: "string", enum: TIERS, description: "The highest tier to apply. Default: the config's (normally typed)." },
       obscure: { type: "boolean", description: "Also apply fixes that are correct but hard to read." },
+      maxSlowdown,
       write: { type: "boolean", description: "Write the fixed files. Default false: return the diff only." },
     }),
     annotations: { readOnlyHint: false, destructiveHint: false, openWorldHint: false },
@@ -61,6 +67,7 @@ interface Args {
   filename?: string;
   rules?: string[];
   minImpact?: string;
+  maxSlowdown?: string;
   tier?: string;
   obscure?: boolean;
   write?: boolean;
@@ -85,7 +92,7 @@ function request(root: string, a: Args, fix: boolean): Request {
   for (const p of a.paths ?? []) inside(root, p);
   const buffer = a.code === undefined ? undefined : { file: inside(root, a.filename ?? "snippet.ts"), text: a.code };
   if (!buffer && a.filename) throw new UsageError("`filename` needs `code`");
-  return { cwd: root, paths: a.paths, buffer, fix, layer: layer({ only: a.rules, tier: a.tier, obscure: a.obscure, minImpact: a.minImpact }) };
+  return { cwd: root, paths: a.paths, buffer, fix, layer: layer({ only: a.rules, tier: a.tier, obscure: a.obscure, minImpact: a.minImpact, maxSlowdown: a.maxSlowdown }) };
 }
 
 const brief = (root: string) => (f: Finding) => ({

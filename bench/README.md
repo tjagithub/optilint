@@ -16,6 +16,17 @@ Lower tiers matter because most flagged code never gets hot enough for TurboFan 
 
 Results and what they mean for each rule: [`FINDINGS.md`](FINDINGS.md).
 
+## Shipping the numbers
+
+optilint's `maxSlowdown` setting reads `src/speedups.ts`, generated from a full run:
+
+```sh
+bun run bench --tiers all --json bench/results/DATE.json > bench/results/DATE.txt
+bun run bench:speedups        # newest bench/results/*.json → src/speedups.ts
+```
+
+Unsteady results (`?`) are left out. A test fails when `src/speedups.ts` does not match the newest results file.
+
 ## Adding a case
 
 Add an entry to the `cases/<group>.ts` file of the rule's config group. `code` must declare `export function run(input)`, `inputs(size)` returns a few variants, and nothing may mutate them. `test/bench.test.ts` fails when a fixable rule has no case (or no reason in `SKIPPED`, `gen.ts`), when a case stops triggering its fix, or when a fix changes a result.

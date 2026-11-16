@@ -1,7 +1,7 @@
 import { TIERS } from "./core/fix.ts";
 import { allRules, groups, retiredByName } from "./rules/index.ts";
+import { parseSlowdown } from "./slowdown.ts";
 
-export const TOP_KEYS = ["$schema", "extends", "files", "ignore", "tier", "obscure", "minImpact", "rules", "overrides"];
 export const LEVELS = ["off", "on", "info", "warn", "error"];
 export const PRESETS = ["recommended", "all", "none"];
 export const IMPACTS = ["low", "medium", "high"];
@@ -92,38 +92,51 @@ function validateRules(e: Errors, at: string, v: unknown) {
   }
 }
 
+/** Checks one value; `at` is its path, for messages. */
+type Check = (e: Errors, at: string, v: unknown) => void;
+
+/** Runs the check of each key of `v`; a key without one is unknown. `prefix` starts each key's path. */
+function checkObject(e: Errors, at: string, v: unknown, checks: Record<string, Check>, prefix = `${at}.`) {
+  if (!isObj(v)) return e.add(at, "expected an object");
+  for (const [k, x] of Object.entries(v)) {
+    const check = checks[k];
+    if (check) check(e, `${prefix}${k}`, x);
+    else e.add(at, `unknown key ${show(k)}${suggest(k, Object.keys(checks))}`);
+  }
+}
+
+const strings: Check = (e, at, v) => void e.strings(at, v);
+const tier: Check = (e, at, v) => void e.oneOf(at, v, TIERS);
+const obscure: Check = (e, at, v) => typeof v === "boolean" || e.add(at, "expected true or false");
+const rules: Check = validateRules;
+const OVERRIDE: Record<string, Check> = { include: strings, tier, obscure, rules };
+
+// One entry per config key: adding a key means adding its check here (and to schema.ts).
+const CONFIG: Record<string, Check> = {
+  $schema: (e, at, v) => typeof v === "string" || e.add(at, "expected a string"),
+  extends: strings,
+  files: (e, at, v) => checkObject(e, at, v, { include: strings, ignore: strings }),
+  ignore: strings,
+  tier,
+  obscure,
+  minImpact: (e, at, v) => void e.oneOf(at, v, IMPACTS),
+  maxSlowdown: (e, at, v) => parseSlowdown(v) !== undefined || e.add(at, `expected a percentage such as "10%", or "any", got ${show(v)}`),
+  rules,
+  overrides: (e, at, v) => {
+    if (!Array.isArray(v)) return e.add(at, "expected an array");
+    v.forEach((o, i) => {
+      if (isObj(o) && !("include" in o)) e.add(`${at}[${i}]`, `missing "include"`);
+      checkObject(e, `${at}[${i}]`, o, OVERRIDE);
+    });
+  },
+};
+export const TOP_KEYS = Object.keys(CONFIG);
+
 /** Problems with a parsed config, as "path: message" lines; empty when it is valid. */
 export function validate(raw: unknown): string[] {
-  const e = new Errors();
   if (!isObj(raw)) return ["config must be a JSON object"];
-  e.keys("config", raw, TOP_KEYS);
-  if ("$schema" in raw && typeof raw.$schema !== "string") e.add("$schema", "expected a string");
-  if ("extends" in raw) e.strings("extends", raw.extends);
-  if ("ignore" in raw) e.strings("ignore", raw.ignore);
-  if ("files" in raw) {
-    if (!isObj(raw.files)) e.add("files", "expected an object");
-    else {
-      e.keys("files", raw.files, ["include", "ignore"]);
-      for (const k of ["include", "ignore"]) if (k in raw.files) e.strings(`files.${k}`, raw.files[k]);
-    }
-  }
-  if ("tier" in raw) e.oneOf("tier", raw.tier, TIERS);
-  if ("obscure" in raw && typeof raw.obscure !== "boolean") e.add("obscure", "expected true or false");
-  if ("minImpact" in raw) e.oneOf("minImpact", raw.minImpact, IMPACTS);
-  if ("rules" in raw) validateRules(e, "rules", raw.rules);
-  if ("overrides" in raw) {
-    if (!Array.isArray(raw.overrides)) e.add("overrides", "expected an array");
-    else raw.overrides.forEach((o, i) => {
-      const at = `overrides[${i}]`;
-      if (!isObj(o)) return e.add(at, "expected an object");
-      e.keys(at, o, ["include", "tier", "obscure", "rules"]);
-      if (!("include" in o)) e.add(at, `missing "include"`);
-      else e.strings(`${at}.include`, o.include);
-      if ("tier" in o) e.oneOf(`${at}.tier`, o.tier, TIERS);
-      if ("obscure" in o && typeof o.obscure !== "boolean") e.add(`${at}.obscure`, "expected true or false");
-      if ("rules" in o) validateRules(e, `${at}.rules`, o.rules);
-    });
-  }
+  const e = new Errors();
+  checkObject(e, "config", raw, CONFIG, "");
   return e.list;
 }
 

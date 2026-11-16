@@ -8,6 +8,7 @@ import { TIERS } from "./core/fix.ts";
 import { type Project, ProjectResolver } from "./core/project.ts";
 import { allRules } from "./rules/index.ts";
 import type { Impact, Rule, Tier } from "./core/types.ts";
+import { allowed, parseSlowdown } from "./slowdown.ts";
 import { IMPACTS, validateNames } from "./validate.ts";
 
 /** A bad request: the CLI exits with 2, the MCP server returns a tool error. */
@@ -39,6 +40,8 @@ export interface LayerInput {
   tier?: string;
   obscure?: boolean;
   minImpact?: string;
+  /** "10%" or "any". */
+  maxSlowdown?: string;
 }
 
 /** Checks the command-line (or tool-call) settings that sit on top of the config. */
@@ -51,9 +54,13 @@ export function layer(input: LayerInput): CliLayer {
     throw new UsageError(`invalid --tier: ${input.tier} (exact | typed | assumed)`);
   }
   if (input.minImpact !== undefined && !IMPACTS.includes(input.minImpact)) throw new UsageError(`invalid --min-impact: ${input.minImpact}`);
+  const maxSlowdown = input.maxSlowdown === undefined ? undefined : parseSlowdown(input.maxSlowdown);
+  if (input.maxSlowdown !== undefined && maxSlowdown === undefined) {
+    throw new UsageError(`invalid --max-slowdown: ${input.maxSlowdown} (a percentage such as 10%, or any)`);
+  }
   return {
     only, disable, ignore: input.ignore, tier: input.tier as Tier | undefined,
-    obscure: input.obscure, minImpact: input.minImpact as Impact | undefined,
+    obscure: input.obscure, minImpact: input.minImpact as Impact | undefined, maxSlowdown,
   };
 }
 
@@ -87,7 +94,8 @@ export function run(req: Request): Run {
     if (e instanceof ConfigError) throw new UsageError(e.message);
     throw e;
   }
-  const rules = allRules.filter((r) => IMPACT_RANK[r.impact] >= IMPACT_RANK[config.minImpact]);
+  // A fix measured slower somewhere than maxSlowdown allows takes its rule out; unmeasured rules stay.
+  const rules = allRules.filter((r) => IMPACT_RANK[r.impact] >= IMPACT_RANK[config.minImpact] && allowed(r.name, config.maxSlowdown));
 
   const files: string[] = [];
   const sources = new Map<string, string>();

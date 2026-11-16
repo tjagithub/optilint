@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { parseArgs } from "node:util";
-import { generate, type Job, loadCases } from "./gen.ts";
+import { generate, type Job, loadCases, UNSTEADY } from "./gen.ts";
 import { selectTiers } from "./tiers.ts";
 
 const { values, positionals } = parseArgs({
@@ -26,7 +26,6 @@ if (values.show) for (const j of jobs) console.log(`── ${j.id}\n${j.source.b
 const child = path.join(import.meta.dirname, "child.ts");
 const ratios = new Map<string, Map<string, string>>(); // "id @size" → tier → ratio
 interface Measured { size: number; before: number; after: number; spread: number }
-const UNSTEADY = 1.2;
 const raw: ({ tier: string; id: string } & Measured)[] = [];
 const took: { what: string; ms: number }[] = [];
 const started = performance.now();
@@ -37,11 +36,12 @@ for (const tier of tiers) {
     const r = spawnSync(tier.cmd, [...(tier.args ?? []), child, manifest, String(i), values.time, values.rounds], { env: { ...process.env, ...tier.env }, encoding: "utf8" });
     took.push({ what: `${job.id} on ${tier.id}`, ms: performance.now() - t0 });
     process.stderr.write(".");
+    // An error is a bug (a crash, or a fix that changed a result), so stop instead of timing the rest.
     if (r.status !== 0) {
       const why = r.stderr.trim().split("\n").findLast((l) => /Error/.test(l)) ?? `exit ${r.status}`;
-      for (const size of job.sizes) cell(`${job.id} @${size}`, tier.id, "error");
       console.error(`\n${tier.id} ${job.id}: ${why}`);
-      continue;
+      fs.rmSync(outDir, { recursive: true, force: true });
+      process.exit(1);
     }
     for (const m of JSON.parse(r.stdout) as Measured[]) {
       raw.push({ tier: tier.id, id: job.id, ...m });
@@ -56,6 +56,9 @@ function cell(row: string, tier: string, text: string) {
   ratios.get(row)!.set(tier, text);
 }
 
+const version = (cmd: string) => spawnSync(cmd, ["--version"], { encoding: "utf8" }).stdout.trim();
+const meta = { date: new Date().toISOString().slice(0, 10), node: version("node"), bun: version("bun"), cpu: os.cpus()[0]?.model, timeMs: Number(values.time), rounds: Number(values.rounds) };
+console.log(`# ${meta.date} · ${meta.cpu} · Node ${meta.node} · Bun ${meta.bun} · ${meta.timeMs} ms, ${meta.rounds} rounds\n`);
 const width = Math.max(...[...ratios.keys()].map((k) => k.length));
 const cols = tiers.map((t) => Math.max(t.id.length, 8));
 console.log(["case".padEnd(width), ...tiers.map((t, i) => t.id.padStart(cols[i]!))].join("  "));
@@ -65,8 +68,6 @@ const slowest = took.sort((a, b) => b.ms - a.ms).slice(0, 3).map((t) => `${t.wha
 console.error(`took ${((performance.now() - started) / 1000).toFixed(0)}s; slowest: ${slowest.join(", ")}`);
 
 if (values.json) {
-  const version = (cmd: string) => spawnSync(cmd, ["--version"], { encoding: "utf8" }).stdout.trim();
-  const meta = { date: new Date().toISOString(), node: version("node"), bun: version("bun"), cpu: os.cpus()[0]?.model, timeMs: Number(values.time), rounds: Number(values.rounds) };
   fs.mkdirSync(path.dirname(path.resolve(values.json)), { recursive: true });
   fs.writeFileSync(values.json, JSON.stringify({ ...meta, results: raw }, null, 2) + "\n");
 }

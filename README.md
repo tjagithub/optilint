@@ -18,7 +18,7 @@ optilint --explain spread-in-accumulator
 
 `bun run bundle [outdir]` builds a copy that runs on plain Node (`node dist/optilint.mjs`), with TypeScript and its lib files beside it. The VS Code extension ships this build.
 
-Other flags: `--rule a,b` and `--disable a,b` (rules or groups), `--obscure`, `--min-impact high|medium|low`, `--format pretty|json|sarif`, `--config PATH`, `--project tsconfig.json`, `--ignore GLOB` (repeatable). `--fix-unsafe` is short for `--fix --tier assumed`. Exit code is 1 when findings remain (findings set to `info` do not count), 2 on usage errors.
+Other flags: `--rule a,b` and `--disable a,b` (rules or groups), `--obscure`, `--min-impact high|medium|low`, `--max-slowdown 10%`, `--format pretty|json|sarif`, `--config PATH`, `--project tsconfig.json`, `--ignore GLOB` (repeatable). `--fix-unsafe` is short for `--fix --tier assumed`. Exit code is 1 when findings remain (findings set to `info` do not count), 2 on usage errors.
 
 ## Fix tiers
 
@@ -48,6 +48,7 @@ optilint uses the nearest `optilint.json` (or an `"optilint"` key in `package.js
   "tier": "typed",
   "obscure": false,
   "minImpact": "low",
+  "maxSlowdown": "10%",
   "rules": {
     "preset": "recommended",
     "async": "warn",
@@ -61,6 +62,7 @@ optilint uses the nearest `optilint.json` (or an `"optilint"` key in `package.js
 - `rules` applies its `preset` (`recommended`, `all` or `none`), then groups, then single rules, so the most specific setting wins. A level is `off`, `on`, `info`, `warn` or `error`; the last three also set the finding's `severity`.
 - A rule's `tier` can only raise its fixes (from `typed` to `assumed`, say), or drop them with `"none"`. It cannot make an `assumed` fix count as `typed`.
 - The recommended preset leaves out `for-of-to-indexed`, `bitwise-trunc` and `large-object-literal`.
+- `maxSlowdown` (default `"10%"`) drops rules whose fix was measured more than that much slower than the original code on some engine, compiler tier or input size (`bench/`). The 10% allows for measurement noise. `"0%"` drops every fix that was slower anywhere, and `"any"` runs them all. Rules without a measured fix (report-only ones) always run. `--explain <rule>` shows its measured range.
 - Globs are relative to the file that declares them; a folder name also covers what is inside it. `extends` paths are relative too, and later files win.
 - Unknown keys, rules and groups are errors with a suggestion. `schema.json` (from `--print-schema config`) gives editors completion and hover docs.
 

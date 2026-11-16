@@ -62,6 +62,22 @@ describe("cli", () => {
     expect(r.err).toContain('did you mean "filter-first"?');
   });
 
+  test("unknown or incomplete flags are a usage error, not a stack trace", () => {
+    for (const [args, message] of [[["--nope"], "Unknown option '--nope'"], [["--tier"], "argument missing"]] as const) {
+      const r = cli([...args]);
+      expect(r.code).toBe(2);
+      expect(r.err).toContain(message);
+      expect(r.err).toContain("--help");
+      expect(r.err).not.toContain("    at ");
+    }
+  });
+
+  test("--version prints the package version", () => {
+    const { version } = JSON.parse(fs.readFileSync(path.join(import.meta.dir, "..", "package.json"), "utf8"));
+    const r = cli(["--version"]);
+    expect(r).toMatchObject({ code: 0, out: `optilint ${version}\n` });
+  });
+
   test("the committed schema.json matches the rules", () => {
     const committed = JSON.parse(fs.readFileSync(path.join(import.meta.dir, "..", "schema.json"), "utf8"));
     expect(committed).toEqual(configSchema());

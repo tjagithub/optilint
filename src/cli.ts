@@ -34,6 +34,7 @@ Output:
   --explain RULE     explain a rule
   --print-schema K   print the JSON Schema of the config or the json output
   --mcp              run as an MCP server on stdio (tools: lint, fix, rules)
+  --version          print the version
   -h, --help         show this help
 
 Tiers: exact = same behaviour for every input; typed = for every input the types
@@ -61,7 +62,18 @@ const describe = (rule: string) => ruleByName.get(rule)?.description;
 const list = (value?: string) => (value ? value.split(",").map((s) => s.trim()).filter(Boolean) : []);
 const json = (value: unknown) => console.log(JSON.stringify(value, null, 2));
 
+// parseArgs throws TypeError (code ERR_PARSE_ARGS_*) with a long hint; keep its first sentence.
 function parse() {
+  try {
+    return parseOptions();
+  } catch (e) {
+    const code = (e as { code?: string }).code;
+    if (!code?.startsWith("ERR_PARSE_ARGS_")) throw e;
+    throw new UsageError(`${(e as Error).message.split(". ")[0]!.replace(/\.$/, "")}; see --help`);
+  }
+}
+
+function parseOptions() {
   return parseArgs({
     allowPositionals: true,
     options: {
@@ -70,17 +82,18 @@ function parse() {
       rule: { type: "string" }, disable: { type: "string" }, "min-impact": { type: "string" },
       format: { type: "string" }, project: { type: "string" }, config: { type: "string" },
       "list-rules": { type: "boolean" }, explain: { type: "string" }, "print-schema": { type: "string" },
-      help: { type: "boolean", short: "h" }, mcp: { type: "boolean" },
+      help: { type: "boolean", short: "h" }, mcp: { type: "boolean" }, version: { type: "boolean" },
       "stdin-filename": { type: "string" }, ignore: { type: "string", multiple: true },
     },
   });
 }
 
 function main() {
-  const { values, positionals } = parse();
+  const { values, positionals } = guard(parse);
   const format = values.format ?? "pretty";
   if (!["pretty", "json", "sarif"].includes(format)) fail(`invalid --format: ${format}`);
   if (values.help) return console.log(HELP);
+  if (values.version) return console.log(`${TOOL.name} ${TOOL.version}`);
   if (values.mcp) return serve(process.cwd());
   if (values["print-schema"]) {
     const kind = values["print-schema"];

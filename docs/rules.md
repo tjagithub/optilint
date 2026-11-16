@@ -1,0 +1,41 @@
+# Rules
+
+| Area | Rules |
+|---|---|
+| Complexity (O(n²)) | `spread-in-accumulator`, `accumulate-by-copy-in-loop`, `lookup-in-loop`, `quadratic-array-mutation`, `sort-for-extremum` |
+| Async | `await-in-loop`, `sequential-await` |
+| Allocation | `filter-first`, `filter-length-to-some`, `map-flat-to-flatmap`, `unused-map`, `redundant-array-copy`, `chained-array-methods`, `array-literal-lookup`, `object-entries-iteration`, `object-keys-emptiness`, `date-now` |
+| Loops | `foreach-to-for`, `for-of-to-indexed`, `for-in-array`, `cache-array-length` |
+| Strings and regex | `split-join-to-replaceall`, `regex-to-string-method`, `match-to-test`, `indexof-to-startswith`, `regexp-constructor-literal`, `catastrophic-regex` |
+| Engine | `object-assign-to-spread`, `delete-property`, `large-object-literal` (JSON.parse trick), `math-pow-to-mul`, `bitwise-trunc`, `math-minmax-spread`, `arguments-object`, `dynamic-code`, `dom-in-loop` |
+
+`optilint --list-rules` shows each rule's impact and fix tiers. `optilint --explain <rule>` says why it is faster, and what it measured.
+
+## Fixes
+
+- Most rules give `typed` when the checker proves the receiver's type, and `assumed` when it is `any` or `unknown`. A union with one non-matching member (`Set<T> | T[]`) counts as "not an array", and the rule stays quiet.
+- `typed` takes arrays to be dense: a holey array (`[1, , 3]`, `new Array(n)`) can behave differently in loops.
+- A fix can also be **obscure**: correct for its tier but hard to read. `--fix` skips those unless you pass `--obscure`.
+- Fixes are applied in up to 10 passes, so they compose: `xs.map(f);` → `xs.forEach(f)` → an indexed loop.
+
+## Measured, not guessed
+
+Every fix is benchmarked before and after on Node (V8) and Bun (JavaScriptCore), at each of their compiler tiers, from the interpreter up to the top optimizing compiler. A rule whose fix measured more than `maxSlowdown` (default 10%) slower anywhere does not run by default ([configuration](configuration.md)).
+
+Retired rules never run at all, because their fix was slower nearly everywhere: `array-from-map` and `object-entries-pair` (`[k, v]` from `Object.entries`). They are kept so a later run on newer engines can bring them back; `--explain` gives the reason.
+
+## Left out on purpose
+
+Some well-known "tricks" no longer pay off in modern engines, so there are no rules for them:
+
+- `+=` string building in loops (engines use ropes, and `join` is usually slower).
+- try/catch in hot functions (optimizing compilers handle it).
+- `structuredClone` over `JSON.parse(JSON.stringify())` (it is often slower).
+- `x << 1` instead of `x * 2` (the JIT already does this).
+
+## Limitations
+
+- Impact labels are rules of thumb. Measure hot paths with a benchmark before and after.
+- `replaceAll` and `flatMap` fixes are skipped when the project's `lib` lacks them.
+- `sequential-await` and `array-literal-lookup` (Set form) rewrite whole statements, so comments between the rewritten statements are dropped.
+- The type checker sees the files you lint plus the `.d.ts` files from your tsconfig. Unresolved imports become `any`, which turns fixes `assumed`.

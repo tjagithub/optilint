@@ -68,7 +68,7 @@ export const forEachToFor: RuleDef = {
   impact: "medium",
   tiers: ["typed", "assumed"],
   description: "`xs.forEach(x => ...)` → indexed `for` loop",
-  why: "An indexed loop has no per-element function call, so nothing has to be inlined. It is fastest in every engine tier, especially for large or polymorphic arrays. (Unlike forEach, it visits holes in sparse arrays.)",
+  why: "An indexed loop has no per-element function call, so nothing has to be inlined. It is fastest in every engine tier, especially for large or polymorphic arrays. Holes in sparse arrays are skipped, as forEach does.",
   kinds: [K.ExpressionStatement],
   check(node, ctx) {
     const stmt = node as ts.ExpressionStatement;
@@ -94,15 +94,19 @@ export const forEachToFor: RuleDef = {
     }
     const i = idx ? (idx.name as ts.Identifier).text : ctx.uniqueName("i", stmt);
     const len = ctx.uniqueName("len", stmt);
-    let decl = "";
+    // forEach skips holes; the `in` test runs only when the read gives undefined, so dense arrays pay one compare.
+    let decl = `\n${indent}  if (!(${i} in ${arr})) continue;`;
     if (elem) {
       const kind = isAssignedIn(fn.body, boundNames(elem.name)) ? "let" : "const";
       const type = elem.type ? `: ${ctx.text(elem.type)}` : "";
       const bang = ctx.isTS && ctx.options.noUncheckedIndexedAccess ? "!" : "";
-      decl = `\n${indent}  ${kind} ${ctx.text(elem.name)}${type} = ${arr}[${i}]${bang};`;
+      const read = `\n${indent}  ${kind} ${ctx.text(elem.name)}${type} = ${arr}[${i}]${bang};`;
+      decl = ts.isIdentifier(elem.name)
+        ? `${read}\n${indent}  if (${elem.name.text} === undefined && !(${i} in ${arr})) continue;`
+        : `${decl}${read}`;
     }
     const loop = `${pre}for (let ${i} = 0, ${len} = ${arr}.length; ${i} < ${len}; ${i}++) {${decl}${bodyText(fn, plan, ctx, indent)}}`;
     ctx.report(m.call, "`.forEach()` calls a function per element; an indexed `for` loop avoids the call.",
-      fix(tier, [ctx.replace(stmt, hoist ? asStatements(stmt, loop, indent) : loop)], "the receiver is an array without holes"));
+      fix(tier, [ctx.replace(stmt, hoist ? asStatements(stmt, loop, indent) : loop)], "the receiver is an array"));
   },
 };

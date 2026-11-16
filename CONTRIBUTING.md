@@ -34,7 +34,7 @@ optilint --version   # same as `bun src/cli.ts --version`
 ## Adding a rule
 
 - Declare `kinds` and `tiers`, and report with `ctx.report(node, message, fix(tier, edits, assumes))` from `src/core/fix.ts`.
-- Pick the tier honestly: `exact` is identical for every input, `typed` for every input the types allow, `assumed` needs its `assumes` text to hold. `byType(ctx.isArray(...))` gives `typed` for "yes" and `assumed` for "maybe". Mark hard-to-read fixes `obscure`.
+- Pick the tier honestly: `exact` is identical for every input, `typed` for every input the types allow, `assumed` needs its `assumes` text to hold. Holes are allowed by every array type, so a `typed` fix must not change which elements are visited (`isDense` in `src/core/ast.ts`); `test/bench.test.ts` runs every fix on arrays with holes. `byType(ctx.isArray(...))` gives `typed` for "yes" and `assumed` for "maybe". Mark hard-to-read fixes `obscure`.
 - Every fix needs a test in `test/`, a runnable case in `test/semantics.test.ts` when it rewrites JS semantics, and a bench case in `bench/cases/` (`test/bench.test.ts` checks this).
 - Keep files under 300 lines.
 

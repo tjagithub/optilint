@@ -4,9 +4,18 @@ import { fixed, rulesHit, run } from "./helpers.ts";
 const ARR = "declare const xs: number[];\n";
 
 describe("filter-first", () => {
-  test("fixes on proven arrays", () => {
-    expect(fixed(`${ARR}const a = xs.filter((x) => x > 1)[0];`, "filter-first"))
-      .toBe(`${ARR}const a = xs.find((x) => x > 1);`);
+  test("typed on arrays that provably have no holes", () => {
+    for (const recv of ["[1, 2, 3]", "Object.values(o)", "Array.from(xs)", "xs.filter(Boolean)", "s.split(\",\")"]) {
+      const code = `${ARR}declare const o: Record<string, number>; declare const s: string;\nconst a = ${recv}.filter((x) => x > 1)[0];`;
+      expect(fixed(code, "filter-first")).toContain(`const a = ${recv}.find((x) => x > 1);`);
+    }
+  });
+  test("assumed on other arrays: find, unlike filter, visits holes", () => {
+    for (const code of [`${ARR}const a = xs.filter((x) => x > 1)[0];`, `${ARR}const a = [1, , 3].filter((x) => x > 1)[0];`]) {
+      const f = run(code, { rule: "filter-first" }).findings[0]?.fix;
+      expect(f).toMatchObject({ tier: "assumed", assumes: "the receiver is an array without holes" });
+      expect(fixed(code, "filter-first", "assumed")).toContain(".find((x) => x > 1)");
+    }
   });
   test("unsafe fix when the type is unknown", () => {
     const code = "function f(xs) { return xs.filter(Boolean)[0]; }";
@@ -52,7 +61,12 @@ describe("array method rewrites", () => {
       .toBe("const a = Array.from(new Set([1]), (x) => x * 2);");
   });
   test("redundant-array-copy", () => {
-    expect(fixed(`${ARR}[...xs].map((x) => x);`, "redundant-array-copy")).toBe(`${ARR}xs.map((x) => x);`);
+    // map skips holes, which the spread copy turned into undefined; find visits them either way.
+    expect(fixed(`${ARR}[...xs].map((x) => x);`, "redundant-array-copy")).toBe(`${ARR}[...xs].map((x) => x);`);
+    expect(run(`${ARR}[...xs].map((x) => x);`, { rule: "redundant-array-copy" }).findings[0]?.fix).toMatchObject({ tier: "assumed", assumes: "the array has no holes" });
+    expect(fixed(`${ARR}[...xs].map((x) => x);`, "redundant-array-copy", "assumed")).toBe(`${ARR}xs.map((x) => x);`);
+    expect(fixed(`${ARR}[...xs].find((x) => x);`, "redundant-array-copy")).toBe(`${ARR}xs.find((x) => x);`);
+    expect(fixed(`${ARR}[...xs.filter(Boolean)].map((x) => x);`, "redundant-array-copy")).toBe(`${ARR}xs.filter(Boolean).map((x) => x);`);
     expect(fixed(`${ARR}xs.slice().filter(Boolean);`, "redundant-array-copy")).toBe(`${ARR}xs.filter(Boolean);`);
     expect(rulesHit(`${ARR}[...xs].sort();`, { rule: "redundant-array-copy" })).toEqual([]);
     expect(rulesHit("declare const s: Set<number>;\n[...s].map((x) => x);", { rule: "redundant-array-copy" })).toEqual([]);

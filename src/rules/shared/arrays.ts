@@ -1,5 +1,5 @@
 import ts from "typescript";
-import { asMemberTarget, isBooleanContext, isFunction, isNumber, methodCall, staticCall, unwrap } from "../../core/ast.ts";
+import { asMemberTarget, isBooleanContext, isDense, isFunction, isNumber, methodCall, staticCall, unwrap } from "../../core/ast.ts";
 import { byType, fix } from "../../core/fix.ts";
 import type { RuleContext, RuleDef } from "../../core/types.ts";
 
@@ -25,9 +25,12 @@ export const filterFirst: RuleDef = {
     const n = node as ts.ElementAccessExpression;
     const m = methodCall(n.expression, "filter");
     if (!m || !isNumber(n.argumentExpression, 0) || n.questionDotToken) return;
-    const tier = byType(ctx.isArray(m.object));
-    if (!tier) return;
-    ctx.report(n, "`.filter(...)[0]` scans the whole array; use `.find(...)`.", fix(tier, [rewriteMethod(ctx, n, m.object, "find", m.args)], ARRAY));
+    const type = byType(ctx.isArray(m.object));
+    if (!type) return;
+    // filter skips holes but find does not, so `typed` needs an array that provably has none.
+    const tier = type === "typed" && isDense(m.object) ? "typed" : "assumed";
+    ctx.report(n, "`.filter(...)[0]` scans the whole array; use `.find(...)`.",
+      fix(tier, [rewriteMethod(ctx, n, m.object, "find", m.args)], `${ARRAY} without holes`));
   },
 };
 
@@ -134,6 +137,10 @@ const NON_MUTATING = new Set([
   "slice", "toSorted", "toReversed", "toSpliced", "with", "entries", "keys", "values",
 ]);
 
+const SKIPS_HOLES = new Set([
+  "map", "filter", "forEach", "reduce", "reduceRight", "some", "every", "indexOf", "lastIndexOf", "flatMap", "flat", "concat", "slice",
+]);
+
 /** `[...xs]` or `xs.slice()` → `xs` */
 function copiedArray(expr: ts.Expression) {
   const e = unwrap(expr);
@@ -160,9 +167,12 @@ export const redundantCopy: RuleDef = {
     const cb = m.args[0];
     // A callback that is not written inline may read its third argument, which would now be the original.
     const known = !cb || (isFunction(cb) && cb.parameters.length < 3) || (ts.isIdentifier(cb) && ONE_ARG.has(cb.text));
-    const tier = known ? "typed" : "assumed";
+    // `[...xs]` turns holes into undefined; methods that skip holes would then see fewer elements.
+    const holes = ts.isArrayLiteralExpression(unwrap(m.object)) && SKIPS_HOLES.has(m.name) && !isDense(source);
+    const tier = known && !holes ? "typed" : "assumed";
+    const assumes = [!known && "the callback does not use its third (array) argument", holes && "the array has no holes"].filter(Boolean).join("; ");
     ctx.report(m.object, `The array is copied before \`.${m.name}()\`, which does not mutate it.`,
-      fix(tier, [ctx.replace(m.object, asMemberTarget(source, ctx.text(source)))], "the callback does not use its third (array) argument"));
+      fix(tier, [ctx.replace(m.object, asMemberTarget(source, ctx.text(source)))], assumes || undefined));
   },
 };
 

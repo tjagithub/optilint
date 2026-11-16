@@ -22,13 +22,13 @@ describe("disable directives", () => {
 describe("multi-pass fixing", () => {
   test("unused map → forEach → indexed loop", () => {
     const r = run(`${ARR}xs.map((x) => console.log(x));`, { fix: "typed" });
-    expect(r.output).toBe(`${ARR}for (let i = 0, len = xs.length; i < len; i++) {\n  const x = xs[i];\n  console.log(x);\n}`);
+    expect(r.output).toBe(`${ARR}for (let i = 0, len = xs.length; i < len; i++) {\n  const x = xs[i];\n  if (x === undefined && !(i in xs)) continue;\n  console.log(x);\n}`);
     expect(r.fixesApplied).toBe(2);
     expect(r.findings).toEqual([]);
   });
   test("nested fixes inside a converted loop are applied on a later pass", () => {
-    const r = run(`${ARR}xs.forEach((x) => { if (xs.filter((y) => y > x)[0]) console.log(new Date().getTime()); });`, { fix: "typed" });
-    expect(r.output).toContain("xs.find((y) => y > x)");
+    const r = run(`${ARR}xs.forEach((x) => { if (Array.from(xs).filter((y) => y > x)[0]) console.log(new Date().getTime()); });`, { fix: "typed" });
+    expect(r.output).toContain("Array.from(xs).find((y) => y > x)");
     expect(r.output).toContain("Date.now()");
     expect(r.output).toContain("for (let i = 0, len = xs.length;");
   });

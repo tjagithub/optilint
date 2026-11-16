@@ -32,6 +32,17 @@ export function unwrap(expr: ts.Expression): ts.Expression {
   return expr;
 }
 
+// Methods whose result never has holes, whatever the receiver had.
+const DENSE_METHODS = new Set(["filter", "flat", "flatMap", "split", "toSorted", "toReversed", "toSpliced", "with"]);
+const DENSE_STATICS: [string, string][] = [["Object", "keys"], ["Object", "values"], ["Object", "entries"], ["Array", "from"], ["Array", "of"]];
+
+/** An expression that provably builds an array without holes: holes are legal in every array type. */
+export function isDense(expr: ts.Expression): boolean {
+  const e = unwrap(expr);
+  if (ts.isArrayLiteralExpression(e)) return !e.elements.some(ts.isOmittedExpression);
+  return !!methodCall(e, DENSE_METHODS) || DENSE_STATICS.some(([g, name]) => staticCall(e, g, name));
+}
+
 export function isFunction(node: ts.Node): node is ts.ArrowFunction | ts.FunctionExpression {
   return ts.isArrowFunction(node) || ts.isFunctionExpression(node);
 }

@@ -24,7 +24,7 @@ Every fix has a tier:
 | Tier | Same behaviour… | Example |
 |---|---|---|
 | `exact` | for every input | `new Date().getTime()` → `Date.now()` |
-| `typed` | for every input the types allow | `xs.filter(f)[0]` → `xs.find(f)` when `xs: T[]` |
+| `typed` | for every input the types allow | `xs.filter(f).length > 0` → `xs.some(f)` when `xs: T[]` |
 | `assumed` | only if the fix's stated assumption holds | `Promise.all` for sequential awaits |
 
 `--fix` applies `exact` and `typed`; add `--tier assumed` for the rest. `optilint --help` lists every flag.

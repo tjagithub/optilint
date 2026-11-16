@@ -11,18 +11,19 @@ describe("foreach-to-for", () => {
 });`;
     expect(fixed(code, "foreach-to-for")).toBe(`${ARR}for (let i = 0, len = xs.length; i < len; i++) {
   const x = xs[i];
+  if (x === undefined && !(i in xs)) continue;
   if (x < 0) continue;
   console.log(x, i);
 }`);
   });
   test("expression body", () => {
     expect(fixed(`${ARR}xs.forEach((x) => console.log(x));`, "foreach-to-for"))
-      .toBe(`${ARR}for (let i = 0, len = xs.length; i < len; i++) {\n  const x = xs[i];\n  console.log(x);\n}`);
+      .toBe(`${ARR}for (let i = 0, len = xs.length; i < len; i++) {\n  const x = xs[i];\n  if (x === undefined && !(i in xs)) continue;\n  console.log(x);\n}`);
   });
   test("receiver shadowed by the parameter is hoisted", () => {
     const code = "declare const x: { items: number[] };\nx.items.forEach((x) => console.log(x));";
     expect(fixed(code, "foreach-to-for")).toBe(
-      "declare const x: { items: number[] };\nconst arr = x.items;\nfor (let i = 0, len = arr.length; i < len; i++) {\n  const x = arr[i];\n  console.log(x);\n}",
+      "declare const x: { items: number[] };\nconst arr = x.items;\nfor (let i = 0, len = arr.length; i < len; i++) {\n  const x = arr[i];\n  if (x === undefined && !(i in arr)) continue;\n  console.log(x);\n}",
     );
   });
   test("hoisting under a braceless if wraps in a block", () => {
@@ -30,6 +31,11 @@ describe("foreach-to-for", () => {
     const out = fixed(code, "foreach-to-for");
     expect(out).toContain("if (c) {\n  const arr = get();\n  for (let i = 0, len = arr.length; i < len; i++) {");
     expect(out.trimEnd().endsWith("}\n}")).toBe(true);
+  });
+  test("a destructured element, or none, is guarded with `in` before the read", () => {
+    const out = fixed("declare const ps: [number, number][];\nps.forEach(([a, b]) => console.log(a, b));", "foreach-to-for");
+    expect(out).toContain("  if (!(i in ps)) continue;\n  const [a, b] = ps[i];");
+    expect(fixed(`${ARR}xs.forEach((_, i) => console.log(i));`, "foreach-to-for")).toContain("const _ = xs[i];\n  if (_ === undefined && !(i in xs)) continue;");
   });
   test("reassigned element uses let; noUncheckedIndexedAccess adds !", () => {
     const out = fixed(`${ARR}xs.forEach((x: number) => { x++; });`, "foreach-to-for", "typed", {

@@ -284,7 +284,7 @@
               "properties": {
                 "foreach-to-for": {
                   "$ref": "#/$defs/RuleValue",
-                  "markdownDescription": "`xs.forEach(x => ...)` → indexed `for` loop\n\nAn indexed loop has no per-element function call, so nothing has to be inlined. It is fastest in every engine tier, especially for large or polymorphic arrays. (Unlike forEach, it visits holes in sparse arrays.)\n\nmedium impact. Fixes: typed or assumed."
+                  "markdownDescription": "`xs.forEach(x => ...)` → indexed `for` loop\n\nAn indexed loop has no per-element function call, so nothing has to be inlined. It is fastest in every engine tier, especially for large or polymorphic arrays. Holes in sparse arrays are skipped, as forEach does.\n\nmedium impact. Fixes: typed or assumed."
                 },
                 "for-of-to-indexed": {
                   "$ref": "#/$defs/RuleValue",
@@ -475,7 +475,7 @@
         },
         "foreach-to-for": {
           "$ref": "#/$defs/RuleValue",
-          "markdownDescription": "`xs.forEach(x => ...)` → indexed `for` loop\n\nAn indexed loop has no per-element function call, so nothing has to be inlined. It is fastest in every engine tier, especially for large or polymorphic arrays. (Unlike forEach, it visits holes in sparse arrays.)\n\nmedium impact. Fixes: typed or assumed."
+          "markdownDescription": "`xs.forEach(x => ...)` → indexed `for` loop\n\nAn indexed loop has no per-element function call, so nothing has to be inlined. It is fastest in every engine tier, especially for large or polymorphic arrays. Holes in sparse arrays are skipped, as forEach does.\n\nmedium impact. Fixes: typed or assumed."
         },
         "for-of-to-indexed": {
           "$ref": "#/$defs/RuleValue",

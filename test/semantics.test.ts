@@ -7,6 +7,12 @@ const PROGRAMS: Record<string, string> = {
     const xs = [3, -1, 4, -1, 5]; const out = [];
     xs.forEach((x, i) => { if (x < 0) return; switch (x) { case 4: return; default: out.push(x * i); } });
     return out;`,
+  "foreach skips holes but not explicit undefined": `
+    const xs = [1, , 3, undefined]; const out = [];
+    xs.forEach((x, i) => { out.push([i, x]); });
+    const ys = new Array(3); ys[1] = "b"; const seen = [];
+    ys.forEach(([c]) => { seen.push(c); });
+    return [out, seen];`,
   "for-of with closures": `
     const xs = [1, 2, 3]; const fns = [];
     for (const x of xs) fns.push(() => x);

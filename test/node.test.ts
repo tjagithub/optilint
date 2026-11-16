@@ -40,11 +40,11 @@ describe.skipIf(!node)("bundle on Node", () => {
     const r = spawnSync(node!, [path.join(out, "optilint.mjs"), "--format=json", "--stdin-filename=a.ts"], {
       cwd: out,
       encoding: "utf8",
-      input: "const xs: number[] = [1];\nexport const y = xs.filter((x) => x > 0)[0];\n",
+      input: "const xs: number[] = [1];\nexport const y = xs.filter((x) => x > 0).length > 0;\n",
     });
     expect(r.stderr).toBe("");
     const { findings } = JSON.parse(r.stdout);
-    expect(findings.map((f: { rule: string; fix: { tier: string } }) => `${f.rule}:${f.fix.tier}`)).toEqual(["filter-first:typed"]);
+    expect(findings.map((f: { rule: string; fix: { tier: string } }) => `${f.rule}:${f.fix.tier}`)).toEqual(["filter-length-to-some:typed"]);
   });
 
   test("carries the skill", () => {

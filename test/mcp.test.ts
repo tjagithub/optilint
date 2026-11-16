@@ -5,10 +5,10 @@ import path from "node:path";
 
 const CLI = path.join(import.meta.dir, "..", "src", "cli.ts");
 const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "optilint-mcp-")));
-fs.writeFileSync(path.join(root, "a.ts"), "const xs: number[] = [1];\nexport const y = xs.filter((x) => x > 0)[0];\n");
+fs.writeFileSync(path.join(root, "a.ts"), "const xs: number[] = [1];\nexport const y = xs.filter((x) => x > 0).length > 0;\n");
 fs.mkdirSync(path.join(root, "lib"));
 fs.writeFileSync(path.join(root, "lib", "b.ts"), "export const list: number[] = [];\n");
-fs.writeFileSync(path.join(root, "uses.ts"), `import { list } from "./lib/b";\nexport const z = list.filter((x) => x)[0];\n`);
+fs.writeFileSync(path.join(root, "uses.ts"), `import { list } from "./lib/b";\nexport const z = list.filter((x) => x).length > 0;\n`);
 
 const proc = Bun.spawn(["bun", CLI, "--mcp"], { cwd: root, stdin: "pipe", stdout: "pipe", stderr: "inherit" });
 const waiting = new Map<number, (m: Message) => void>();
@@ -84,29 +84,29 @@ describe("protocol", () => {
 
 describe("tools", () => {
   test("lint a snippet", async () => {
-    const { findings } = (await tool("lint", { code: "export const f = (xs: number[]) => xs.filter(Boolean)[0];" })).json();
-    expect(findings).toEqual([expect.objectContaining({ file: "snippet.ts", rule: "filter-first", fix: { tier: "typed" } })]);
+    const { findings } = (await tool("lint", { code: "export const f = (xs: number[]) => xs.filter(Boolean).length > 0;" })).json();
+    expect(findings).toEqual([expect.objectContaining({ file: "snippet.ts", rule: "filter-length-to-some", fix: { tier: "typed" } })]);
   });
 
   test("lint files, with paths relative to the root", async () => {
     const { findings } = (await tool("lint", { paths: ["a.ts"] })).json();
-    expect(findings.map((f: { file: string; rule: string }) => `${f.file}:${f.rule}`)).toEqual(["a.ts:filter-first"]);
+    expect(findings.map((f: { file: string; rule: string }) => `${f.file}:${f.rule}`)).toEqual(["a.ts:filter-length-to-some"]);
   });
 
   test("fix a snippet returns the text", async () => {
-    const out = (await tool("fix", { code: "export const f = (xs: number[]) => xs.filter(Boolean)[0];" })).json();
-    expect(out.code).toBe("export const f = (xs: number[]) => xs.find(Boolean);");
+    const out = (await tool("fix", { code: "export const f = (xs: number[]) => xs.filter(Boolean).length > 0;" })).json();
+    expect(out.code).toBe("export const f = (xs: number[]) => xs.some(Boolean);");
     expect(out.applied).toBe(1);
   });
 
   test("fix files previews a diff, and writes only when asked", async () => {
     const preview = (await tool("fix", { paths: ["a.ts"] })).json();
     expect(preview.written).toBe(false);
-    expect(preview.diff).toContain("+export const y = xs.find((x) => x > 0);");
+    expect(preview.diff).toContain("+export const y = xs.some((x) => x > 0);");
     expect(fs.readFileSync(path.join(root, "a.ts"), "utf8")).toContain(".filter(");
     const done = (await tool("fix", { paths: ["a.ts"], write: true })).json();
     expect(done.files).toEqual(["a.ts"]);
-    expect(fs.readFileSync(path.join(root, "a.ts"), "utf8")).toContain(".find(");
+    expect(fs.readFileSync(path.join(root, "a.ts"), "utf8")).toContain(".some(");
   });
 
   test("sees an imported file change between calls", async () => {

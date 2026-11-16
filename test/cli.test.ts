@@ -5,7 +5,7 @@ import path from "node:path";
 import { configSchema } from "../src/schema.ts";
 
 const CLI = path.join(import.meta.dir, "..", "src", "cli.ts");
-const CODE = "const xs = [1, 2, 3];\nconst a = xs.filter((x) => x > 1)[0];\nconst t = new Date().getTime();\n";
+const CODE = "const xs = [1, 2, 3];\nconst a = Array.from(xs).filter((x) => x > 1)[0];\nconst t = new Date().getTime();\n";
 
 function cli(args: string[], stdin?: string, cwd = os.tmpdir()) {
   const r = Bun.spawnSync(["bun", CLI, ...args], { cwd, stdin: stdin === undefined ? "ignore" : Buffer.from(stdin) });
@@ -31,9 +31,9 @@ describe("cli", () => {
     expect(out).toMatchObject({ version: 1, tool: { name: "optilint" } });
     expect(out.findings.map((f: { rule: string }) => f.rule)).toEqual(["filter-first", "date-now"]);
     const [first, second] = out.findings;
-    expect(first).toMatchObject({ group: "arrays", line: 2, col: 11, endLine: 2, endCol: 37, description: expect.stringContaining("find") });
-    expect(first.fix).toMatchObject({ tier: "typed", edits: [{ text: "xs.find((x) => x > 1)" }] });
-    expect(CODE.slice(first.fix.edits[0].start, first.fix.edits[0].end)).toBe("xs.filter((x) => x > 1)[0]");
+    expect(first).toMatchObject({ group: "arrays", line: 2, col: 11, endLine: 2, endCol: 49, description: expect.stringContaining("find") });
+    expect(first.fix).toMatchObject({ tier: "typed", edits: [{ text: "Array.from(xs).find((x) => x > 1)" }] });
+    expect(CODE.slice(first.fix.edits[0].start, first.fix.edits[0].end)).toBe("Array.from(xs).filter((x) => x > 1)[0]");
     expect(second.fix.tier).toBe("exact");
   });
 
@@ -93,7 +93,7 @@ describe("cli", () => {
     expect(result.locations[0].physicalLocation).toMatchObject({
       artifactLocation: { uri: "src/a.ts", uriBaseId: "%SRCROOT%" }, region: { startLine: 2, startColumn: 11 },
     });
-    expect(result.fixes[0].artifactChanges[0].replacements[0].insertedContent.text).toBe("xs.find((x) => x > 1)");
+    expect(result.fixes[0].artifactChanges[0].replacements[0].insertedContent.text).toBe("Array.from(xs).find((x) => x > 1)");
   });
 });
 

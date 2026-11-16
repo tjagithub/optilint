@@ -14,7 +14,7 @@
 ## Fixes
 
 - Most rules give `typed` when the checker proves the receiver's type, and `assumed` when it is `any` or `unknown`. A union with one non-matching member (`Set<T> | T[]`) counts as "not an array", and the rule stays quiet.
-- `typed` takes arrays to be dense: a holey array (`[1, , 3]`, `new Array(n)`) can behave differently in loops.
+- Any array type can have holes (`[1, , 3]`, `new Array(n)`, `delete xs[i]`). A `typed` fix may take element values to match their type, as TypeScript does, but never changes which elements are visited. `forEach` → `for` keeps skipping holes, and `filter(f)[0]` → `find(f)` is `typed` only when the array provably has none (a literal without gaps, or the result of `filter`, `split`, `Array.from` or `Object.values`); otherwise it is `assumed`.
 - A fix can also be **obscure**: correct for its tier but hard to read. `--fix` skips those unless you pass `--obscure`.
 - Fixes are applied in up to 10 passes, so they compose: `xs.map(f);` → `xs.forEach(f)` → an indexed loop.
 

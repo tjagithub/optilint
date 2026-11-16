@@ -1,6 +1,6 @@
 {
   "name": "optilint",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "A linter that finds and fixes JavaScript/TypeScript performance problems",
   "type": "module",
   "private": true,

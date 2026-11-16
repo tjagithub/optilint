@@ -46,6 +46,9 @@ const PROGRAMS: Record<string, string> = {
     function small(k) { return ["a", "b", "c"].includes(k); }
     function big(k) { return ["a", "b", "c", "d", "e", "f", "g"].includes(k); }
     return [kinds.map(small), kinds.map(big), Math.pow(n, 2) + 1, n ** 2 / 3];`,
+  "typed array views read at once": `
+    const ta = new Uint8Array([104, 105, 33, 0, 7]);
+    return [ta.slice(1, 3).indexOf(105), ta.slice(-2).includes(7), Math.max(...ta.slice(2)), String.fromCharCode(...ta.slice(0, 2))];`,
   "cached length loop": `
     const xs = [1, 2, 3, 4]; let s = 0;
     for (let i = 0; i < xs.length; i++) s += xs[i] * 2;

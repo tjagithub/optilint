@@ -1,6 +1,13 @@
-import { type Case, items, SIZES, sets, words } from "../case.ts";
+import { type Case, items, numbers, SIZES, sets, words } from "../case.ts";
+
+const bytes = (size: number) => numbers(size).map((xs) => Uint8Array.from(xs, (x) => x & 0xff));
 
 export const cases: Case[] = [
+  {
+    // A search over the second half: the copy is what the fix saves.
+    rule: "typed-array-subarray", sizes: SIZES, inputs: bytes,
+    code: `export function run(xs: Uint8Array) { return xs.slice(xs.length >> 1).indexOf(255); }`,
+  },
   {
     rule: "array-literal-lookup", sizes: SIZES, inputs: words,
     code: `export function run(xs: string[]) {

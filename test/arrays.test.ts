@@ -88,6 +88,24 @@ describe("report-only array rules", () => {
   });
 });
 
+describe("typed-array-subarray", () => {
+  const TA = "declare const ta: Uint8Array; declare const d: TextDecoder;\n";
+  const tier = (code: string) => run(`${TA}${code}`, { rule: "typed-array-subarray" }).findings.map((f) => f.fix?.tier);
+  test("typed when the copy is read at once", () => {
+    expect(fixed(`${TA}const i = ta.slice(1, 4).indexOf(0);`, "typed-array-subarray")).toBe(`${TA}const i = ta.subarray(1, 4).indexOf(0);`);
+    expect(tier("d.decode(ta.slice(2)); Math.max(...ta.slice(1)); (ta.slice(1)).includes(3);")).toEqual(["typed", "typed", "typed"]);
+  });
+  test("assumed when the copy is kept or user code runs while it is read", () => {
+    expect(tier("const c = ta.slice(); ta.slice(1).indexOf(f()); ta.slice().forEach(() => {});\ndeclare function f(): number;"))
+      .toEqual(["assumed", "assumed", "assumed"]);
+    expect(fixed(`${TA}const c = ta.slice();`, "typed-array-subarray")).toBe(`${TA}const c = ta.slice();`);
+  });
+  test("ignores plain arrays, Buffer-like and unknown receivers", () => {
+    const code = "declare const xs: number[]; declare const u: any;\nxs.slice(1).indexOf(2); u.slice(1).indexOf(2);";
+    expect(rulesHit(code, { rule: "typed-array-subarray" })).toEqual([]);
+  });
+});
+
 describe("spread-in-accumulator", () => {
   test("object spread with a computed key", () => {
     const code = `${ARR}const m = xs.reduce((acc, x) => ({ ...acc, [x]: true }), {} as Record<number, boolean>);`;

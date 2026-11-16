@@ -9,13 +9,14 @@ import { domInLoop } from "./browser/dom.ts";
 import { argumentsObject, bitwiseTrunc, dateNow, dynamicCode, powToMul } from "./shared/misc.ts";
 import { objectRules } from "./shared/objects.ts";
 import { stringRules } from "./shared/strings.ts";
+import { typedArraySubarray } from "./shared/typed.ts";
 
 // Group names share the config namespace with rule names, so none may equal a rule name.
 const GROUPS: Record<string, readonly RuleDef[]> = {
   accumulate: accumulateRules,
   lookup: lookupRules,
   async: asyncRules,
-  arrays: arrayRules,
+  arrays: [...arrayRules, typedArraySubarray],
   loops: [forEachToFor, ...indexedRules],
   strings: stringRules,
   objects: objectRules,

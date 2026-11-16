@@ -228,7 +228,7 @@
           ]
         },
         "arrays": {
-          "description": "The arrays group: filter-first, filter-length-to-some, map-flat-to-flatmap, unused-map, redundant-array-copy, chained-array-methods, sort-for-extremum, math-minmax-spread. A level for all of them, or settings per rule.",
+          "description": "The arrays group: filter-first, filter-length-to-some, map-flat-to-flatmap, unused-map, redundant-array-copy, chained-array-methods, sort-for-extremum, math-minmax-spread, typed-array-subarray. A level for all of them, or settings per rule.",
           "anyOf": [
             {
               "$ref": "#/$defs/Level"
@@ -267,6 +267,10 @@
                 "math-minmax-spread": {
                   "$ref": "#/$defs/RuleValue",
                   "markdownDescription": "`Math.max(...xs)` on large arrays\n\nSpreading pushes every element onto the stack: slow for big arrays and a RangeError past ~100k elements. A loop is faster and safe.\n\nmedium impact. Report only."
+                },
+                "typed-array-subarray": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`ta.slice(a, b)` on a typed array → `ta.subarray(a, b)`\n\nOn a typed array, `slice` allocates a new buffer and copies the elements; `subarray` makes a view over the same memory in constant time. The view shares memory, so it is `typed` only when the result is read right away (`indexOf`, `TextDecoder.decode`, a spread into `Math.max`); otherwise writes to either array would show in the other.\n\nmedium impact. Fixes: typed or assumed."
                 }
               },
               "additionalProperties": false
@@ -472,6 +476,10 @@
         "math-minmax-spread": {
           "$ref": "#/$defs/RuleValue",
           "markdownDescription": "`Math.max(...xs)` on large arrays\n\nSpreading pushes every element onto the stack: slow for big arrays and a RangeError past ~100k elements. A loop is faster and safe.\n\nmedium impact. Report only."
+        },
+        "typed-array-subarray": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`ta.slice(a, b)` on a typed array → `ta.subarray(a, b)`\n\nOn a typed array, `slice` allocates a new buffer and copies the elements; `subarray` makes a view over the same memory in constant time. The view shares memory, so it is `typed` only when the result is read right away (`indexOf`, `TextDecoder.decode`, a spread into `Math.max`); otherwise writes to either array would show in the other.\n\nmedium impact. Fixes: typed or assumed."
         },
         "foreach-to-for": {
           "$ref": "#/$defs/RuleValue",

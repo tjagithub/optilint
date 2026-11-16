@@ -11,80 +11,80 @@
       "id": "spread-in-accumulator:array",
       "size": 10,
       "before": 156.25,
-      "after": 17.41552734375,
-      "spread": 1.0313005982420724
+      "after": 17.333984375,
+      "spread": 1.0257698330312228
     },
     {
       "tier": "node:turbofan",
       "id": "spread-in-accumulator:array",
       "size": 100,
-      "before": 3921.875,
-      "after": 190.2060546875,
-      "spread": 1.053035395269889
+      "before": 3885.375,
+      "after": 168.45703125,
+      "spread": 1.0081177184115524
     },
     {
       "tier": "node:turbofan",
       "id": "spread-in-accumulator:object",
       "size": 10,
-      "before": 1078.125,
-      "after": 87.6259765625,
-      "spread": 1.0294887940353732
+      "before": 1057.25,
+      "after": 87.54443359375,
+      "spread": 1.0102699506632125
     },
     {
       "tier": "node:turbofan",
       "id": "spread-in-accumulator:object",
       "size": 100,
-      "before": 76354.125,
-      "after": 2401,
-      "spread": 1.0701413222910905
+      "before": 76979.125,
+      "after": 2349,
+      "spread": 1.0204701845237325
     },
     {
       "tier": "node:turbofan",
       "id": "accumulate-by-copy-in-loop",
       "size": 10,
-      "before": 151.125,
-      "after": 16.56103515625,
-      "spread": 1.051148419554494
+      "before": 156.27001953125,
+      "after": 16.64208984375,
+      "spread": 1.1287491518251414
     },
     {
       "tier": "node:turbofan",
       "id": "accumulate-by-copy-in-loop",
       "size": 100,
-      "before": 3906.25,
-      "after": 180.1552734375,
-      "spread": 1.017962600236141
+      "before": 4031.25,
+      "after": 181.92529296875,
+      "spread": 1.106267638362126
     },
     {
       "tier": "node:turbofan",
       "id": "array-literal-lookup",
       "size": 10,
-      "before": 37.7197265625,
+      "before": 37.9638671875,
       "after": 11.474609375,
-      "spread": 1.0692800704144219
+      "spread": 1.0283616236347022
     },
     {
       "tier": "node:turbofan",
       "id": "array-literal-lookup",
       "size": 1000,
-      "before": 3322.875,
+      "before": 3323,
       "after": 958.375,
-      "spread": 1.0250912237144039
+      "spread": 1.0830574781823654
     },
     {
       "tier": "node:turbofan",
       "id": "filter-first",
       "size": 10,
-      "before": 14.9130859375,
-      "after": 7.853515625,
-      "spread": 1.1638443632913975
+      "before": 14.83154296875,
+      "after": 7.73095703125,
+      "spread": 2.249145147954483
     },
     {
       "tier": "node:turbofan",
       "id": "filter-first",
       "size": 1000,
       "before": 1265.625,
-      "after": 994.875,
-      "spread": 1.006002781692411
+      "after": 979.25,
+      "spread": 1.0200700838699306
     },
     {
       "tier": "node:turbofan",
@@ -92,63 +92,63 @@
       "size": 10,
       "before": 7.8125,
       "after": 6.40869140625,
-      "spread": 1.025343899512248
+      "spread": 1.0125780488262206
     },
     {
       "tier": "node:turbofan",
       "id": "filter-length-to-some",
       "size": 1000,
-      "before": 1119.75,
+      "before": 1109.375,
       "after": 1031.25,
-      "spread": 1.019911100286184
+      "spread": 1.0151515151515151
     },
     {
       "tier": "node:turbofan",
       "id": "map-flat-to-flatmap",
       "size": 10,
-      "before": 234.88330078125,
-      "after": 232.34033203126455,
-      "spread": 1.0272955977501048
+      "before": 236.79638671875,
+      "after": 241.6181640625,
+      "spread": 1.011909635342494
     },
     {
       "tier": "node:turbofan",
       "id": "map-flat-to-flatmap",
       "size": 1000,
-      "before": 19171.875,
-      "after": 18677.125,
-      "spread": 1.0444396759251349
+      "before": 18802,
+      "after": 18651,
+      "spread": 1.0091816415675572
     },
     {
       "tier": "node:turbofan",
       "id": "unused-map",
       "size": 10,
-      "before": 27.60791015625,
-      "after": 20.365234375,
-      "spread": 1.0084738494479555
+      "before": 28.421875,
+      "after": 20.751953125,
+      "spread": 1.042770943957572
     },
     {
       "tier": "node:turbofan",
       "id": "unused-map",
       "size": 1000,
-      "before": 3458.375,
-      "after": 2578.125,
-      "spread": 1.0064786619219266
+      "before": 3536.5,
+      "after": 2541.625,
+      "spread": 1.0425887061798103
     },
     {
       "tier": "node:turbofan",
       "id": "array-from-map",
       "size": 10,
-      "before": 23.5390625,
-      "after": 188.96484375,
-      "spread": 1.010840033282877
+      "before": 23.72216796875,
+      "after": 175.578125,
+      "spread": 1.0292377920097118
     },
     {
       "tier": "node:turbofan",
       "id": "array-from-map",
       "size": 1000,
-      "before": 1770.75,
-      "after": 11453.125,
-      "spread": 1.0335960335184164
+      "before": 1729.125,
+      "after": 11432.25,
+      "spread": 1.0095720633479979
     },
     {
       "tier": "node:turbofan",
@@ -156,439 +156,439 @@
       "size": 10,
       "before": 19.4296875,
       "after": 12.6953125,
-      "spread": 1.1015782066747084
+      "spread": 1.0162512130362438
     },
     {
       "tier": "node:turbofan",
       "id": "redundant-array-copy",
       "size": 1000,
-      "before": 1807.375,
-      "after": 1546.875,
-      "spread": 1.0090843953750104
+      "before": 1927,
+      "after": 1541.625,
+      "spread": 1.0401955308141089
     },
     {
       "tier": "node:turbofan",
       "id": "foreach-to-for",
       "size": 10,
-      "before": 14.22119140625,
+      "before": 14.2822265625,
       "after": 4.048828125,
-      "spread": 1.0028476798734838
+      "spread": 1.0092391595647745
     },
     {
       "tier": "node:turbofan",
       "id": "foreach-to-for",
       "size": 1000,
       "before": 1000,
-      "after": 314.6767578125,
-      "spread": 1.0096000379659475
+      "after": 314.5546875,
+      "spread": 1.0059051245870898
     },
     {
       "tier": "node:turbofan",
       "id": "for-of-to-indexed",
       "size": 10,
       "before": 5.37109375,
-      "after": 4.55712890625,
-      "spread": 1.0844035825954823
+      "after": 4.5576171875,
+      "spread": 1.0833636363636365
     },
     {
       "tier": "node:turbofan",
       "id": "for-of-to-indexed",
       "size": 1000,
-      "before": 414.73388671875,
-      "after": 315.185546875,
-      "spread": 1.0063761269159734
+      "before": 415.6083984375,
+      "after": 316.2841796875,
+      "spread": 1.007309760684942
     },
     {
       "tier": "node:turbofan",
       "id": "for-in-array",
       "size": 10,
-      "before": 139.42480468750364,
+      "before": 140.625,
       "after": 4.55712890625,
-      "spread": 1.0431915445013071
+      "spread": 1.050201388862061
     },
     {
       "tier": "node:turbofan",
       "id": "for-in-array",
       "size": 1000,
-      "before": 10755.125,
-      "after": 316.6708984375,
-      "spread": 1.0237964080549218
+      "before": 10979.25,
+      "after": 316.365234375,
+      "spread": 1.0141580781626685
     },
     {
       "tier": "node:turbofan",
       "id": "cache-array-length",
       "size": 10,
       "before": 4.55712890625,
-      "after": 4.0693359375,
-      "spread": 1.0094419061711322
+      "after": 4.089355468691792,
+      "spread": 1.0051226093895678
     },
     {
       "tier": "node:turbofan",
       "id": "cache-array-length",
       "size": 1000,
-      "before": 316.40625,
-      "after": 312.92724609351717,
-      "spread": 1.016617741466297
+      "before": 316.73193359375,
+      "after": 313.9448242188664,
+      "spread": 1.011664818440614
     },
     {
       "tier": "node:turbofan",
       "id": "date-now",
       "size": 10,
       "before": 375,
-      "after": 247.17236328125,
-      "spread": 1.0086829969050723
+      "after": 244.384765625,
+      "spread": 1.0250320334327132
     },
     {
       "tier": "node:turbofan",
       "id": "date-now",
       "size": 1000,
-      "before": 37192.75,
-      "after": 23604.125,
-      "spread": 1.0212536060658015
+      "before": 37119.75,
+      "after": 24104.125,
+      "spread": 1.01306637426911
     },
     {
       "tier": "node:turbofan",
       "id": "math-pow-to-mul",
       "size": 10,
-      "before": 7.9345703125,
-      "after": 7.8935546875,
-      "spread": 1.105878916394563
+      "before": 7.710937499985448,
+      "after": 7.7314453125,
+      "spread": 1.1457924216042477
     },
     {
       "tier": "node:turbofan",
       "id": "math-pow-to-mul",
       "size": 1000,
-      "before": 640.625,
-      "after": 541.75,
-      "spread": 1.0182504760600017
+      "before": 630.25,
+      "after": 538.330078125,
+      "spread": 1.0019655328793862
     },
     {
       "tier": "node:turbofan",
       "id": "bitwise-trunc",
       "size": 10,
-      "before": 8.15869140625,
-      "after": 6.42919921875,
-      "spread": 1.1135710510614045
+      "before": 8.1787109375,
+      "after": 6.38818359375,
+      "spread": 1.1064179104477612
     },
     {
       "tier": "node:turbofan",
       "id": "bitwise-trunc",
       "size": 1000,
       "before": 703.125,
-      "after": 457.33642578125,
-      "spread": 1.013612705191512
+      "after": 448.9951171875,
+      "spread": 1.0120984142105527
     },
     {
       "tier": "node:turbofan",
       "id": "object-assign-to-spread",
       "size": 10,
-      "before": 192.625,
-      "after": 171.7529296875,
-      "spread": 1.0304884488770598
+      "before": 187.33740234375,
+      "after": 173.4619140625291,
+      "spread": 1.0326556140773542
     },
     {
       "tier": "node:turbofan",
       "id": "object-assign-to-spread",
       "size": 1000,
-      "before": 17567.75,
-      "after": 15927,
-      "spread": 1.0904687668599093
+      "before": 16968.75,
+      "after": 15760.5,
+      "spread": 1.0461400443145443
     },
     {
       "tier": "node:turbofan",
       "id": "object-entries-pair",
       "size": 10,
-      "before": 39.9169921875,
-      "after": 66.67089843761642,
-      "spread": 1.0370924335399712
+      "before": 36.5,
+      "after": 63.63916015625,
+      "spread": 1.1098246426448308
     },
     {
       "tier": "node:turbofan",
       "id": "object-entries-pair",
       "size": 1000,
-      "before": 4463.5,
-      "after": 43968.75,
-      "spread": 1.0056106757017966
+      "before": 4473.875,
+      "after": 43437.5,
+      "spread": 1.450400235258693
     },
     {
       "tier": "node:turbofan",
       "id": "object-entries-iteration:values",
       "size": 10,
-      "before": 198,
-      "after": 69.07177734375,
-      "spread": 1.0219419697452434
+      "before": 197.875,
+      "after": 68.88818359375,
+      "spread": 1.0159545322843921
     },
     {
       "tier": "node:turbofan",
       "id": "object-entries-iteration:values",
       "size": 1000,
-      "before": 16828.125,
-      "after": 4869.75,
-      "spread": 1.040644656819908
+      "before": 16713.5,
+      "after": 4932.25,
+      "spread": 1.0109432387408637
     },
     {
       "tier": "node:turbofan",
       "id": "object-entries-iteration:keys",
       "size": 10,
       "before": 36.5,
-      "after": 15.13671875,
-      "spread": 1.031785102739726
+      "after": 15.0146484375,
+      "spread": 1.0372926790114434
     },
     {
       "tier": "node:turbofan",
       "id": "object-entries-iteration:keys",
       "size": 1000,
-      "before": 4260.375,
-      "after": 1151,
-      "spread": 1.0467839051257632
+      "before": 4203.125,
+      "after": 1125,
+      "spread": 1.0230659663965995
     },
     {
       "tier": "node:turbofan",
       "id": "split-join-to-replaceall",
       "size": 10,
-      "before": 1583.25,
-      "after": 864.625,
-      "spread": 1.0248231945857038
+      "before": 1578.125,
+      "after": 849,
+      "spread": 1.0122202591106204
     },
     {
       "tier": "node:turbofan",
       "id": "split-join-to-replaceall",
       "size": 1000,
-      "before": 169223.875,
-      "after": 93526.125,
-      "spread": 1.025824785589399
+      "before": 173114.625,
+      "after": 94604.25,
+      "spread": 1.0153138645297304
     },
     {
       "tier": "node:turbofan",
       "id": "regex-to-string-method",
       "size": 10,
-      "before": 182.8408203125,
-      "after": 123.43310546875,
-      "spread": 1.014063588948942
+      "before": 187.01171875,
+      "after": 125.1220703125,
+      "spread": 1.0607306017958351
     },
     {
       "tier": "node:turbofan",
       "id": "regex-to-string-method",
       "size": 1000,
-      "before": 18822.875,
-      "after": 12854.125,
-      "spread": 1.0233315002254824
+      "before": 18744.875,
+      "after": 12906.25,
+      "spread": 1.0423157438039632
     },
     {
       "tier": "node:turbofan",
       "id": "match-to-test",
       "size": 10,
-      "before": 160.787109375,
-      "after": 126.74951171875,
-      "spread": 1.0191375275498495
+      "before": 151.65185546875,
+      "after": 119.73046875,
+      "spread": 1.0204725807548884
     },
     {
       "tier": "node:turbofan",
       "id": "match-to-test",
       "size": 1000,
-      "before": 15963.5,
-      "after": 12786.5,
-      "spread": 1.0594332578296455
+      "before": 15942.625,
+      "after": 13265.625,
+      "spread": 1.0433709326997702
     },
     {
       "tier": "node:turbofan",
       "id": "indexof-to-startswith",
       "size": 10,
-      "before": 84.1875,
-      "after": 27.587890625,
-      "spread": 1.0613646067356683
+      "before": 81.94970703125,
+      "after": 28.86962890625,
+      "spread": 1.0352206422247807
     },
     {
       "tier": "node:turbofan",
       "id": "indexof-to-startswith",
       "size": 1000,
-      "before": 7895.75,
-      "after": 2651.125,
-      "spread": 1.050092500140559
+      "before": 8125,
+      "after": 2510.5,
+      "spread": 1.091327638870017
     },
     {
       "tier": "node:turbofan",
       "id": "regexp-constructor-literal",
       "size": 10,
-      "before": 562.5,
+      "before": 572.875,
       "after": 93.05810546875,
-      "spread": 1.0291385578791816
+      "spread": 1.050842536950532
     },
     {
       "tier": "node:turbofan",
       "id": "regexp-constructor-literal",
       "size": 1000,
-      "before": 57328.125,
-      "after": 9369.75,
-      "spread": 1.0241027863549164
+      "before": 57625,
+      "after": 9510.5,
+      "spread": 1.00545283034381
     },
     {
       "tier": "node:maglev",
       "id": "spread-in-accumulator:array",
       "size": 10,
-      "before": 192.75,
-      "after": 66.69091796875,
-      "spread": 1.0788332836614825
+      "before": 197.875,
+      "after": 63.86279296875,
+      "spread": 1.0377030867236006
     },
     {
       "tier": "node:maglev",
       "id": "spread-in-accumulator:array",
       "size": 100,
-      "before": 4302,
-      "after": 572.83544921875,
-      "spread": 1.0049217731420217
+      "before": 4291.625,
+      "after": 567.75,
+      "spread": 1.0139348930847887
     },
     {
       "tier": "node:maglev",
       "id": "spread-in-accumulator:object",
       "size": 10,
-      "before": 1104.125,
-      "after": 123.27099609375,
-      "spread": 1.0153652392939196
+      "before": 1109.375,
+      "after": 121.64306640625,
+      "spread": 1.0099596781308173
     },
     {
       "tier": "node:maglev",
       "id": "spread-in-accumulator:object",
       "size": 100,
-      "before": 76765.625,
-      "after": 3020.875,
-      "spread": 1.0099424490344284
+      "before": 78968.75,
+      "after": 3020.75,
+      "spread": 1.0204272662034568
     },
     {
       "tier": "node:maglev",
       "id": "accumulate-by-copy-in-loop",
       "size": 10,
-      "before": 208.375,
-      "after": 44.25048828125,
-      "spread": 1.044302913301577
+      "before": 213.5,
+      "after": 45.0439453125,
+      "spread": 1.1398356703945405
     },
     {
       "tier": "node:maglev",
       "id": "accumulate-by-copy-in-loop",
       "size": 100,
-      "before": 4614.5,
-      "after": 347.92041015625,
-      "spread": 1.0268697798162367
+      "before": 4510.5,
+      "after": 362.85400390625,
+      "spread": 1.0212284700061596
     },
     {
       "tier": "node:maglev",
       "id": "array-literal-lookup",
       "size": 10,
-      "before": 126.56640625,
-      "after": 34.77001953125,
-      "spread": 1.0789789607310358
+      "before": 129.08935546875,
+      "after": 35.0546875,
+      "spread": 1.0249265038087731
     },
     {
       "tier": "node:maglev",
       "id": "array-literal-lookup",
       "size": 1000,
-      "before": 11322.875,
-      "after": 2619.75,
-      "spread": 1.036900648339881
+      "before": 10937.5,
+      "after": 2614.625,
+      "spread": 1.0759984172398107
     },
     {
       "tier": "node:maglev",
       "id": "filter-first",
       "size": 10,
-      "before": 67.1181640625,
-      "after": 56.80371093755821,
-      "spread": 1.0833008508899684
+      "before": 68.37939453125,
+      "after": 56.7421875,
+      "spread": 1.0373704551579943
     },
     {
       "tier": "node:maglev",
       "id": "filter-first",
       "size": 1000,
-      "before": 5015.625,
-      "after": 3864.5000000298023,
-      "spread": 1.0063591927276747
+      "before": 4937.5,
+      "after": 3823,
+      "spread": 1.0217490054249547
     },
     {
       "tier": "node:maglev",
       "id": "filter-length-to-some",
       "size": 10,
-      "before": 57.7802734375,
-      "after": 52.103515625,
-      "spread": 1.0314268241570361
+      "before": 57.39306640625,
+      "after": 51.9814453125,
+      "spread": 1.037117368245582
     },
     {
       "tier": "node:maglev",
       "id": "filter-length-to-some",
       "size": 1000,
-      "before": 4421.875,
-      "after": 4031.25,
-      "spread": 1.0135044305068857
+      "before": 4401,
+      "after": 4015.6250000298023,
+      "spread": 1.0062861553321831
     },
     {
       "tier": "node:maglev",
       "id": "map-flat-to-flatmap",
       "size": 10,
-      "before": 282.4501953125,
-      "after": 246.236328125,
-      "spread": 1.0072524683410817
+      "before": 282.2060546875,
+      "after": 240.51953125,
+      "spread": 1.028891499262163
     },
     {
       "tier": "node:maglev",
       "id": "map-flat-to-flatmap",
       "size": 1000,
-      "before": 23203.125,
-      "after": 19432.375,
-      "spread": 1.0361961767432264
+      "before": 22125,
+      "after": 19130.249999970198,
+      "spread": 1.0602971852012646
     },
     {
       "tier": "node:maglev",
       "id": "unused-map",
       "size": 10,
-      "before": 82.80419921875,
-      "after": 37.17041015625,
-      "spread": 1.002386804620435
+      "before": 82.8857421875,
+      "after": 37.41455078125,
+      "spread": 1.0083475699558173
     },
     {
       "tier": "node:maglev",
       "id": "unused-map",
       "size": 1000,
-      "before": 7192.75,
-      "after": 3401.125,
-      "spread": 1.01040463954343
+      "before": 7135.375,
+      "after": 3416.625,
+      "spread": 1.0794491048534003
     },
     {
       "tier": "node:maglev",
       "id": "array-from-map",
       "size": 10,
-      "before": 76.61962890625,
-      "after": 186.09619140625,
-      "spread": 1.0335425888511938
+      "before": 76.72119140625,
+      "after": 190.87744140625,
+      "spread": 1.0221310717655776
     },
     {
       "tier": "node:maglev",
       "id": "array-from-map",
       "size": 1000,
-      "before": 5552,
-      "after": 11145.875,
-      "spread": 1.0042234559248653
+      "before": 5630.25,
+      "after": 11479.125,
+      "spread": 1.0169273523765328
     },
     {
       "tier": "node:maglev",
       "id": "redundant-array-copy",
       "size": 10,
-      "before": 73.42529296875,
-      "after": 62.1337890625,
-      "spread": 1.056227530978022
+      "before": 73.974609375,
+      "after": 64.1884765625291,
+      "spread": 1.0248942554311036
     },
     {
       "tier": "node:maglev",
       "id": "redundant-array-copy",
       "size": 1000,
-      "before": 5411.5,
-      "after": 4927.125,
-      "spread": 1.0110246523550357
+      "before": 5474,
+      "after": 4901,
+      "spread": 1.0136225124599132
     },
     {
       "tier": "node:maglev",
       "id": "foreach-to-for",
       "size": 10,
-      "before": 24.7802734375,
-      "after": 14.0380859375,
-      "spread": 1.0791801242236025
+      "before": 23.90576171875,
+      "after": 14.01806640625,
+      "spread": 1.0973864340995543
     },
     {
       "tier": "node:maglev",
@@ -596,47 +596,47 @@
       "size": 1000,
       "before": 1401,
       "after": 640.625,
-      "spread": 1.613490364025696
+      "spread": 1.011152748084156
     },
     {
       "tier": "node:maglev",
       "id": "for-of-to-indexed",
       "size": 10,
-      "before": 30.90380859375,
-      "after": 13.93603515625,
-      "spread": 1.2879868957005223
+      "before": 31.2294921875,
+      "after": 14.07861328125,
+      "spread": 1.2886112761499733
     },
     {
       "tier": "node:maglev",
       "id": "for-of-to-indexed",
       "size": 1000,
-      "before": 2031.25,
+      "before": 2026.125,
       "after": 640.625,
-      "spread": 1.0025846153846154
+      "spread": 1.0025294589425628
     },
     {
       "tier": "node:maglev",
       "id": "for-in-array",
       "size": 10,
-      "before": 160.97021484375,
-      "after": 13.814453125,
-      "spread": 1.0119879319650764
+      "before": 155.2734375,
+      "after": 13.875,
+      "spread": 1.0446070254882487
     },
     {
       "tier": "node:maglev",
       "id": "for-in-array",
       "size": 1000,
-      "before": 11395.75,
+      "before": 11520.875,
       "after": 640.625,
-      "spread": 1.071309479411184
+      "spread": 1.039330779997179
     },
     {
       "tier": "node:maglev",
       "id": "cache-array-length",
       "size": 10,
       "before": 9.3994140625,
-      "after": 13.916015625,
-      "spread": 1.4892342709268684
+      "after": 13.9365234375,
+      "spread": 1.5063897626077134
     },
     {
       "tier": "node:maglev",
@@ -650,1081 +650,1081 @@
       "tier": "node:maglev",
       "id": "date-now",
       "size": 10,
-      "before": 395.875,
-      "after": 267.3544921875,
-      "spread": 1.0248770634204263
+      "before": 394.185546875,
+      "after": 266.45947265625,
+      "spread": 1.0100779201500016
     },
     {
       "tier": "node:maglev",
       "id": "date-now",
       "size": 1000,
-      "before": 38250,
-      "after": 25838.5,
-      "spread": 1.0234442437888134
+      "before": 38192.625,
+      "after": 25791.624999940395,
+      "spread": 1.0021035999159584
     },
     {
       "tier": "node:maglev",
       "id": "math-pow-to-mul",
       "size": 10,
-      "before": 45.755859375,
-      "after": 32.63330078125,
-      "spread": 1.195563197444984
+      "before": 44.9423828125,
+      "after": 32.67431640625,
+      "spread": 1.2358151777826782
     },
     {
       "tier": "node:maglev",
       "id": "math-pow-to-mul",
       "size": 1000,
-      "before": 3317.625,
-      "after": 2265.625,
-      "spread": 1.0117530495918283
+      "before": 3307.25,
+      "after": 2270.75,
+      "spread": 1.0103058872795174
     },
     {
       "tier": "node:maglev",
       "id": "bitwise-trunc",
       "size": 10,
-      "before": 37.109375,
-      "after": 32.14501953125,
-      "spread": 1.0135970042220066
+      "before": 37.29248046875,
+      "after": 32.6943359375,
+      "spread": 1.0181639732242442
     },
     {
       "tier": "node:maglev",
       "id": "bitwise-trunc",
       "size": 1000,
-      "before": 2572.875,
-      "after": 2145.75,
-      "spread": 1.0318900809208773
+      "before": 2546.875,
+      "after": 2130.25,
+      "spread": 1.0044187825948443
     },
     {
       "tier": "node:maglev",
       "id": "object-assign-to-spread",
       "size": 10,
-      "before": 227.07080078125,
-      "after": 216.796875,
-      "spread": 1.026675132674052
+      "before": 227.19287109375,
+      "after": 217.61083984375,
+      "spread": 1.0312664849542534
     },
     {
       "tier": "node:maglev",
       "id": "object-assign-to-spread",
       "size": 1000,
-      "before": 20281.25,
-      "after": 18442.749999970198,
-      "spread": 1.0368013592318062
+      "before": 19619.75,
+      "after": 18666.75,
+      "spread": 1.0181368682127845
     },
     {
       "tier": "node:maglev",
       "id": "object-entries-pair",
       "size": 10,
-      "before": 110.29052734375,
-      "after": 110.16845703125,
-      "spread": 1.0210598671189695
+      "before": 109.375,
+      "after": 110.29052734375,
+      "spread": 1.0432036233694364
     },
     {
       "tier": "node:maglev",
       "id": "object-entries-pair",
       "size": 1000,
-      "before": 9791.625,
-      "after": 55036.4999999702,
-      "spread": 1.26001667376455
+      "before": 10093.75,
+      "after": 58744.75,
+      "spread": 1.0837958935211025
     },
     {
       "tier": "node:maglev",
       "id": "object-entries-iteration:values",
       "size": 10,
-      "before": 273.23388671875,
-      "after": 95.52001953125,
-      "spread": 1.0263442531611287
+      "before": 270.79248046875,
+      "after": 94.970703125,
+      "spread": 1.0190158432035272
     },
     {
       "tier": "node:maglev",
       "id": "object-entries-iteration:values",
       "size": 1000,
-      "before": 22541.75,
-      "after": 6671.875,
-      "spread": 1.0197593111514864
+      "before": 22484.375,
+      "after": 6614.625,
+      "spread": 1.0044509201730019
     },
     {
       "tier": "node:maglev",
       "id": "object-entries-iteration:keys",
       "size": 10,
-      "before": 92.2041015625,
-      "after": 38.85888671875,
-      "spread": 1.018354745436277
+      "before": 88.625,
+      "after": 38.75732421875,
+      "spread": 1.0710903371004188
     },
     {
       "tier": "node:maglev",
       "id": "object-entries-iteration:keys",
       "size": 1000,
-      "before": 8026,
-      "after": 2823,
-      "spread": 1.0043904176135892
+      "before": 8057.25,
+      "after": 2791.625,
+      "spread": 1.0213059691136048
     },
     {
       "tier": "node:maglev",
       "id": "split-join-to-replaceall",
       "size": 10,
-      "before": 1609.375,
-      "after": 958.375,
-      "spread": 1.0282159962233013
+      "before": 1630.25,
+      "after": 932.25,
+      "spread": 1.009542495109703
     },
     {
       "tier": "node:maglev",
       "id": "split-join-to-replaceall",
       "size": 1000,
-      "before": 174599,
-      "after": 105781.25,
-      "spread": 1.0361041648995521
+      "before": 174130.25,
+      "after": 100906.25,
+      "spread": 1.0202356210298822
     },
     {
       "tier": "node:maglev",
       "id": "regex-to-string-method",
       "size": 10,
-      "before": 245.68701171875,
-      "after": 186.95068359375,
-      "spread": 1.020664822020289
+      "before": 242.533203125,
+      "after": 187.68310546875,
+      "spread": 1.0480589278455283
     },
     {
       "tier": "node:maglev",
       "id": "regex-to-string-method",
       "size": 1000,
-      "before": 24328.125,
-      "after": 19010.5,
-      "spread": 1.0040767756405549
+      "before": 23859.375,
+      "after": 18692.75,
+      "spread": 1.0369362501074644
     },
     {
       "tier": "node:maglev",
       "id": "match-to-test",
       "size": 10,
-      "before": 204.30517578125,
-      "after": 192.15869140625,
-      "spread": 1.0372050663842387
+      "before": 205.13916015625,
+      "after": 189.63623046875,
+      "spread": 1.0604849949057413
     },
     {
       "tier": "node:maglev",
       "id": "match-to-test",
       "size": 1000,
-      "before": 19984.375,
-      "after": 18349,
-      "spread": 1.0289457191127582
+      "before": 19583.375,
+      "after": 18448,
+      "spread": 1.0973968202715234
     },
     {
       "tier": "node:maglev",
       "id": "indexof-to-startswith",
       "size": 10,
-      "before": 142.63916015625,
-      "after": 87.48388671875,
-      "spread": 1.0430393854148563
+      "before": 144.4501953125,
+      "after": 87.82958984375,
+      "spread": 1.0744356649160949
     },
     {
       "tier": "node:maglev",
       "id": "indexof-to-startswith",
       "size": 1000,
-      "before": 13562.5,
-      "after": 7948,
-      "spread": 1.0090418958321137
+      "before": 13614.5,
+      "after": 8026,
+      "spread": 1.0169653398652678
     },
     {
       "tier": "node:maglev",
       "id": "regexp-constructor-literal",
       "size": 10,
-      "before": 635.375,
-      "after": 158.26416015625,
-      "spread": 1.029649052113255
+      "before": 640.625,
+      "after": 157.38916015625,
+      "spread": 1.006941382073621
     },
     {
       "tier": "node:maglev",
       "id": "regexp-constructor-literal",
       "size": 1000,
-      "before": 60109.375,
-      "after": 14812.5,
-      "spread": 1.0269651421358499
+      "before": 59041.625,
+      "after": 14567.625,
+      "spread": 1.0517028382972426
     },
     {
       "tier": "node:sparkplug",
       "id": "spread-in-accumulator:array",
       "size": 10,
-      "before": 291.75,
-      "after": 181.45751953125,
-      "spread": 1.0210016943272442
+      "before": 282.26708984375,
+      "after": 180.8066406249709,
+      "spread": 1.035636328083715
     },
     {
       "tier": "node:sparkplug",
       "id": "spread-in-accumulator:array",
       "size": 100,
-      "before": 5135.375,
-      "after": 1526,
-      "spread": 1.0133129623813972
+      "before": 5083.375,
+      "after": 1526.125,
+      "spread": 1.005016074019692
     },
     {
       "tier": "node:sparkplug",
       "id": "spread-in-accumulator:object",
       "size": 10,
-      "before": 1198,
-      "after": 183.349609375,
-      "spread": 1.0419371277917702
+      "before": 1182.25,
+      "after": 187.64208984375,
+      "spread": 1.032767855855109
     },
     {
       "tier": "node:sparkplug",
       "id": "spread-in-accumulator:object",
       "size": 100,
-      "before": 78046.875,
+      "before": 77843.75,
       "after": 3656.25,
-      "spread": 1.0186835724613503
+      "spread": 1.0234852580400553
     },
     {
       "tier": "node:sparkplug",
       "id": "accumulate-by-copy-in-loop",
       "size": 10,
-      "before": 334.06591796875,
-      "after": 219.5229492186918,
-      "spread": 1.019645800030237
+      "before": 333.375,
+      "after": 231.83203125,
+      "spread": 1.0285361800720905
     },
     {
       "tier": "node:sparkplug",
       "id": "accumulate-by-copy-in-loop",
       "size": 100,
-      "before": 5421.875,
-      "after": 1812.5000000298023,
-      "spread": 1.029766117386321
+      "before": 5447.875,
+      "after": 1895.75,
+      "spread": 1.0266312564860343
     },
     {
       "tier": "node:sparkplug",
       "id": "array-literal-lookup",
       "size": 10,
-      "before": 295.93896484375,
-      "after": 226.50146484375,
-      "spread": 1.107554046775304
+      "before": 304.830078125,
+      "after": 241.92333984375,
+      "spread": 1.0577084658373683
     },
     {
       "tier": "node:sparkplug",
       "id": "array-literal-lookup",
       "size": 1000,
-      "before": 24822.875,
-      "after": 18416.75,
-      "spread": 1.0395080382376842
+      "before": 24276,
+      "after": 18119.75,
+      "spread": 1.058941573144586
     },
     {
       "tier": "node:sparkplug",
       "id": "filter-first",
       "size": 10,
-      "before": 154.09326171875,
-      "after": 139.4453125,
-      "spread": 1.0251173920968786
+      "before": 154.439453125,
+      "after": 140.23876953125,
+      "spread": 1.0500634797930537
     },
     {
       "tier": "node:sparkplug",
       "id": "filter-first",
       "size": 1000,
       "before": 10953.125,
-      "after": 8609.375,
-      "spread": 1.0067729936854533
+      "after": 8619.75,
+      "spread": 1.0060406068349563
     },
     {
       "tier": "node:sparkplug",
       "id": "filter-length-to-some",
       "size": 10,
-      "before": 109.86328125,
-      "after": 100.3212890625,
-      "spread": 1.0022596653063798
+      "before": 111.26708984375,
+      "after": 100.728515625,
+      "spread": 1.0226929795762414
     },
     {
       "tier": "node:sparkplug",
       "id": "filter-length-to-some",
       "size": 1000,
-      "before": 7036.5,
-      "after": 6385.5,
-      "spread": 1.001643031784841
+      "before": 7041.625,
+      "after": 6380.25,
+      "spread": 1.019759776078251
     },
     {
       "tier": "node:sparkplug",
       "id": "map-flat-to-flatmap",
       "size": 10,
-      "before": 323.0185546874927,
-      "after": 292.6435546875,
-      "spread": 1.0601646510338278
+      "before": 327.37255859375,
+      "after": 285.787109375,
+      "spread": 1.0333774599364252
     },
     {
       "tier": "node:sparkplug",
       "id": "map-flat-to-flatmap",
       "size": 1000,
-      "before": 24437.5,
-      "after": 21552,
-      "spread": 1.012548992729415
+      "before": 23916.75,
+      "after": 21369.75,
+      "spread": 1.0423456810217842
     },
     {
       "tier": "node:sparkplug",
       "id": "unused-map",
       "size": 10,
-      "before": 211.28369140625,
-      "after": 197.04150390625,
-      "spread": 1.0305648314252336
+      "before": 205.62744140625,
+      "after": 192.52490234375,
+      "spread": 1.0416118070156306
     },
     {
       "tier": "node:sparkplug",
       "id": "unused-map",
       "size": 1000,
-      "before": 17328.125,
-      "after": 16260.5,
-      "spread": 1.0275448345144367
+      "before": 17640.625,
+      "after": 16520.875,
+      "spread": 1.026222957562722
     },
     {
       "tier": "node:sparkplug",
       "id": "array-from-map",
       "size": 10,
-      "before": 124.267578125,
-      "after": 227.396484375,
-      "spread": 1.0396677276473127
+      "before": 124.71533203125,
+      "after": 228.33251953125,
+      "spread": 1.0340418611379247
     },
     {
       "tier": "node:sparkplug",
       "id": "array-from-map",
       "size": 1000,
-      "before": 7307.25,
-      "after": 13140.625,
-      "spread": 1.0057750323537398
+      "before": 7296.875,
+      "after": 13083.25,
+      "spread": 1.0086934227120992
     },
     {
       "tier": "node:sparkplug",
       "id": "redundant-array-copy",
       "size": 10,
-      "before": 120.076171875,
-      "after": 110.7177734375,
-      "spread": 1.0152709082545612
+      "before": 120.3818359375,
+      "after": 110.90087890630821,
+      "spread": 1.0536769408389604
     },
     {
       "tier": "node:sparkplug",
       "id": "redundant-array-copy",
       "size": 1000,
-      "before": 7338.625,
-      "after": 6927.125,
-      "spread": 1.0034367853001902
+      "before": 7307.375,
+      "after": 6932.375,
+      "spread": 1.0050433836175687
     },
     {
       "tier": "node:sparkplug",
       "id": "foreach-to-for",
       "size": 10,
-      "before": 126.52587890625,
-      "after": 87.056640625,
-      "spread": 1.0870454370646074
+      "before": 120.9921875,
+      "after": 94.44189453125,
+      "spread": 1.0572037326035462
     },
     {
       "tier": "node:sparkplug",
       "id": "foreach-to-for",
       "size": 1000,
-      "before": 8010.5,
-      "after": 5989.5,
-      "spread": 1.1227266351863108
+      "before": 7760.5,
+      "after": 6729.25,
+      "spread": 1.0958086891033494
     },
     {
       "tier": "node:sparkplug",
       "id": "for-of-to-indexed",
       "size": 10,
-      "before": 141.94775390625,
-      "after": 100.50439453125,
-      "spread": 1.0383236521792814
+      "before": 142.65966796875,
+      "after": 100.341796875,
+      "spread": 1.0748325720991267
     },
     {
       "tier": "node:sparkplug",
       "id": "for-of-to-indexed",
       "size": 1000,
-      "before": 9281.25,
-      "after": 6984.375,
-      "spread": 1.0097525387952717
+      "before": 9781.25,
+      "after": 7239.5,
+      "spread": 1.0912261655432738
     },
     {
       "tier": "node:sparkplug",
       "id": "for-in-array",
       "size": 10,
-      "before": 206.0751953125,
-      "after": 98.9580078125,
-      "spread": 1.028210528295124
+      "before": 198.83251953125,
+      "after": 102.94580078125,
+      "spread": 1.0718564649383815
     },
     {
       "tier": "node:sparkplug",
       "id": "for-in-array",
       "size": 1000,
-      "before": 14260.5,
-      "after": 6838.625,
-      "spread": 1.0702284064004794
+      "before": 14276,
+      "after": 6500,
+      "spread": 1.0517187264262775
     },
     {
       "tier": "node:sparkplug",
       "id": "cache-array-length",
       "size": 10,
-      "before": 108.45947265625,
-      "after": 92.71240234375,
-      "spread": 1.0104708634354276
+      "before": 103.271484375,
+      "after": 87.91064453125,
+      "spread": 1.045570668083838
     },
     {
       "tier": "node:sparkplug",
       "id": "cache-array-length",
       "size": 1000,
-      "before": 7354.125,
-      "after": 6088.625,
-      "spread": 1.0401979100371594
+      "before": 6750,
+      "after": 5494.875,
+      "spread": 1.090015696444414
     },
     {
       "tier": "node:sparkplug",
       "id": "date-now",
       "size": 10,
-      "before": 558.248046875,
-      "after": 356.099609375,
-      "spread": 1.006773344122923
+      "before": 562.5,
+      "after": 348.9990234375,
+      "spread": 1.056372158097237
     },
     {
       "tier": "node:sparkplug",
       "id": "date-now",
       "size": 1000,
-      "before": 49781.25,
-      "after": 30427.124999940395,
-      "spread": 1.0130978869367715
+      "before": 48843.75,
+      "after": 30296.875,
+      "spread": 1.0106720927758108
     },
     {
       "tier": "node:sparkplug",
       "id": "math-pow-to-mul",
       "size": 10,
-      "before": 214.21337890625,
-      "after": 156.9013671874709,
-      "spread": 1.0264513740735484
+      "before": 220.49951171875,
+      "after": 158.3046875,
+      "spread": 1.0135919764798431
     },
     {
       "tier": "node:sparkplug",
       "id": "math-pow-to-mul",
       "size": 1000,
-      "before": 16416.75,
-      "after": 10770.75,
-      "spread": 1.0161341700950095
+      "before": 16432.25,
+      "after": 10531.25,
+      "spread": 1.058731836706869
     },
     {
       "tier": "node:sparkplug",
       "id": "bitwise-trunc",
       "size": 10,
-      "before": 234.51708984375,
-      "after": 189.27001953125,
-      "spread": 1.0305299842726379
+      "before": 234.19189453125,
+      "after": 187.94775390625,
+      "spread": 1.0243069296401
     },
     {
       "tier": "node:sparkplug",
       "id": "bitwise-trunc",
       "size": 1000,
-      "before": 17099,
-      "after": 13453.125,
-      "spread": 1.0921950477777191
+      "before": 17338.625,
+      "after": 13151,
+      "spread": 1.0178837237479346
     },
     {
       "tier": "node:sparkplug",
       "id": "object-assign-to-spread",
       "size": 10,
-      "before": 394.8974609375,
-      "after": 332.966796875,
-      "spread": 1.0105006265961423
+      "before": 392.49658203125,
+      "after": 338.90771484375,
+      "spread": 1.008412706399653
     },
     {
       "tier": "node:sparkplug",
       "id": "object-assign-to-spread",
       "size": 1000,
-      "before": 35239.625,
-      "after": 29125,
-      "spread": 1.308007430302231
+      "before": 34088.5,
+      "after": 29088.5,
+      "spread": 1.0140717589018786
     },
     {
       "tier": "node:sparkplug",
       "id": "object-entries-pair",
       "size": 10,
-      "before": 535.6240234375,
-      "after": 238.626953125,
-      "spread": 1.0498731974359905
+      "before": 551.716796875,
+      "after": 238.46435546875,
+      "spread": 1.0071433837547827
     },
     {
       "tier": "node:sparkplug",
       "id": "object-entries-pair",
       "size": 1000,
-      "before": 47953.125,
-      "after": 78046.875,
-      "spread": 1.1029238629331823
+      "before": 48546.875,
+      "after": 76973.875,
+      "spread": 1.0665340828353824
     },
     {
       "tier": "node:sparkplug",
       "id": "object-entries-iteration:values",
       "size": 10,
-      "before": 682.25,
-      "after": 214.6806640625,
-      "spread": 1.068954319772788
+      "before": 677,
+      "after": 214.53857421875,
+      "spread": 1.1033868354866565
     },
     {
       "tier": "node:sparkplug",
       "id": "object-entries-iteration:values",
       "size": 1000,
-      "before": 58989.625,
-      "after": 14260.375,
-      "spread": 1.0394126719517456
+      "before": 59942.75,
+      "after": 14239.5,
+      "spread": 1.0624169792554397
     },
     {
       "tier": "node:sparkplug",
       "id": "object-entries-iteration:keys",
       "size": 10,
-      "before": 439.4326171875,
-      "after": 175.61865234375,
-      "spread": 1.042739420707969
+      "before": 439.7783203125,
+      "after": 173.1767578125,
+      "spread": 1.020159119690056
     },
     {
       "tier": "node:sparkplug",
       "id": "object-entries-iteration:keys",
       "size": 1000,
-      "before": 38208.375,
-      "after": 11786.375,
-      "spread": 1.0117908449921522
+      "before": 36848.875,
+      "after": 11723.875,
+      "spread": 1.0537943137292132
     },
     {
       "tier": "node:sparkplug",
       "id": "split-join-to-replaceall",
       "size": 10,
-      "before": 1864.625,
-      "after": 1104.1249999850988,
-      "spread": 1.0773962581016967
+      "before": 1838.625,
+      "after": 1088.5,
+      "spread": 1.0076240042898685
     },
     {
       "tier": "node:sparkplug",
       "id": "split-join-to-replaceall",
       "size": 1000,
-      "before": 192687.5,
-      "after": 114338.5,
-      "spread": 1.060339430102752
+      "before": 192531.25,
+      "after": 112432.25,
+      "spread": 1.0234600536742644
     },
     {
       "tier": "node:sparkplug",
       "id": "regex-to-string-method",
       "size": 10,
-      "before": 385.375,
-      "after": 315.04296875,
-      "spread": 1.0464614906804914
+      "before": 379.048828125,
+      "after": 313.1103515625,
+      "spread": 1.082374347875308
     },
     {
       "tier": "node:sparkplug",
       "id": "regex-to-string-method",
       "size": 1000,
-      "before": 35062.5,
-      "after": 29114.625000029802,
-      "spread": 1.0330859197596536
+      "before": 35281.25,
+      "after": 28901,
+      "spread": 1.0341434188217855
     },
     {
       "tier": "node:sparkplug",
       "id": "match-to-test",
       "size": 10,
-      "before": 337.544921875,
-      "after": 325.39892578125,
-      "spread": 1.1909993699652317
+      "before": 324.70703125,
+      "after": 315.16552734375,
+      "spread": 1.0402628274403216
     },
     {
       "tier": "node:sparkplug",
       "id": "match-to-test",
       "size": 1000,
-      "before": 28729.125,
-      "after": 27885.375,
-      "spread": 1.062841642478078
+      "before": 28849,
+      "after": 28000,
+      "spread": 1.0161625147974163
     },
     {
       "tier": "node:sparkplug",
       "id": "indexof-to-startswith",
       "size": 10,
-      "before": 271.5859375,
-      "after": 231.81152343738358,
-      "spread": 1.016186718206524
+      "before": 273.60009765625,
+      "after": 228.8408203125,
+      "spread": 1.0915458913713163
     },
     {
       "tier": "node:sparkplug",
       "id": "indexof-to-startswith",
       "size": 1000,
-      "before": 23177.125,
-      "after": 18796.875,
-      "spread": 1.0252509160823007
+      "before": 23224,
+      "after": 18661.5,
+      "spread": 1.0507142617787997
     },
     {
       "tier": "node:sparkplug",
       "id": "regexp-constructor-literal",
       "size": 10,
-      "before": 822.875,
-      "after": 283.4672851561336,
-      "spread": 1.0162690474175744
+      "before": 812.5,
+      "after": 281.51416015625,
+      "spread": 1.0404873608706406
     },
     {
       "tier": "node:sparkplug",
       "id": "regexp-constructor-literal",
       "size": 1000,
-      "before": 76869.75,
-      "after": 23635.5,
-      "spread": 1.0356549737344958
+      "before": 74593.75,
+      "after": 24390.625,
+      "spread": 1.0156423970648185
     },
     {
       "tier": "node:ignition",
       "id": "spread-in-accumulator:array",
       "size": 10,
-      "before": 375,
-      "after": 260.0908203125,
-      "spread": 1.0104951512892628
+      "before": 367.24853515625,
+      "after": 258.50390625,
+      "spread": 1.05519910692262
     },
     {
       "tier": "node:ignition",
       "id": "spread-in-accumulator:array",
       "size": 100,
-      "before": 5786.375,
-      "after": 2020.8749999701977,
-      "spread": 1.032692800061629
+      "before": 5755.25,
+      "after": 2005.125,
+      "spread": 1.0282272972854498
     },
     {
       "tier": "node:ignition",
       "id": "spread-in-accumulator:object",
       "size": 10,
-      "before": 1343.75,
-      "after": 264.0991210936918,
-      "spread": 1.0262388834631766
+      "before": 1349,
+      "after": 265.0346679688082,
+      "spread": 1.0235592742802258
     },
     {
       "tier": "node:ignition",
       "id": "spread-in-accumulator:object",
       "size": 100,
-      "before": 78599,
-      "after": 4187.5,
-      "spread": 1.0300943785506367
+      "before": 77317.625,
+      "after": 4286.5,
+      "spread": 1.0491122503642987
     },
     {
       "tier": "node:ignition",
       "id": "accumulate-by-copy-in-loop",
       "size": 10,
-      "before": 475.87060546875,
-      "after": 360.16845703125,
-      "spread": 1.0101698513640613
+      "before": 475.01611328125,
+      "after": 356.9541015625,
+      "spread": 1.0286133225194714
     },
     {
       "tier": "node:ignition",
       "id": "accumulate-by-copy-in-loop",
       "size": 100,
-      "before": 6744.75,
+      "before": 6656.25,
       "after": 2885.5,
-      "spread": 1.0157158823228878
+      "spread": 1.0097376583816509
     },
     {
       "tier": "node:ignition",
       "id": "array-literal-lookup",
       "size": 10,
-      "before": 418.98583984375,
-      "after": 340.3115234375,
-      "spread": 1.0375087583142524
+      "before": 417.521484375,
+      "after": 340.5966796875582,
+      "spread": 1.0164546064042437
     },
     {
       "tier": "node:ignition",
       "id": "array-literal-lookup",
       "size": 1000,
-      "before": 32921.875,
-      "after": 23526,
-      "spread": 1.0023368433200615
+      "before": 32968.75,
+      "after": 23380.25,
+      "spread": 1.0361521458722984
     },
     {
       "tier": "node:ignition",
       "id": "filter-first",
       "size": 10,
-      "before": 236.04345703125,
-      "after": 216.5527343749418,
-      "spread": 1.0226162459067127
+      "before": 233.845703125,
+      "after": 214.986328125,
+      "spread": 1.0166769493370695
     },
     {
       "tier": "node:ignition",
       "id": "filter-first",
       "size": 1000,
-      "before": 14046.875,
-      "after": 12067.75,
-      "spread": 1.0409903840776222
+      "before": 14093.75,
+      "after": 12046.875,
+      "spread": 1.0154558897406434
     },
     {
       "tier": "node:ignition",
       "id": "filter-length-to-some",
       "size": 10,
-      "before": 198.26220703125,
-      "after": 187.845703125,
-      "spread": 1.0441366383681085
+      "before": 199.30029296875,
+      "after": 191.5078125,
+      "spread": 1.0274778130052997
     },
     {
       "tier": "node:ignition",
       "id": "filter-length-to-some",
       "size": 1000,
-      "before": 10630.125,
-      "after": 10343.75,
-      "spread": 1.0113830766835712
+      "before": 10739.625,
+      "after": 10448,
+      "spread": 1.0141397127567453
     },
     {
       "tier": "node:ignition",
       "id": "map-flat-to-flatmap",
       "size": 10,
-      "before": 407.28759765625,
-      "after": 360.9619140625,
-      "spread": 1.030492326330343
+      "before": 422.77001953125,
+      "after": 366.455078125,
+      "spread": 1.0453184616836155
     },
     {
       "tier": "node:ignition",
       "id": "map-flat-to-flatmap",
       "size": 1000,
-      "before": 28078.125,
-      "after": 24812.5,
-      "spread": 1.005152645573822
+      "before": 28520.875,
+      "after": 25119.750000059605,
+      "spread": 1.0149920327952469
     },
     {
       "tier": "node:ignition",
       "id": "unused-map",
       "size": 10,
-      "before": 272.13525390625,
-      "after": 262.65478515625,
-      "spread": 1.0421525372027434
+      "before": 271.443359375,
+      "after": 265.8081054688664,
+      "spread": 1.0335434086548405
     },
     {
       "tier": "node:ignition",
       "id": "unused-map",
       "size": 1000,
-      "before": 20609.375,
-      "after": 20276,
-      "spread": 1.0517182485213736
+      "before": 20692.75,
+      "after": 19974,
+      "spread": 1.0111349639883034
     },
     {
       "tier": "node:ignition",
       "id": "array-from-map",
       "size": 10,
-      "before": 181.15234375,
-      "after": 286.56005859375,
-      "spread": 1.0158506497420838
+      "before": 180.15576171875,
+      "after": 285.23779296875,
+      "spread": 1.0305543223130287
     },
     {
       "tier": "node:ignition",
       "id": "array-from-map",
       "size": 1000,
-      "before": 9229.25,
-      "after": 15312.5,
-      "spread": 1.0092981553226696
+      "before": 9224,
+      "after": 15239.625,
+      "spread": 1.0145744468100697
     },
     {
       "tier": "node:ignition",
       "id": "redundant-array-copy",
       "size": 10,
-      "before": 199.13720703125728,
-      "after": 190.5107421875,
-      "spread": 1.0256688892417014
+      "before": 185.4658203125,
+      "after": 175.88330078125,
+      "spread": 1.0427061167780614
     },
     {
       "tier": "node:ignition",
       "id": "redundant-array-copy",
       "size": 1000,
-      "before": 11140.625,
-      "after": 10776.000000029802,
-      "spread": 1.0054994941955557
+      "before": 10968.75,
+      "after": 10510.375,
+      "spread": 1.0162824123077683
     },
     {
       "tier": "node:ignition",
       "id": "foreach-to-for",
       "size": 10,
-      "before": 192.81005859375,
-      "after": 171.91552734375,
-      "spread": 1.0161532999496825
+      "before": 192.87109375,
+      "after": 173.13671875,
+      "spread": 1.014983211105358
     },
     {
       "tier": "node:ignition",
       "id": "foreach-to-for",
       "size": 1000,
-      "before": 11052,
-      "after": 11182.25,
-      "spread": 1.0141499095809439
+      "before": 10927.125,
+      "after": 11135.375,
+      "spread": 1.0176272494416279
     },
     {
       "tier": "node:ignition",
       "id": "for-of-to-indexed",
       "size": 10,
-      "before": 275.71630859375,
-      "after": 180.134765625,
-      "spread": 1.0071330722749228
+      "before": 278.36083984375,
+      "after": 179.99267578125,
+      "spread": 1.048887948245062
     },
     {
       "tier": "node:ignition",
       "id": "for-of-to-indexed",
       "size": 1000,
-      "before": 17442.75,
-      "after": 11687.5,
-      "spread": 1.0059675677157314
+      "before": 17739.625,
+      "after": 11776.125,
+      "spread": 1.01370104183184
     },
     {
       "tier": "node:ignition",
       "id": "for-in-array",
       "size": 10,
-      "before": 299.25537109375,
-      "after": 175.25244140625,
-      "spread": 1.0263344433224943
+      "before": 338.1552734375,
+      "after": 184.71240234375,
+      "spread": 1.0162984581715828
     },
     {
       "tier": "node:ignition",
       "id": "for-in-array",
       "size": 1000,
-      "before": 19427,
-      "after": 11567.75,
-      "spread": 1.0531764909205814
+      "before": 22635.375,
+      "after": 11614.625,
+      "spread": 1.0191757318295995
     },
     {
       "tier": "node:ignition",
       "id": "cache-array-length",
       "size": 10,
-      "before": 178.4873046875,
-      "after": 171.1015625,
-      "spread": 1.01879717772745
+      "before": 177.24609375,
+      "after": 169.51513671875,
+      "spread": 1.0017916859675964
     },
     {
       "tier": "node:ignition",
       "id": "cache-array-length",
       "size": 1000,
-      "before": 11677,
-      "after": 10958.375,
-      "spread": 1.0169112297438605
+      "before": 11635.375,
+      "after": 10927.125,
+      "spread": 1.016107570269847
     },
     {
       "tier": "node:ignition",
       "id": "date-now",
       "size": 10,
-      "before": 739.5,
-      "after": 480.611328125,
-      "spread": 1.0120645093122773
+      "before": 739.625,
+      "after": 483.96826171875,
+      "spread": 1.0320301098937659
     },
     {
       "tier": "node:ignition",
       "id": "date-now",
       "size": 1000,
-      "before": 61099,
-      "after": 39057.25,
-      "spread": 1.0073144989297995
+      "before": 61921.875,
+      "after": 38974,
+      "spread": 1.0190111858185937
     },
     {
       "tier": "node:ignition",
       "id": "math-pow-to-mul",
       "size": 10,
-      "before": 402.0791015625,
-      "after": 321.59423828125,
-      "spread": 1.0270819083805325
+      "before": 401.265625,
+      "after": 320.86181640625,
+      "spread": 1.0051955078344397
     },
     {
       "tier": "node:ignition",
       "id": "math-pow-to-mul",
       "size": 1000,
-      "before": 30817.75,
-      "after": 21937.5,
-      "spread": 1.0169827390930457
+      "before": 31062.5,
+      "after": 20750,
+      "spread": 1.0606734255066126
     },
     {
       "tier": "node:ignition",
       "id": "bitwise-trunc",
       "size": 10,
-      "before": 440.4501953125,
-      "after": 343.4853515625,
-      "spread": 1.012220907532672
+      "before": 440.97900390625,
+      "after": 347.8598632812791,
+      "spread": 1.0392995748038751
     },
     {
       "tier": "node:ignition",
       "id": "bitwise-trunc",
       "size": 1000,
-      "before": 34359.375,
-      "after": 21630.25,
-      "spread": 1.0471784788982936
+      "before": 34567.75,
+      "after": 24010.375,
+      "spread": 1.0145145275129985
     },
     {
       "tier": "node:ignition",
       "id": "object-assign-to-spread",
       "size": 10,
-      "before": 500.732421875,
-      "after": 438.130859375,
-      "spread": 1.0326021917524089
+      "before": 501.0986328125,
+      "after": 438.63916015625,
+      "spread": 1.0380681009399115
     },
     {
       "tier": "node:ignition",
       "id": "object-assign-to-spread",
       "size": 1000,
-      "before": 43072.875,
-      "after": 35473.9999999702,
-      "spread": 1.0124072991563138
+      "before": 42343.75,
+      "after": 35239.625,
+      "spread": 1.0018824279544583
     },
     {
       "tier": "node:ignition",
       "id": "object-entries-pair",
       "size": 10,
-      "before": 911.375,
-      "after": 411.1738281250582,
-      "spread": 1.0696194950098292
+      "before": 906.25,
+      "after": 402.7099609375,
+      "spread": 1.0519345256138224
     },
     {
       "tier": "node:ignition",
       "id": "object-entries-pair",
       "size": 1000,
-      "before": 73562.5,
-      "after": 91562.5,
-      "spread": 1.0407880693957496
+      "before": 73234.375,
+      "after": 91823,
+      "spread": 1.0588271314765254
     },
     {
       "tier": "node:ignition",
       "id": "object-entries-iteration:values",
       "size": 10,
-      "before": 963.625,
-      "after": 358.33740234375,
-      "spread": 1.0027970768987569
+      "before": 958.375,
+      "after": 355.65185546875,
+      "spread": 1.0140886423444928
     },
     {
       "tier": "node:ignition",
       "id": "object-entries-iteration:values",
       "size": 1000,
-      "before": 77890.625,
-      "after": 21359.375,
-      "spread": 1.008983228706456
+      "before": 76359.375,
+      "after": 21281.25,
+      "spread": 1.0164440564980002
     },
     {
       "tier": "node:ignition",
       "id": "object-entries-iteration:keys",
       "size": 10,
-      "before": 708.375,
-      "after": 322.44873046875,
-      "spread": 1.0169583170125176
+      "before": 713.625,
+      "after": 324.21875,
+      "spread": 1.0160293697121645
     },
     {
       "tier": "node:ignition",
       "id": "object-entries-iteration:keys",
       "size": 1000,
-      "before": 56036.375,
-      "after": 20572.875,
-      "spread": 1.0119506156554543
+      "before": 55885.5,
+      "after": 20494.75,
+      "spread": 1.0108627468983553
     },
     {
       "tier": "node:ignition",
       "id": "split-join-to-replaceall",
       "size": 10,
       "before": 2109.375,
-      "after": 1296.875,
-      "spread": 1.0236230254350736
+      "after": 1302.125,
+      "spread": 1.051791329699672
     },
     {
       "tier": "node:ignition",
       "id": "split-join-to-replaceall",
       "size": 1000,
-      "before": 215067.75,
-      "after": 129000,
-      "spread": 1.017234691664372
+      "before": 217317.625,
+      "after": 125593.75,
+      "spread": 1.0394511142568128
     },
     {
       "tier": "node:ignition",
       "id": "regex-to-string-method",
       "size": 10,
-      "before": 515.95068359375,
-      "after": 445.4956054686918,
-      "spread": 1.0306183275296787
+      "before": 523.90576171875,
+      "after": 443.1357421875,
+      "spread": 1.0147581556872614
     },
     {
       "tier": "node:ignition",
       "id": "regex-to-string-method",
       "size": 1000,
-      "before": 45354.125,
-      "after": 39255.25,
-      "spread": 1.0260483244599128
+      "before": 45343.75,
+      "after": 38963.5,
+      "spread": 1.012960999425172
     },
     {
       "tier": "node:ignition",
       "id": "match-to-test",
       "size": 10,
-      "before": 485.43310546875,
-      "after": 454.345703125,
-      "spread": 1.023428204707334
+      "before": 493.87646484375,
+      "after": 454.73193359375,
+      "spread": 1.040472605662112
     },
     {
       "tier": "node:ignition",
       "id": "match-to-test",
       "size": 1000,
-      "before": 41109.375,
-      "after": 38255.25,
-      "spread": 1.027216323303827
+      "before": 40880.25,
+      "after": 37890.625,
+      "spread": 1.0054362161660308
     },
     {
       "tier": "node:ignition",
       "id": "indexof-to-startswith",
       "size": 10,
-      "before": 422.34326171875,
-      "after": 365.78369140625,
-      "spread": 1.0093802231852962
+      "before": 416.50390625,
+      "after": 365.43798828125,
+      "spread": 1.0043898125196644
     },
     {
       "tier": "node:ignition",
       "id": "indexof-to-startswith",
       "size": 1000,
-      "before": 32916.625,
-      "after": 29390.625,
-      "spread": 1.018862958131094
+      "before": 32479.125,
+      "after": 29343.75,
+      "spread": 1.0220355962478678
     },
     {
       "tier": "node:ignition",
       "id": "regexp-constructor-literal",
       "size": 10,
-      "before": 994.875,
-      "after": 434.7939453125,
-      "spread": 1.0199768254313382
+      "before": 979.125,
+      "after": 431.98681640625,
+      "spread": 1.0205713592455659
     },
     {
       "tier": "node:ignition",
       "id": "regexp-constructor-literal",
       "size": 1000,
-      "before": 89546.875,
-      "after": 35890.625,
-      "spread": 1.011177700229992
+      "before": 87364.625,
+      "after": 35979.125,
+      "spread": 1.0166378177261484
     },
     {
       "tier": "bun:ftl",
       "id": "spread-in-accumulator:array",
       "size": 10,
-      "before": 125,
-      "after": 20.71142578125,
-      "spread": 1.534893482697429
+      "before": 130.125,
+      "after": 20.56884765625,
+      "spread": 1.236565467180895
     },
     {
       "tier": "bun:ftl",
       "id": "spread-in-accumulator:array",
       "size": 100,
-      "before": 5921.875,
-      "after": 223.53125,
-      "spread": 1.4482816151862992
+      "before": 4979.25,
+      "after": 206.60400390625,
+      "spread": 1.0191898108756168
     },
     {
       "tier": "bun:ftl",
       "id": "spread-in-accumulator:object",
       "size": 10,
-      "before": 234.375,
-      "after": 36.2548828125,
-      "spread": 1.180334157547699
+      "before": 250,
+      "after": 37.80078125,
+      "spread": 1.1445869681533856
     },
     {
       "tier": "bun:ftl",
       "id": "spread-in-accumulator:object",
       "size": 100,
-      "before": 4869.75,
+      "before": 4817.75,
       "after": 750,
-      "spread": 1.048207198950178
+      "spread": 1.0264981355207439
     },
     {
       "tier": "bun:ftl",
       "id": "accumulate-by-copy-in-loop",
       "size": 10,
       "before": 125,
-      "after": 14.5673828125,
-      "spread": 1.241326388313571
+      "after": 14.54638671875,
+      "spread": 1.2549862682850053
     },
     {
       "tier": "bun:ftl",
       "id": "accumulate-by-copy-in-loop",
       "size": 100,
-      "before": 4734.375,
-      "after": 187.54052734375,
-      "spread": 1.022986284231594
+      "before": 4661.5,
+      "after": 186.80810546875,
+      "spread": 1.013749574740175
     },
     {
       "tier": "bun:ftl",
       "id": "array-literal-lookup",
       "size": 10,
-      "before": 30.96484375,
-      "after": 12.14599609375,
-      "spread": 1.2545342734867728
+      "before": 31.20947265625,
+      "after": 12.00390625,
+      "spread": 1.2383915096745046
     },
     {
       "tier": "bun:ftl",
@@ -1732,543 +1732,543 @@
       "size": 1000,
       "before": 2552.125,
       "after": 1093.75,
-      "spread": 1.0391219779917487
+      "spread": 1.027803880269178
     },
     {
       "tier": "bun:ftl",
       "id": "filter-first",
       "size": 10,
-      "before": 17.39501953125,
-      "after": 12.22705078125,
-      "spread": 1.207055093367912
+      "before": 17.27294921875,
+      "after": 12.16650390625,
+      "spread": 1.165658799787469
     },
     {
       "tier": "bun:ftl",
       "id": "filter-first",
       "size": 1000,
       "before": 1729.125,
-      "after": 989.625,
-      "spread": 1.0151087978023567
+      "after": 958.375,
+      "spread": 1.0095866379488498
     },
     {
       "tier": "bun:ftl",
       "id": "filter-length-to-some",
       "size": 10,
-      "before": 10.5,
-      "after": 10.53857421875,
-      "spread": 1.1885597854549024
+      "before": 11.3525390625,
+      "after": 10.5791015625,
+      "spread": 1.1010264335676831
     },
     {
       "tier": "bun:ftl",
       "id": "filter-length-to-some",
       "size": 1000,
-      "before": 807.375,
-      "after": 807.25,
-      "spread": 1.012926054744265
+      "before": 807.25,
+      "after": 802,
+      "spread": 1.0262696850317687
     },
     {
       "tier": "bun:ftl",
       "id": "map-flat-to-flatmap",
       "size": 10,
-      "before": 93.6484375,
-      "after": 45.125,
-      "spread": 1.0502534175765195
+      "before": 93.75,
+      "after": 45.0234375,
+      "spread": 1.0635438642721193
     },
     {
       "tier": "bun:ftl",
       "id": "map-flat-to-flatmap",
       "size": 1000,
-      "before": 7828.125,
-      "after": 5760.375,
-      "spread": 1.0398246504783284
+      "before": 7869.75,
+      "after": 5708.25,
+      "spread": 1.0371326214718792
     },
     {
       "tier": "bun:ftl",
       "id": "unused-map",
       "size": 10,
-      "before": 26,
-      "after": 20.44677734375,
-      "spread": 1.1400290470723307
+      "before": 26.125,
+      "after": 20.5283203125,
+      "spread": 1.1324243084325107
     },
     {
       "tier": "bun:ftl",
       "id": "unused-map",
       "size": 1000,
-      "before": 2828.125,
-      "after": 2255.125,
-      "spread": 1.0075159026429745
+      "before": 2802.125,
+      "after": 2234.375,
+      "spread": 1.0107164782315656
     },
     {
       "tier": "bun:ftl",
       "id": "array-from-map",
       "size": 10,
       "before": 46.875,
-      "after": 49.6015625,
-      "spread": 1.0267663608442275
+      "after": 49.03173828125,
+      "spread": 1.0408452222980171
     },
     {
       "tier": "bun:ftl",
       "id": "array-from-map",
       "size": 1000,
-      "before": 3401,
+      "before": 3307.375,
       "after": 3453.125,
-      "spread": 1.041514273816192
+      "spread": 1.0296815409275752
     },
     {
       "tier": "bun:ftl",
       "id": "redundant-array-copy",
       "size": 10,
-      "before": 21.40283203125,
-      "after": 14.05810546875,
-      "spread": 1.3576080863365916
+      "before": 21.17919921875,
+      "after": 14.505859375,
+      "spread": 1.1939595037436164
     },
     {
       "tier": "bun:ftl",
       "id": "redundant-array-copy",
       "size": 1000,
-      "before": 1854.125,
-      "after": 1312.5,
-      "spread": 1.0265105386416862
+      "before": 1838.625,
+      "after": 1286.5,
+      "spread": 1.0859741118657242
     },
     {
       "tier": "bun:ftl",
       "id": "foreach-to-for",
       "size": 10,
-      "before": 9.90771484375,
-      "after": 4.84228515625,
-      "spread": 1.3975697931311508
+      "before": 10.294921875,
+      "after": 4.90283203125,
+      "spread": 1.3763274485225103
     },
     {
       "tier": "bun:ftl",
       "id": "foreach-to-for",
       "size": 1000,
-      "before": 671.875,
-      "after": 536.5,
-      "spread": 1.1178474660377475
+      "before": 692.75,
+      "after": 546.875,
+      "spread": 1.0484910883301772
     },
     {
       "tier": "bun:ftl",
       "id": "for-of-to-indexed",
       "size": 10,
-      "before": 6.7138671875,
-      "after": 4.84228515625,
-      "spread": 1.422574814219723
+      "before": 6.9375,
+      "after": 4.923828125,
+      "spread": 1.4038214818180075
     },
     {
       "tier": "bun:ftl",
       "id": "for-of-to-indexed",
       "size": 1000,
-      "before": 760.375,
-      "after": 538.8388671875,
-      "spread": 1.0019509718498971
+      "before": 760.5,
+      "after": 537.109375,
+      "spread": 1.0076432959011077
     },
     {
       "tier": "bun:ftl",
       "id": "for-in-array",
       "size": 10,
-      "before": 145.875,
-      "after": 4.78125,
-      "spread": 1.3653635294970325
+      "before": 143.33056640625,
+      "after": 4.740234375,
+      "spread": 1.3885580882287805
     },
     {
       "tier": "bun:ftl",
       "id": "for-in-array",
       "size": 1000,
-      "before": 7161.375,
-      "after": 536.19384765625,
-      "spread": 1.0032766128972233
+      "before": 7166.75,
+      "after": 536.478515625,
+      "spread": 1.0066103036074099
     },
     {
       "tier": "bun:ftl",
       "id": "cache-array-length",
       "size": 10,
       "before": 4.72021484375,
-      "after": 4.8828125,
-      "spread": 1.27434441915796
+      "after": 4.84228515625,
+      "spread": 1.2705308192827172
     },
     {
       "tier": "bun:ftl",
       "id": "cache-array-length",
       "size": 1000,
-      "before": 536.275390625,
-      "after": 535.17626953125,
-      "spread": 1.0020538075695395
+      "before": 536.19384765625,
+      "after": 536.82470703125,
+      "spread": 1.00170101260465
     },
     {
       "tier": "bun:ftl",
       "id": "date-now",
       "size": 10,
-      "before": 248.2099609375,
-      "after": 192.2197265625,
-      "spread": 1.023304671980816
+      "before": 244.875,
+      "after": 192.240234375,
+      "spread": 1.0178882971562278
     },
     {
       "tier": "bun:ftl",
       "id": "date-now",
       "size": 1000,
-      "before": 24645.875,
-      "after": 19104.125,
-      "spread": 1.0101476549954567
+      "before": 24687.5,
+      "after": 19083.25,
+      "spread": 1.0074349997789922
     },
     {
       "tier": "bun:ftl",
       "id": "math-pow-to-mul",
       "size": 10,
-      "before": 8.646484375,
-      "after": 7.22216796875,
-      "spread": 1.6563150043455417
+      "before": 6.591796875,
+      "after": 7.32421875,
+      "spread": 1.4184972080961629
     },
     {
       "tier": "bun:ftl",
       "id": "math-pow-to-mul",
       "size": 1000,
-      "before": 671.875,
-      "after": 901.125,
-      "spread": 1.0135457293370367
+      "before": 687.5,
+      "after": 916.75,
+      "spread": 1.020765674194908
     },
     {
       "tier": "bun:ftl",
       "id": "bitwise-trunc",
       "size": 10,
-      "before": 13.38720703125,
-      "after": 6.6328125,
-      "spread": 1.3401713780918727
+      "before": 11.65771484375,
+      "after": 6.79541015625,
+      "spread": 1.2778160142773305
     },
     {
       "tier": "bun:ftl",
       "id": "bitwise-trunc",
       "size": 1000,
-      "before": 1036.5,
+      "before": 1041.625,
       "after": 760.375,
-      "spread": 1.021718065316116
+      "spread": 1.0148788096952244
     },
     {
       "tier": "bun:ftl",
       "id": "object-assign-to-spread",
       "size": 10,
-      "before": 442.625,
-      "after": 261.04736328125,
-      "spread": 1.014513499762246
+      "before": 435.302734375,
+      "after": 259.765625,
+      "spread": 1.0143107140849856
     },
     {
       "tier": "bun:ftl",
       "id": "object-assign-to-spread",
       "size": 1000,
-      "before": 41729.125,
-      "after": 24916.625,
-      "spread": 1.0081673015640993
+      "before": 41958.25,
+      "after": 24458.375,
+      "spread": 1.0158066460952913
     },
     {
       "tier": "bun:ftl",
       "id": "object-entries-pair",
       "size": 10,
       "before": 187.5,
-      "after": 25.45166015625,
-      "spread": 1.056749442046363
+      "after": 25.349609375,
+      "spread": 1.0790249612383853
     },
     {
       "tier": "bun:ftl",
       "id": "object-entries-pair",
       "size": 1000,
-      "before": 20031.25,
-      "after": 23364.625,
-      "spread": 1.0232888576195402
+      "before": 20125,
+      "after": 23927.125,
+      "spread": 1.0433336220161522
     },
     {
       "tier": "bun:ftl",
       "id": "object-entries-iteration:values",
-      "size": 10,
-      "before": 182.25,
-      "after": 32.91845703125,
-      "spread": 1.054727024405487
-    },
-    {
-      "tier": "bun:ftl",
-      "id": "object-entries-iteration:values",
-      "size": 1000,
-      "before": 19296.875,
-      "after": 2041.75,
-      "spread": 1.0216344755620599
-    },
-    {
-      "tier": "bun:ftl",
-      "id": "object-entries-iteration:keys",
       "size": 10,
       "before": 182.375,
-      "after": 13.3056640625,
-      "spread": 1.0866820209188774
+      "after": 32.8779296875,
+      "spread": 1.044554405958091
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "object-entries-iteration:values",
+      "size": 1000,
+      "before": 19588.5,
+      "after": 2041.625,
+      "spread": 1.0290324554360364
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "object-entries-iteration:keys",
+      "size": 10,
+      "before": 186.279296875,
+      "after": 13.24462890625,
+      "spread": 1.0781145973630648
     },
     {
       "tier": "bun:ftl",
       "id": "object-entries-iteration:keys",
       "size": 1000,
-      "before": 19593.75,
-      "after": 7166.625,
-      "spread": 1.013692027905921
+      "before": 19916.625,
+      "after": 7218.75,
+      "spread": 1.0499891552780785
     },
     {
       "tier": "bun:ftl",
       "id": "split-join-to-replaceall",
       "size": 10,
-      "before": 713.625,
-      "after": 677.125,
-      "spread": 1.0688735012321324
+      "before": 755.25,
+      "after": 708.25,
+      "spread": 1.0207134637514383
     },
     {
       "tier": "bun:ftl",
       "id": "split-join-to-replaceall",
       "size": 1000,
-      "before": 77578.125,
-      "after": 71765.625,
-      "spread": 1.0485847810573434
+      "before": 79906.25,
+      "after": 77140.625,
+      "spread": 1.0225473764818804
     },
     {
       "tier": "bun:ftl",
       "id": "regex-to-string-method",
       "size": 10,
-      "before": 141.4384765625,
-      "after": 108.3984375,
-      "spread": 1.0252812787080139
+      "before": 136.373046875,
+      "after": 109.375,
+      "spread": 1.0454208713006832
     },
     {
       "tier": "bun:ftl",
       "id": "regex-to-string-method",
       "size": 1000,
-      "before": 13265.625,
-      "after": 11145.875,
-      "spread": 1.0413650002537922
+      "before": 13567.75,
+      "after": 11494.75,
+      "spread": 1.0040416777944774
     },
     {
       "tier": "bun:ftl",
       "id": "match-to-test",
       "size": 10,
-      "before": 83.375,
-      "after": 86.32373046875,
-      "spread": 1.0780581152443007
+      "before": 88.27734375,
+      "after": 91.16650390625,
+      "spread": 1.0851918805338938
     },
     {
       "tier": "bun:ftl",
       "id": "match-to-test",
       "size": 1000,
-      "before": 8682.25,
-      "after": 8854.125,
-      "spread": 1.1230649418841168
+      "before": 9307.25,
+      "after": 9781.25,
+      "spread": 1.0950058943537182
     },
     {
       "tier": "bun:ftl",
       "id": "indexof-to-startswith",
       "size": 10,
-      "before": 83.375,
-      "after": 13.26513671875,
-      "spread": 1.0991622366492149
+      "before": 88.5,
+      "after": 13.34619140625,
+      "spread": 1.144283196742443
     },
     {
       "tier": "bun:ftl",
       "id": "indexof-to-startswith",
       "size": 1000,
-      "before": 9197.875,
-      "after": 1224,
-      "spread": 1.0341076484250453
+      "before": 8526,
+      "after": 1244.875,
+      "spread": 1.1487748019283472
     },
     {
       "tier": "bun:ftl",
       "id": "regexp-constructor-literal",
       "size": 10,
-      "before": 213.0537109375,
-      "after": 26.42822265625,
-      "spread": 1.0668494506999433
+      "before": 229.125,
+      "after": 26.55029296875,
+      "spread": 1.0719179963702357
     },
     {
       "tier": "bun:ftl",
       "id": "regexp-constructor-literal",
       "size": 1000,
-      "before": 20718.75,
-      "after": 2432.25,
-      "spread": 1.0100573152337857
+      "before": 22703.125,
+      "after": 2484.375,
+      "spread": 1.0082435700001948
     },
     {
       "tier": "bun:dfg",
       "id": "spread-in-accumulator:array",
       "size": 10,
-      "before": 156.25,
-      "after": 54.13818359375,
-      "spread": 1.083821374199419
+      "before": 161.5,
+      "after": 55.6435546875,
+      "spread": 1.1861959701691975
     },
     {
       "tier": "bun:dfg",
       "id": "spread-in-accumulator:array",
       "size": 100,
-      "before": 7338.625,
-      "after": 552.125,
-      "spread": 1.0496684137472867
+      "before": 7630.25,
+      "after": 583.375,
+      "spread": 1.0170699681984465
     },
     {
       "tier": "bun:dfg",
       "id": "spread-in-accumulator:object",
       "size": 10,
-      "before": 270.875,
-      "after": 74.9716796875,
-      "spread": 1.0275833733695376
+      "before": 281.25,
+      "after": 75.8056640625,
+      "spread": 1.0327829082725024
     },
     {
       "tier": "bun:dfg",
       "id": "spread-in-accumulator:object",
       "size": 100,
-      "before": 5036.5,
-      "after": 1265.625,
-      "spread": 1.0030737452971696
+      "before": 4947.875,
+      "after": 1276,
+      "spread": 1.0399661351050216
     },
     {
       "tier": "bun:dfg",
       "id": "accumulate-by-copy-in-loop",
       "size": 10,
-      "before": 145.75,
-      "after": 28.5439453125,
-      "spread": 1.0435833728015156
+      "before": 140.625,
+      "after": 27.83203125,
+      "spread": 1.0846205531189086
     },
     {
       "tier": "bun:dfg",
       "id": "accumulate-by-copy-in-loop",
       "size": 100,
-      "before": 7099,
-      "after": 281.53466796875,
-      "spread": 1.0229067731083912
+      "before": 7307.25,
+      "after": 279.37841796875,
+      "spread": 1.0506068215012019
     },
     {
       "tier": "bun:dfg",
       "id": "array-literal-lookup",
       "size": 10,
-      "before": 41.75,
-      "after": 31.04638671875,
-      "spread": 1.068809018642331
+      "before": 44.087890625,
+      "after": 31.25,
+      "spread": 1.106621119922673
     },
     {
       "tier": "bun:dfg",
       "id": "array-literal-lookup",
       "size": 1000,
-      "before": 3734.375,
-      "after": 2250,
-      "spread": 1.0849536
+      "before": 3744.75,
+      "after": 2411.375,
+      "spread": 1.0509860505241266
     },
     {
       "tier": "bun:dfg",
       "id": "filter-first",
       "size": 10,
-      "before": 30.6806640625,
-      "after": 26.08203125,
-      "spread": 1.0747526448102263
+      "before": 31.06689453125,
+      "after": 26.2451171875,
+      "spread": 1.0754433143327091
     },
     {
       "tier": "bun:dfg",
       "id": "filter-first",
       "size": 1000,
-      "before": 2432.375,
-      "after": 1781.25,
-      "spread": 1.0073523836199854
+      "before": 2453.125,
+      "after": 1802,
+      "spread": 1.0042292993630575
     },
     {
       "tier": "bun:dfg",
       "id": "filter-length-to-some",
       "size": 10,
-      "before": 23.6611328125,
-      "after": 23.33544921875,
-      "spread": 1.1123210121541027
+      "before": 23.78369140625,
+      "after": 23.3154296875,
+      "spread": 1.1315146606626623
     },
     {
       "tier": "bun:dfg",
       "id": "filter-length-to-some",
       "size": 1000,
-      "before": 1677.125,
-      "after": 1796.875,
-      "spread": 1.005916714356543
+      "before": 1671.875,
+      "after": 1817.75,
+      "spread": 1.0305449609702866
     },
     {
       "tier": "bun:dfg",
       "id": "map-flat-to-flatmap",
       "size": 10,
-      "before": 109.375,
-      "after": 107.80810546875,
-      "spread": 1.0905834024031777
+      "before": 114.625,
+      "after": 108.744140625,
+      "spread": 1.0550648115281063
     },
     {
       "tier": "bun:dfg",
       "id": "map-flat-to-flatmap",
       "size": 1000,
-      "before": 9192.75,
-      "after": 11458.25,
-      "spread": 1.0428657657031248
+      "before": 9338.625,
+      "after": 11828.125,
+      "spread": 1.0365816726892416
     },
     {
       "tier": "bun:dfg",
       "id": "unused-map",
       "size": 10,
       "before": 46.875,
-      "after": 39.408203125,
-      "spread": 1.082383406849383
+      "after": 40.18115234375,
+      "spread": 1.0799930004496239
     },
     {
       "tier": "bun:dfg",
       "id": "unused-map",
       "size": 1000,
-      "before": 4260.375,
-      "after": 3546.875,
-      "spread": 1.0510103542259688
+      "before": 4406.25,
+      "after": 3630.25,
+      "spread": 1.0667518948041275
     },
     {
       "tier": "bun:dfg",
       "id": "array-from-map",
       "size": 10,
       "before": 62.5,
-      "after": 88.337890625,
-      "spread": 1.074647361897234
+      "after": 94.95068359375,
+      "spread": 1.1294769728933862
     },
     {
       "tier": "bun:dfg",
       "id": "array-from-map",
       "size": 1000,
-      "before": 4229.25,
-      "after": 6348.875,
-      "spread": 1.092227376569398
+      "before": 4338.625,
+      "after": 6484.375,
+      "spread": 1.0275813991404879
     },
     {
       "tier": "bun:dfg",
       "id": "redundant-array-copy",
       "size": 10,
-      "before": 59.7734375,
-      "after": 50.76123046875,
-      "spread": 1.069067611649525
+      "before": 58.6748046875,
+      "after": 52.775390625,
+      "spread": 1.1666133661715654
     },
     {
       "tier": "bun:dfg",
       "id": "redundant-array-copy",
       "size": 1000,
-      "before": 5604.125,
-      "after": 4609.375,
-      "spread": 1.0053718266922977
+      "before": 5630.125,
+      "after": 4593.75,
+      "spread": 1.0179360989008084
     },
     {
       "tier": "bun:dfg",
       "id": "foreach-to-for",
       "size": 10,
-      "before": 26.265625,
-      "after": 10.5390625,
-      "spread": 1.2268749280701106
+      "before": 26.4892578125,
+      "after": 10.7421875,
+      "spread": 1.2280424764432192
     },
     {
       "tier": "bun:dfg",
       "id": "foreach-to-for",
       "size": 1000,
-      "before": 1750,
-      "after": 1328.125,
-      "spread": 1.0188450016806723
+      "before": 1744.875,
+      "after": 1333.375,
+      "spread": 1.018189420518662
     },
     {
       "tier": "bun:dfg",
       "id": "for-of-to-indexed",
       "size": 10,
-      "before": 21.037109375,
-      "after": 10.5185546875,
-      "spread": 1.2718265521789653
+      "before": 20.875,
+      "after": 10.599609375,
+      "spread": 1.2492745485769103
     },
     {
       "tier": "bun:dfg",
@@ -2276,38 +2276,38 @@
       "size": 1000,
       "before": 1505.25,
       "after": 1328.125,
-      "spread": 1
+      "spread": 1.0034047500415213
     },
     {
       "tier": "bun:dfg",
       "id": "for-in-array",
       "size": 10,
-      "before": 151.125,
-      "after": 10.55908203125,
-      "spread": 1.255921901180653
+      "before": 151.8759765625,
+      "after": 10.5390625,
+      "spread": 1.268670926101722
     },
     {
       "tier": "bun:dfg",
       "id": "for-in-array",
       "size": 1000,
-      "before": 8286.5,
-      "after": 1250,
-      "spread": 1.0242436090225564
-    },
-    {
-      "tier": "bun:dfg",
-      "id": "cache-array-length",
-      "size": 10,
-      "before": 10.498046875,
-      "after": 10.599609375,
-      "spread": 1.2705401668544385
-    },
-    {
-      "tier": "bun:dfg",
-      "id": "cache-array-length",
-      "size": 1000,
-      "before": 1250,
+      "before": 8270.875,
       "after": 1244.875,
+      "spread": 1.0230624806991686
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "cache-array-length",
+      "size": 10,
+      "before": 10.4775390625,
+      "after": 10.57958984375,
+      "spread": 1.2026975361645784
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "cache-array-length",
+      "size": 1000,
+      "before": 1244.875,
+      "after": 1250,
       "spread": 1.0041168792047395
     },
     {
@@ -2315,1024 +2315,1024 @@
       "id": "date-now",
       "size": 10,
       "before": 255.25,
-      "after": 209.4521484375,
-      "spread": 1.023221846581292
+      "after": 208.375,
+      "spread": 1.0121443744987146
     },
     {
       "tier": "bun:dfg",
       "id": "date-now",
       "size": 1000,
-      "before": 25088.625,
-      "after": 20500,
-      "spread": 1.0063322768347187
+      "before": 25078.125,
+      "after": 20442.625,
+      "spread": 1.0014027025438552
     },
     {
       "tier": "bun:dfg",
       "id": "math-pow-to-mul",
       "size": 10,
       "before": 20.875,
-      "after": 21.17919921875,
-      "spread": 1.044592081987227
+      "after": 21.3623046875,
+      "spread": 1.047251872574844
     },
     {
       "tier": "bun:dfg",
       "id": "math-pow-to-mul",
       "size": 1000,
-      "before": 1505.25,
+      "before": 1750,
       "after": 1505.25,
-      "spread": 1.0068210924058878
+      "spread": 1.0029285714285714
     },
     {
       "tier": "bun:dfg",
       "id": "bitwise-trunc",
       "size": 10,
-      "before": 24.35302734375,
+      "before": 24.0068359375,
       "after": 20.875,
-      "spread": 1.1279379286539704
+      "spread": 1.1209732834700774
     },
     {
       "tier": "bun:dfg",
       "id": "bitwise-trunc",
       "size": 1000,
-      "before": 2005.25,
+      "before": 2010.375,
       "after": 1505.25,
-      "spread": 1.0051739184640318
+      "spread": 1.0304924288131914
     },
     {
       "tier": "bun:dfg",
       "id": "object-assign-to-spread",
       "size": 10,
-      "before": 473.875,
-      "after": 297.05810546875,
-      "spread": 1.0163509114986762
+      "before": 478.0478515625,
+      "after": 308.41064453125,
+      "spread": 1.0574877073366231
     },
     {
       "tier": "bun:dfg",
       "id": "object-assign-to-spread",
       "size": 1000,
-      "before": 44630.125,
-      "after": 28166.625,
-      "spread": 1.0652599160161305
+      "before": 44671.875,
+      "after": 28010.5,
+      "spread": 1.0268503851631456
     },
     {
       "tier": "bun:dfg",
       "id": "object-entries-pair",
       "size": 10,
-      "before": 223.875,
-      "after": 39.0625,
-      "spread": 1.0901101758793972
+      "before": 226.03369140625,
+      "after": 36.5,
+      "spread": 1.0769361639757842
     },
     {
       "tier": "bun:dfg",
       "id": "object-entries-pair",
       "size": 1000,
-      "before": 22937.5,
-      "after": 24494.75,
-      "spread": 1.0021431257665563
+      "before": 22708.25,
+      "after": 24156.25,
+      "spread": 1.0584214507769074
     },
     {
       "tier": "bun:dfg",
       "id": "object-entries-iteration:values",
       "size": 10,
-      "before": 218.75,
-      "after": 43.4365234375,
-      "spread": 1.043531816679942
+      "before": 221.39453125,
+      "after": 43.4775390625,
+      "spread": 1.0056812059261235
     },
     {
       "tier": "bun:dfg",
       "id": "object-entries-iteration:values",
       "size": 1000,
-      "before": 22479.125,
-      "after": 2786.5,
-      "spread": 1.0165232985144919
+      "before": 22375,
+      "after": 2817.75,
+      "spread": 1.0297398168297898
     },
     {
       "tier": "bun:dfg",
       "id": "object-entries-iteration:keys",
       "size": 10,
-      "before": 212.46337890625,
-      "after": 23.4169921875,
-      "spread": 1.0082737091881568
+      "before": 215.14892578125,
+      "after": 23.49853515625,
+      "spread": 1.0882374768089054
     },
     {
       "tier": "bun:dfg",
       "id": "object-entries-iteration:keys",
       "size": 1000,
-      "before": 21463.5,
-      "after": 7838.625,
-      "spread": 1.0116389451860135
+      "before": 21473.875,
+      "after": 7817.75,
+      "spread": 1.034764877479373
     },
     {
       "tier": "bun:dfg",
       "id": "split-join-to-replaceall",
       "size": 10,
-      "before": 724,
-      "after": 708.25,
-      "spread": 1.036551505246961
+      "before": 750,
+      "after": 697.875,
+      "spread": 1.0371216192011465
     },
     {
       "tier": "bun:dfg",
       "id": "split-join-to-replaceall",
       "size": 1000,
-      "before": 78500,
-      "after": 73005.25,
-      "spread": 1.033635637543692
+      "before": 78265.625,
+      "after": 73052.125,
+      "spread": 1.016525680622644
     },
     {
       "tier": "bun:dfg",
       "id": "regex-to-string-method",
       "size": 10,
-      "before": 151,
+      "before": 147.0947265625,
       "after": 125,
-      "spread": 1.013615775170933
+      "spread": 1.0672572614107882
     },
     {
       "tier": "bun:dfg",
       "id": "regex-to-string-method",
       "size": 1000,
-      "before": 14911.375,
-      "after": 12239.625,
-      "spread": 1.1132438624026721
+      "before": 14390.625,
+      "after": 12390.625,
+      "spread": 1.1193471268641433
     },
     {
       "tier": "bun:dfg",
       "id": "match-to-test",
       "size": 10,
-      "before": 108.78515625,
-      "after": 104.20703125,
-      "spread": 1.008346479123929
+      "before": 106.546875,
+      "after": 104.04443359375,
+      "spread": 1.0245192814072541
     },
     {
       "tier": "bun:dfg",
       "id": "match-to-test",
       "size": 1000,
-      "before": 11156.25,
-      "after": 10395.75,
-      "spread": 1.0731548950292187
+      "before": 10817.75,
+      "after": 10140.625,
+      "spread": 1.0167277794585075
     },
     {
       "tier": "bun:dfg",
       "id": "indexof-to-startswith",
       "size": 10,
       "before": 99,
-      "after": 28.38134765625,
-      "spread": 1.0076395614661064
+      "after": 28.6455078125,
+      "spread": 1.0980830274586453
     },
     {
       "tier": "bun:dfg",
       "id": "indexof-to-startswith",
       "size": 1000,
-      "before": 9890.625,
+      "before": 9906.25,
       "after": 2317.75,
-      "spread": 1.076093002300571
+      "spread": 1.1167192429022084
     },
     {
       "tier": "bun:dfg",
       "id": "regexp-constructor-literal",
       "size": 10,
-      "before": 240.5595703125,
-      "after": 38.26904296875,
-      "spread": 1.0314783971290895
+      "before": 230.611328125,
+      "after": 39.44921875,
+      "spread": 1.038209961382315
     },
     {
       "tier": "bun:dfg",
       "id": "regexp-constructor-literal",
       "size": 1000,
-      "before": 23437.5,
-      "after": 3270.875,
-      "spread": 1.004
+      "before": 21849,
+      "after": 3270.75,
+      "spread": 1.0383355255379176
     },
     {
       "tier": "bun:baseline",
       "id": "spread-in-accumulator:array",
       "size": 10,
-      "before": 468.75,
-      "after": 173.25830078125,
-      "spread": 1.0158642514323983
+      "before": 474,
+      "after": 167.88720703125,
+      "spread": 1.035635680042698
     },
     {
       "tier": "bun:baseline",
       "id": "spread-in-accumulator:array",
       "size": 100,
-      "before": 20796.875,
-      "after": 1317.75,
-      "spread": 1.0555511203429533
+      "before": 21817.75,
+      "after": 1317.625,
+      "spread": 1.0100678196420376
     },
     {
       "tier": "bun:baseline",
       "id": "spread-in-accumulator:object",
       "size": 10,
-      "before": 375,
-      "after": 133.23974609375,
-      "spread": 1.0209391328576638
+      "before": 380.25,
+      "after": 127.50244140625,
+      "spread": 1.0729751467299156
     },
     {
       "tier": "bun:baseline",
       "id": "spread-in-accumulator:object",
       "size": 100,
-      "before": 5916.625,
-      "after": 1708.25,
-      "spread": 1.0069019268660575
+      "before": 5770.875,
+      "after": 1661.5,
+      "spread": 1.0156044718708215
     },
     {
       "tier": "bun:baseline",
       "id": "accumulate-by-copy-in-loop",
       "size": 10,
-      "before": 422.3837890625,
-      "after": 106.4453125,
-      "spread": 1.0112248885025235
+      "before": 415.7509765625,
+      "after": 105.99755859375,
+      "spread": 1.0376112847559964
     },
     {
       "tier": "bun:baseline",
       "id": "accumulate-by-copy-in-loop",
       "size": 100,
-      "before": 20114.625,
-      "after": 770.875,
-      "spread": 1.010350461918874
+      "before": 20145.875,
+      "after": 765.625,
+      "spread": 1.0131675110555067
     },
     {
       "tier": "bun:baseline",
       "id": "array-literal-lookup",
       "size": 10,
-      "before": 230.91650390625,
-      "after": 56.68115234375,
-      "spread": 1.0863881877622046
+      "before": 226.88818359375,
+      "after": 56.47802734375,
+      "spread": 1.0104638085119297
     },
     {
       "tier": "bun:baseline",
       "id": "array-literal-lookup",
       "size": 1000,
-      "before": 19989.5,
-      "after": 3802.125,
-      "spread": 1.0029856864582307
+      "before": 19901,
+      "after": 3812.5,
+      "spread": 1.0106822302041087
     },
     {
       "tier": "bun:baseline",
       "id": "filter-first",
       "size": 10,
-      "before": 122.1923828125,
-      "after": 100.240234375,
-      "spread": 1.0162732037711446
+      "before": 122.15185546875,
+      "after": 100.28076171875,
+      "spread": 1.0179904167955482
     },
     {
       "tier": "bun:baseline",
       "id": "filter-first",
       "size": 1000,
-      "before": 7260.5,
-      "after": 5729.125,
-      "spread": 1.0299732580792837
+      "before": 7244.75,
+      "after": 5854.125,
+      "spread": 1.0114963141555047
     },
     {
       "tier": "bun:baseline",
       "id": "filter-length-to-some",
       "size": 10,
-      "before": 104.25,
-      "after": 83.251953125,
-      "spread": 1.0687217096409574
+      "before": 99.853515625,
+      "after": 81.685546875,
+      "spread": 1.0406699370085888
     },
     {
       "tier": "bun:baseline",
       "id": "filter-length-to-some",
       "size": 1000,
-      "before": 5687.5,
+      "before": 5750,
       "after": 5432.25,
-      "spread": 1.0194630258139856
+      "spread": 1.0209922648586782
     },
     {
       "tier": "bun:baseline",
       "id": "map-flat-to-flatmap",
       "size": 10,
-      "before": 199.076171875,
-      "after": 382.6904296875,
-      "spread": 1.0304735459028287
+      "before": 198,
+      "after": 393.0869140625,
+      "spread": 1.085320230108328
     },
     {
       "tier": "bun:baseline",
       "id": "map-flat-to-flatmap",
       "size": 1000,
-      "before": 13656.25,
-      "after": 26234.375,
-      "spread": 1.0201730106592244
+      "before": 13640.625,
+      "after": 26703.125,
+      "spread": 1.0435595233754575
     },
     {
       "tier": "bun:baseline",
       "id": "unused-map",
       "size": 10,
-      "before": 199.40185546875,
-      "after": 170.064453125,
-      "spread": 1.0105350038074854
+      "before": 199.1982421875,
+      "after": 167.52099609375,
+      "spread": 1.0080835997436732
     },
     {
       "tier": "bun:baseline",
       "id": "unused-map",
       "size": 1000,
-      "before": 13140.625,
-      "after": 11411.5,
-      "spread": 1.0080500207797765
+      "before": 13119.875,
+      "after": 11302,
+      "spread": 1.0038182112152316
     },
     {
       "tier": "bun:baseline",
       "id": "array-from-map",
       "size": 10,
-      "before": 166.75,
-      "after": 297.81103515625,
-      "spread": 1.0350626358025252
+      "before": 164.95751953125,
+      "after": 304.9521484375,
+      "spread": 1.003248148319983
     },
     {
       "tier": "bun:baseline",
       "id": "array-from-map",
       "size": 1000,
-      "before": 9901,
-      "after": 15984.375,
-      "spread": 1.0058230411799498
+      "before": 10088.5,
+      "after": 17198,
+      "spread": 1.0246222976826072
     },
     {
       "tier": "bun:baseline",
       "id": "redundant-array-copy",
       "size": 10,
-      "before": 135.375,
-      "after": 111.9794921875,
-      "spread": 1.0492648027776572
+      "before": 140.625,
+      "after": 120.76806640625,
+      "spread": 1.0849502887641915
     },
     {
       "tier": "bun:baseline",
       "id": "redundant-array-copy",
       "size": 1000,
-      "before": 7942.75,
-      "after": 7265.625,
-      "spread": 1.0056703125657953
+      "before": 8224,
+      "after": 7557.375,
+      "spread": 1.0655114215818533
     },
     {
       "tier": "bun:baseline",
       "id": "foreach-to-for",
       "size": 10,
-      "before": 90.04736328125,
-      "after": 30.416015625,
-      "spread": 1.044595181641559
+      "before": 93.404296875,
+      "after": 33.67138671875,
+      "spread": 1.057284561467038
     },
     {
       "tier": "bun:baseline",
       "id": "foreach-to-for",
       "size": 1000,
-      "before": 5557.25,
-      "after": 2078.125,
-      "spread": 1.0043584610965617
+      "before": 5536.375,
+      "after": 2255.25,
+      "spread": 1.0152298211105204
     },
     {
       "tier": "bun:baseline",
       "id": "for-of-to-indexed",
       "size": 10,
-      "before": 34.87158203125,
-      "after": 34.58642578125,
-      "spread": 1.016353996120768
+      "before": 35.05419921875,
+      "after": 34.5869140625,
+      "spread": 1.0040303128961177
     },
     {
       "tier": "bun:baseline",
       "id": "for-of-to-indexed",
       "size": 1000,
-      "before": 1791.75,
-      "after": 2510.5,
-      "spread": 1.0028603320775777
+      "before": 1791.625,
+      "after": 2515.625,
+      "spread": 1.0057908323449383
     },
     {
       "tier": "bun:baseline",
       "id": "for-in-array",
       "size": 10,
-      "before": 270.2841796875,
-      "after": 34.87158203125,
-      "spread": 1.0211474468062045
+      "before": 271.30126953125,
+      "after": 35.0341796875,
+      "spread": 1.0184960643153054
     },
     {
       "tier": "bun:baseline",
       "id": "for-in-array",
       "size": 1000,
-      "before": 17770.875,
-      "after": 2526.125,
-      "spread": 1.006448301080108
+      "before": 17838.625,
+      "after": 2531.25,
+      "spread": 1.0072945644633484
     },
     {
       "tier": "bun:baseline",
       "id": "cache-array-length",
       "size": 10,
-      "before": 35.0341796875,
-      "after": 31.39208984375,
-      "spread": 1.0111697641128938
+      "before": 34.5458984375,
+      "after": 31.35205078125,
+      "spread": 1.0192316319523544
     },
     {
       "tier": "bun:baseline",
       "id": "cache-array-length",
       "size": 1000,
       "before": 2526.125,
-      "after": 2411.5,
-      "spread": 1.0113342880264955
+      "after": 2260.5,
+      "spread": 1.0359032341187435
     },
     {
       "tier": "bun:baseline",
       "id": "date-now",
       "size": 10,
-      "before": 327.43359375,
-      "after": 299.3369140625,
-      "spread": 1.0074730220911652
+      "before": 328.125,
+      "after": 306.31494140625,
+      "spread": 1.0147444371649508
     },
     {
       "tier": "bun:baseline",
       "id": "date-now",
       "size": 1000,
-      "before": 29635.375,
-      "after": 28505.25,
-      "spread": 1.0071340052107736
+      "before": 29885.5,
+      "after": 28458.25,
+      "spread": 1.0102765983015047
     },
     {
       "tier": "bun:baseline",
       "id": "math-pow-to-mul",
       "size": 10,
-      "before": 96.4560546875,
-      "after": 43.25341796875,
-      "spread": 1.0187812996343213
+      "before": 96.21142578125,
+      "after": 43.599609375,
+      "spread": 1.006819683530643
     },
     {
       "tier": "bun:baseline",
       "id": "math-pow-to-mul",
       "size": 1000,
-      "before": 6765.625,
-      "after": 2364.625,
-      "spread": 1.0037226894049502
+      "before": 6812.5,
+      "after": 2375,
+      "spread": 1.003816513761468
     },
     {
       "tier": "bun:baseline",
       "id": "bitwise-trunc",
       "size": 10,
-      "before": 72.021484375,
-      "after": 94.767578125,
-      "spread": 1.0582923372336772
+      "before": 74.666015625,
+      "after": 95.703125,
+      "spread": 1.0114815792442724
     },
     {
       "tier": "bun:baseline",
       "id": "bitwise-trunc",
       "size": 1000,
-      "before": 5229.125,
-      "after": 6974,
-      "spread": 1.0030119761910454
+      "before": 5260.5,
+      "after": 6854.125,
+      "spread": 1.0172643684592673
     },
     {
       "tier": "bun:baseline",
       "id": "object-assign-to-spread",
       "size": 10,
-      "before": 599,
-      "after": 401.998046875,
-      "spread": 1.0187399472356682
+      "before": 593.75,
+      "after": 401.57080078125,
+      "spread": 1.006109881207759
     },
     {
       "tier": "bun:baseline",
       "id": "object-assign-to-spread",
       "size": 1000,
       "before": 53520.875,
-      "after": 34276.125,
-      "spread": 1.0039051926565583
+      "after": 34213.5,
+      "spread": 1.0102928162070501
     },
     {
       "tier": "bun:baseline",
       "id": "object-entries-pair",
       "size": 10,
-      "before": 328.125,
-      "after": 83.65869140625,
-      "spread": 1.0589197611001466
+      "before": 322.9169921875,
+      "after": 81.60400390625,
+      "spread": 1.0687997857320939
     },
     {
       "tier": "bun:baseline",
       "id": "object-entries-pair",
       "size": 1000,
-      "before": 29984.375,
-      "after": 28093.75,
-      "spread": 1.0061286188318104
+      "before": 29567.625,
+      "after": 29057.25,
+      "spread": 1.0058090274596285
     },
     {
       "tier": "bun:baseline",
       "id": "object-entries-iteration:values",
       "size": 10,
       "before": 312.5,
-      "after": 64.59521484375,
-      "spread": 1.0288567409718625
+      "after": 66.5078125,
+      "spread": 1.024232190209551
     },
     {
       "tier": "bun:baseline",
       "id": "object-entries-iteration:values",
       "size": 1000,
-      "before": 28734.375,
+      "before": 29213.625,
       "after": 3093.75,
-      "spread": 1.0244546289869878
+      "spread": 1.0248405263123304
     },
     {
       "tier": "bun:baseline",
       "id": "object-entries-iteration:keys",
       "size": 10,
-      "before": 307.375,
-      "after": 58.41064453125,
-      "spread": 1.0739891605219782
+      "before": 312.5,
+      "after": 56.82373046875,
+      "spread": 1.0141562372789792
     },
     {
       "tier": "bun:baseline",
       "id": "object-entries-iteration:keys",
       "size": 1000,
-      "before": 28104.125,
-      "after": 8989.625,
-      "spread": 1.0064667637372937
+      "before": 28000,
+      "after": 8979.125,
+      "spread": 1.0064128959832774
     },
     {
       "tier": "bun:baseline",
       "id": "split-join-to-replaceall",
       "size": 10,
-      "before": 828.125,
-      "after": 770.875,
-      "spread": 1.0198836778838063
+      "before": 838.5,
+      "after": 765.625,
+      "spread": 1.027565443138386
     },
     {
       "tier": "bun:baseline",
       "id": "split-join-to-replaceall",
       "size": 1000,
-      "before": 85703.125,
-      "after": 78880.125,
-      "spread": 1.0275921387833034
+      "before": 86822.875,
+      "after": 78135.5,
+      "spread": 1.0141121804667856
     },
     {
       "tier": "bun:baseline",
       "id": "regex-to-string-method",
       "size": 10,
-      "before": 205.0576171875,
-      "after": 185.05859375,
-      "spread": 1.0322518632782929
+      "before": 204.91552734375,
+      "after": 185.28271484375,
+      "spread": 1.0508624654787877
     },
     {
       "tier": "bun:baseline",
       "id": "regex-to-string-method",
       "size": 1000,
-      "before": 18645.875,
-      "after": 16901.125,
-      "spread": 1.0257911912615165
+      "before": 18609.375,
+      "after": 16973.875,
+      "spread": 1.0351102793971778
     },
     {
       "tier": "bun:baseline",
       "id": "match-to-test",
       "size": 10,
-      "before": 182.57666015625,
-      "after": 151.91650390625,
-      "spread": 1.0018294022369225
+      "before": 183.5732421875,
+      "after": 155.94482421875,
+      "spread": 1.0059040948987399
     },
     {
       "tier": "bun:baseline",
       "id": "match-to-test",
       "size": 1000,
-      "before": 16640.625,
-      "after": 13724,
-      "spread": 1.0142310923737314
+      "before": 16703.125,
+      "after": 14036.5,
+      "spread": 1.0676419275990896
     },
     {
       "tier": "bun:baseline",
       "id": "indexof-to-startswith",
       "size": 10,
-      "before": 145.95556640625,
-      "after": 127.54296875,
-      "spread": 1.0375720851517793
+      "before": 152.56787109375,
+      "after": 125.28466796875,
+      "spread": 1.0700565901775838
     },
     {
       "tier": "bun:baseline",
       "id": "indexof-to-startswith",
       "size": 1000,
-      "before": 13234.375,
-      "after": 10718.75,
-      "spread": 1.1418417945690673
+      "before": 13932.25,
+      "after": 10651,
+      "spread": 1.0639861924938538
     },
     {
       "tier": "bun:baseline",
       "id": "regexp-constructor-literal",
       "size": 10,
-      "before": 296.7529296875,
-      "after": 142.4150390625,
-      "spread": 1.0219928480598117
+      "before": 302.0224609375,
+      "after": 151,
+      "spread": 1.0277734197378003
     },
     {
       "tier": "bun:baseline",
       "id": "regexp-constructor-literal",
       "size": 1000,
-      "before": 27255.25,
-      "after": 12302.125,
-      "spread": 1.0235721732063234
+      "before": 27599,
+      "after": 12718.75,
+      "spread": 1.0436705631251086
     },
     {
       "tier": "bun:llint",
       "id": "spread-in-accumulator:array",
       "size": 10,
-      "before": 708.25,
-      "after": 470.66259765625,
-      "spread": 1.0521784262328273
+      "before": 734.375,
+      "after": 484.375,
+      "spread": 1.2395089239631336
     },
     {
       "tier": "bun:llint",
       "id": "spread-in-accumulator:array",
       "size": 100,
-      "before": 23291.625,
-      "after": 3619.75,
-      "spread": 1.0048865952987827
+      "before": 24474,
+      "after": 3666.625,
+      "spread": 2.3433221143062806
     },
     {
       "tier": "bun:llint",
       "id": "spread-in-accumulator:object",
       "size": 10,
       "before": 656.25,
-      "after": 503.47900390625,
-      "spread": 1.0113337682424703
+      "after": 504.2724609375,
+      "spread": 1.0045048476421026
     },
     {
       "tier": "bun:llint",
       "id": "spread-in-accumulator:object",
       "size": 100,
-      "before": 15182.25,
-      "after": 4187.5,
-      "spread": 1.0113206157479444
+      "before": 15125,
+      "after": 4161.5,
+      "spread": 1.03864216554147
     },
     {
       "tier": "bun:llint",
       "id": "accumulate-by-copy-in-loop",
       "size": 10,
-      "before": 615.234375,
-      "after": 248.81982421875,
-      "spread": 1.0142907973133222
+      "before": 632.50732421875,
+      "after": 252.0546875,
+      "spread": 1.0215291619577809
     },
     {
       "tier": "bun:llint",
       "id": "accumulate-by-copy-in-loop",
       "size": 100,
-      "before": 21145.875,
-      "after": 1822.875,
-      "spread": 1.009917504777042
+      "before": 22375,
+      "after": 1833.25,
+      "spread": 1.0055865921787708
     },
     {
       "tier": "bun:llint",
       "id": "array-literal-lookup",
       "size": 10,
-      "before": 354.77685546875,
-      "after": 299.64208984375,
-      "spread": 1.0083968345126428
+      "before": 352.03076171875,
+      "after": 298.828125,
+      "spread": 1.0044330324976465
     },
     {
       "tier": "bun:llint",
       "id": "array-literal-lookup",
       "size": 1000,
-      "before": 28614.5,
-      "after": 21463.5,
-      "spread": 1.0976756510727699
+      "before": 28479.125,
+      "after": 21458.375,
+      "spread": 1.0031501273017456
     },
     {
       "tier": "bun:llint",
       "id": "filter-first",
       "size": 10,
-      "before": 432.90185546875,
-      "after": 344.99072265625,
-      "spread": 1.0147269890015302
+      "before": 428.7109375,
+      "after": 345.21484375,
+      "spread": 1.0212825789453335
     },
     {
       "tier": "bun:llint",
       "id": "filter-first",
       "size": 1000,
-      "before": 30875,
-      "after": 22510.5,
-      "spread": 1.0085076354577496
+      "before": 30942.75,
+      "after": 22765.625,
+      "spread": 1.0194101613709783
     },
     {
       "tier": "bun:llint",
       "id": "filter-length-to-some",
       "size": 10,
-      "before": 440.95849609375,
-      "after": 395.93505859375,
-      "spread": 1.034969999016775
+      "before": 466.51171875,
+      "after": 389.6279296875,
+      "spread": 1.0057969430160643
     },
     {
       "tier": "bun:llint",
       "id": "filter-length-to-some",
       "size": 1000,
-      "before": 34937.5,
-      "after": 34005.125,
-      "spread": 1.006086891386983
+      "before": 36437.5,
+      "after": 32645.75,
+      "spread": 1.034719055941353
     },
     {
       "tier": "bun:llint",
       "id": "map-flat-to-flatmap",
       "size": 10,
-      "before": 490.865234375,
-      "after": 1218.75,
-      "spread": 1.0056195972962365
+      "before": 454.42724609375,
+      "after": 1229.125,
+      "spread": 1.0193850217102358
     },
     {
       "tier": "bun:llint",
       "id": "map-flat-to-flatmap",
       "size": 1000,
-      "before": 35692.75,
-      "after": 102296.875,
-      "spread": 1.0201166388879666
+      "before": 32062.5,
+      "after": 101239.625,
+      "spread": 1.0632340445971926
     },
     {
       "tier": "bun:llint",
       "id": "unused-map",
       "size": 10,
-      "before": 562.92724609375,
-      "after": 468.607421875,
-      "spread": 1.0025731559176567
+      "before": 568.7255859375,
+      "after": 466.349609375,
+      "spread": 1.013252456197648
     },
     {
       "tier": "bun:llint",
       "id": "unused-map",
       "size": 1000,
-      "before": 34078.125,
-      "after": 31765.625,
-      "spread": 1.0151648322838231
+      "before": 33906.25,
+      "after": 31875,
+      "spread": 1.0024877938802566
     },
     {
       "tier": "bun:llint",
       "id": "array-from-map",
       "size": 10,
-      "before": 427.4697265625,
+      "before": 422.46533203125,
       "after": 572.875,
-      "spread": 1.1362524512305148
+      "spread": 1.1546684188779741
     },
     {
       "tier": "bun:llint",
       "id": "array-from-map",
       "size": 1000,
-      "before": 27208.25,
-      "after": 34213.625,
-      "spread": 1.0426647366272157
+      "before": 27208.375,
+      "after": 34572.875,
+      "spread": 1.003121443467397
     },
     {
       "tier": "bun:llint",
       "id": "redundant-array-copy",
       "size": 10,
-      "before": 371.826171875,
+      "before": 370.9716796875,
       "after": 349.6904296875,
-      "spread": 1.0116889311254653
+      "spread": 1.0093052303972736
     },
     {
       "tier": "bun:llint",
       "id": "redundant-array-copy",
       "size": 1000,
-      "before": 25484.375,
-      "after": 24875,
-      "spread": 1.0113993397843155
+      "before": 25552,
+      "after": 24994.75,
+      "spread": 1.0397990060780973
     },
     {
       "tier": "bun:llint",
       "id": "foreach-to-for",
       "size": 10,
-      "before": 347.59521484375,
-      "after": 97.513671875,
-      "spread": 1.0088115322032287
+      "before": 350.9931640625,
+      "after": 113.58642578125,
+      "spread": 1.004269259672825
     },
     {
       "tier": "bun:llint",
       "id": "foreach-to-for",
       "size": 1000,
-      "before": 24046.875,
-      "after": 5697.875,
-      "spread": 1.000649772579597
+      "before": 24005.125,
+      "after": 6651,
+      "spread": 1.004624528135492
     },
     {
       "tier": "bun:llint",
       "id": "for-of-to-indexed",
       "size": 10,
-      "before": 109.31396484375,
-      "after": 112.8134765625,
-      "spread": 1.0063406487857407
+      "before": 109.53759765625,
+      "after": 112.40673828125,
+      "spread": 1.0115688400995868
     },
     {
       "tier": "bun:llint",
       "id": "for-of-to-indexed",
       "size": 1000,
-      "before": 5875,
-      "after": 6718.75,
-      "spread": 1.005432558139535
+      "before": 5869.75,
+      "after": 6692.75,
+      "spread": 1.0047826916331215
     },
     {
       "tier": "bun:llint",
       "id": "for-in-array",
       "size": 10,
-      "before": 396.4033203125,
-      "after": 115.53955078125,
-      "spread": 1.0111665121558597
+      "before": 396.97265625,
+      "after": 115.763671875,
+      "spread": 1.0191643986418395
     },
     {
       "tier": "bun:llint",
       "id": "for-in-array",
       "size": 1000,
-      "before": 25833.375,
-      "after": 6984.375,
-      "spread": 1.0129944463285072
+      "before": 25770.75,
+      "after": 7020.875,
+      "spread": 1.0099257340596275
     },
     {
       "tier": "bun:llint",
       "id": "cache-array-length",
       "size": 10,
-      "before": 113.78955078125,
-      "after": 98.9990234375,
-      "spread": 1.0060085096032703
+      "before": 112.6708984375,
+      "after": 99.54833984375,
+      "spread": 1.0097519777609782
     },
     {
       "tier": "bun:llint",
       "id": "cache-array-length",
       "size": 1000,
-      "before": 6953.125,
-      "after": 5901,
-      "spread": 1.0015101123595507
+      "before": 6916.75,
+      "after": 6026,
+      "spread": 1.0059790602403353
     },
     {
       "tier": "bun:llint",
       "id": "date-now",
       "size": 10,
-      "before": 479.28857421875,
-      "after": 350.01611328125,
-      "spread": 1.005851216363105
+      "before": 479.32958984375,
+      "after": 375.52880859375,
+      "spread": 1.004972245704874
     },
     {
       "tier": "bun:llint",
       "id": "date-now",
       "size": 1000,
-      "before": 36609.375,
-      "after": 30562.5,
-      "spread": 1.0091147668231615
+      "before": 36255.25,
+      "after": 33072.875,
+      "spread": 1.005485684153498
     },
     {
       "tier": "bun:llint",
       "id": "math-pow-to-mul",
       "size": 10,
-      "before": 254.537109375,
-      "after": 137.7158203125,
-      "spread": 1.0289620087528153
+      "before": 253.11279296875,
+      "after": 140.4013671875,
+      "spread": 1.0116255953261633
     },
     {
       "tier": "bun:llint",
       "id": "math-pow-to-mul",
       "size": 1000,
-      "before": 18187.5,
-      "after": 7875,
-      "spread": 1.0137411860773706
+      "before": 18255.25,
+      "after": 7958.25,
+      "spread": 1.004091466354965
     },
     {
       "tier": "bun:llint",
       "id": "bitwise-trunc",
       "size": 10,
-      "before": 297.404296875,
-      "after": 238.60693359375,
-      "spread": 1.0267968242308527
+      "before": 305.0126953125,
+      "after": 245.9716796875,
+      "spread": 1.0293096072257275
     },
     {
       "tier": "bun:llint",
       "id": "bitwise-trunc",
       "size": 1000,
-      "before": 21760.375,
-      "after": 16906.25,
-      "spread": 1.048062887290161
+      "before": 22453.125,
+      "after": 17307.375,
+      "spread": 1.0353234591406693
     },
     {
       "tier": "bun:llint",
       "id": "object-assign-to-spread",
       "size": 10,
-      "before": 1010.375,
+      "before": 968.75,
       "after": 723.875,
-      "spread": 1.005022541511651
+      "spread": 1.0159548586152365
     },
     {
       "tier": "bun:llint",
       "id": "object-assign-to-spread",
       "size": 1000,
-      "before": 89286.375,
-      "after": 62875,
-      "spread": 1.1474178853496566
+      "before": 85500,
+      "after": 63234.375,
+      "spread": 1.0663481331091806
     },
     {
       "tier": "bun:llint",
       "id": "object-entries-pair",
       "size": 10,
-      "before": 572.875,
-      "after": 333.29248046875,
-      "spread": 1.0084607518702442
+      "before": 573,
+      "after": 332.763671875,
+      "spread": 1.004901762141
     },
     {
       "tier": "bun:llint",
       "id": "object-entries-pair",
       "size": 1000,
-      "before": 49916.625,
-      "after": 33635.375,
-      "spread": 1.003915616281896
+      "before": 50062.5,
+      "after": 33552.125,
+      "spread": 1.0250784251944949
     },
     {
       "tier": "bun:llint",
       "id": "object-entries-iteration:values",
       "size": 10,
-      "before": 537.88232421875,
-      "after": 145.5078125,
-      "spread": 1.017722697413235
+      "before": 539.97802734375,
+      "after": 144.5517578125,
+      "spread": 1.0588742651127852
     },
     {
       "tier": "bun:llint",
       "id": "object-entries-iteration:values",
       "size": 1000,
-      "before": 39776,
-      "after": 7140.625,
-      "spread": 1.00757063681342
+      "before": 39541.75,
+      "after": 7119.75,
+      "spread": 1.0155882538752043
     },
     {
       "tier": "bun:llint",
       "id": "object-entries-iteration:keys",
       "size": 10,
-      "before": 595.29638671875,
-      "after": 229.837890625,
-      "spread": 1.02180785466711
+      "before": 526.125,
+      "after": 228.4140625,
+      "spread": 1.1426899125320804
     },
     {
       "tier": "bun:llint",
       "id": "object-entries-iteration:keys",
       "size": 1000,
-      "before": 44989.625,
-      "after": 20645.875,
-      "spread": 1.0136004272037942
+      "before": 44609.375,
+      "after": 20901.125,
+      "spread": 1.0116406618565463
     },
     {
       "tier": "bun:llint",
       "id": "split-join-to-replaceall",
       "size": 10,
-      "before": 1078.125,
-      "after": 984.375,
-      "spread": 1.0251851851851852
+      "before": 1093.75,
+      "after": 994.75,
+      "spread": 1.020675661315868
     },
     {
       "tier": "bun:llint",
       "id": "split-join-to-replaceall",
       "size": 1000,
-      "before": 138244.75,
-      "after": 94526,
-      "spread": 1.0137477365607164
+      "before": 143947.875,
+      "after": 96505.25,
+      "spread": 1.0604719993993577
     },
     {
       "tier": "bun:llint",
       "id": "regex-to-string-method",
       "size": 10,
-      "before": 325.68359375,
-      "after": 304.6875,
-      "spread": 1.0066743221142278
+      "before": 327.61669921875,
+      "after": 310.404296875,
+      "spread": 1.010324145821523
     },
     {
       "tier": "bun:llint",
       "id": "regex-to-string-method",
       "size": 1000,
-      "before": 27880.125,
-      "after": 25984.375,
-      "spread": 1.0091458414312184
+      "before": 28229.125,
+      "after": 26703.125,
+      "spread": 1.0304584881701229
     },
     {
       "tier": "bun:llint",
       "id": "match-to-test",
       "size": 10,
       "before": 1744.75,
-      "after": 1750,
-      "spread": 1.0179108754835937
+      "after": 1703.125,
+      "spread": 1.0179558649736893
     },
     {
       "tier": "bun:llint",
       "id": "match-to-test",
       "size": 1000,
-      "before": 189921.875,
-      "after": 180250,
-      "spread": 1.0456104968703486
+      "before": 188718.75,
+      "after": 184463.625,
+      "spread": 1.0128942601028161
     },
     {
       "tier": "bun:llint",
       "id": "indexof-to-startswith",
       "size": 10,
-      "before": 258.056640625,
-      "after": 245.93115234375,
-      "spread": 1.022610627771346
+      "before": 262.451171875,
+      "after": 248.5556640625,
+      "spread": 1.004646908122972
     },
     {
       "tier": "bun:llint",
       "id": "indexof-to-startswith",
       "size": 1000,
-      "before": 21291.625,
-      "after": 19484.375,
-      "spread": 1.008022757837961
+      "before": 21625,
+      "after": 19520.75,
+      "spread": 1.0159863797667799
     },
     {
       "tier": "bun:llint",
       "id": "regexp-constructor-literal",
       "size": 10,
-      "before": 567.625,
-      "after": 375.06103515625,
-      "spread": 1.0057910982391443
+      "before": 568.990234375,
+      "after": 376.2001953125,
+      "spread": 1.0136719853106253
     },
     {
       "tier": "bun:llint",
       "id": "regexp-constructor-literal",
       "size": 1000,
-      "before": 51682.25,
-      "after": 32666.625,
-      "spread": 1.0084594536150993
+      "before": 51343.75,
+      "after": 32682.25,
+      "spread": 1.0140275789678252
     }
   ]
 }

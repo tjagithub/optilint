@@ -1,12 +1,13 @@
 {
   // Solution file: `tsc -b` (bun run typecheck) checks every project in dependency order.
-  // Layers: core ← rules/* ← src (app) ← test. Options live in tsconfig.base.json.
+  // Layers: core ← rules/* ← src (app) ← bench ← test. Options live in tsconfig.base.json.
   "files": [],
   "references": [
     { "path": "src/core" },
     { "path": "src/rules/shared" },
     { "path": "src/rules/browser" },
     { "path": "src" },
+    { "path": "bench" },
     { "path": "test" },
     { "path": "scripts" }
   ]

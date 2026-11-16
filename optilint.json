@@ -1,0 +1,7 @@
+{
+  "$schema": "./schema.json",
+  "overrides": [
+    // The semantics tests run generated code through Function(...) on purpose.
+    { "include": ["test/**"], "rules": { "dynamic-code": "off" } },
+  ],
+}

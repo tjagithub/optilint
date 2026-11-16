@@ -29,7 +29,10 @@ for (const size of job.sizes) {
   // `spread` is the largest / smallest per-round ratio; a high one means the machine was not steady.
   const b: number[] = [], a: number[] = [];
   for (let r = 0; r < Number(rounds); r++) {
+    // Sequential on purpose: the timings must not overlap.
+    // optilint-disable-next-line await-in-loop
     if (r % 2) { a.push(await time(after)); b.push(await time(before)); }
+    // optilint-disable-next-line await-in-loop
     else { b.push(await time(before)); a.push(await time(after)); }
   }
   const per = b.map((t, r) => t / a[r]!);

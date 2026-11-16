@@ -16,7 +16,7 @@ function ruleDoc(r: Rule) {
 const ruleProps = (rules: readonly Rule[]) =>
   Object.fromEntries(rules.map((r) => [r.name, { ...ref("RuleValue"), markdownDescription: ruleDoc(r) }]));
 
-/** JSON Schema for optilint.json (and the "optilint" key of package.json). */
+/** JSON Schema for optilint.json / optilint.jsonc (and the "optilint" key of package.json). */
 export function configSchema() {
   const groupProps = Object.fromEntries(groups.map((g) => {
     const own = allRules.filter((r) => r.group === g);

@@ -26,7 +26,7 @@ Selecting:
   --max-slowdown PCT skip rules whose fix measured more than PCT slower on some
                      engine or tier (default: 10%; 0%: never slower; any: no limit)
   --ignore GLOB      skip matching paths (repeatable)
-  --config PATH      config file (default: nearest optilint.json or package.json "optilint")
+  --config PATH      config file (default: nearest optilint.json(c) or package.json "optilint")
   --project PATH     tsconfig.json to read compiler options from
 
 Output:

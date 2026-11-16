@@ -2,7 +2,7 @@ import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { type CliLayer, type Config, ConfigError, findConfig, loadConfig } from "./config.ts";
+import { type CliLayer, type Config, ConfigError, findConfig, loadConfig, SKIP_DIRS } from "./config.ts";
 import { type FileResult, lint } from "./core/engine.ts";
 import { TIERS } from "./core/fix.ts";
 import { type Project, ProjectResolver } from "./core/project.ts";
@@ -15,7 +15,7 @@ import { IMPACTS, validateNames } from "./validate.ts";
 export class UsageError extends Error {}
 
 const EXTENSIONS = /\.(?:[cm]?[jt]sx?)$/;
-const SKIP_DIRS = new Set(["node_modules", ".git", "dist", "build", "coverage", "out", ".next", ".turbo", "vendor"]);
+const SKIP = new Set(SKIP_DIRS);
 const IMPACT_RANK: Record<Impact, number> = { low: 0, medium: 1, high: 2 };
 
 export function collect(target: string, cwd: string, out: string[]) {
@@ -26,7 +26,7 @@ export function collect(target: string, cwd: string, out: string[]) {
   for (const entry of fs.readdirSync(abs, { withFileTypes: true })) {
     const full = path.join(abs, entry.name);
     if (entry.isDirectory()) {
-      if (!SKIP_DIRS.has(entry.name) && !entry.name.startsWith(".")) collect(full, cwd, out);
+      if (!SKIP.has(entry.name) && !entry.name.startsWith(".")) collect(full, cwd, out);
     } else if (EXTENSIONS.test(entry.name) && !/\.d\.[cm]?ts$|\.min\.js$/.test(entry.name)) {
       out.push(full);
     }

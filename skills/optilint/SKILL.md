@@ -26,7 +26,7 @@ optilint src --fix                  # apply them
 optilint --explain RULE             # what a rule finds and why it is slow
 ```
 
-If `optilint` is not on PATH, ask the user how they run it. Configuration lives in `optilint.json` (or the `"optilint"` key of `package.json`). Read it before you change rule settings.
+If `optilint` is not on PATH, ask the user how they run it. Configuration lives in `optilint.json` or `optilint.jsonc` (or the `"optilint"` key of `package.json`). Read it before you change rule settings.
 
 ## Workflow
 

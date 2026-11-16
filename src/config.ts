@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import ts from "typescript";
 import type { FileSettings, RuleSetting } from "./core/engine.ts";
 import { globMatch } from "./core/glob.ts";
 import { allRules, groups } from "./rules/index.ts";
@@ -53,20 +54,35 @@ export interface Config {
   settingsFor(file: string): FileSettings;
 }
 
-const NAMES = ["optilint.json"];
+export const CONFIG_NAMES = ["optilint.json", "optilint.jsonc"];
+/** Folders the file walk never enters, whatever files.include says (nor any starting with a dot). */
+export const SKIP_DIRS = ["node_modules", ".git", "dist", "build", "coverage", "out", ".next", ".turbo", "vendor"];
+const ROOT_NOT_OBJECT = 5092;
 
+/** Reads JSON with comments and trailing commas, as tsconfig.json allows; package.json stays strict JSON. */
 function readJson(file: string): unknown {
+  let text: string;
   try {
-    return JSON.parse(fs.readFileSync(file, "utf8"));
+    text = fs.readFileSync(file, "utf8");
+    if (path.basename(file) === "package.json") return JSON.parse(text);
   } catch (e) {
     throw new ConfigError(`${file}: ${(e as Error).message}`);
   }
+  const { config, error } = ts.parseConfigFileTextToJson(file, text);
+  if (error?.code === ROOT_NOT_OBJECT || !text.replace(/\/\/.*|\/\*[\s\S]*?\*\//g, "").trim()) throw new ConfigError(`${file}: config must be a JSON object`);
+  if (error) {
+    const { line, character } = ts.getLineAndCharacterOfPosition(ts.createSourceFile(file, text, ts.ScriptTarget.Latest), error.start ?? 0);
+    throw new ConfigError(`${file}:${line + 1}:${character + 1}: ${ts.flattenDiagnosticMessageText(error.messageText, "\n")}`);
+  }
+  return config;
 }
 
-/** Nearest optilint.json, or package.json with an "optilint" key, from `dir` upward. */
+/** Nearest optilint.json(c), or package.json with an "optilint" key, from `dir` upward. */
 export function findConfig(dir: string): string | undefined {
   for (let d = path.resolve(dir); ; d = path.dirname(d)) {
-    for (const name of NAMES) if (fs.existsSync(path.join(d, name))) return path.join(d, name);
+    const found = CONFIG_NAMES.filter((name) => fs.existsSync(path.join(d, name)));
+    if (found.length > 1) throw new ConfigError(`${d}: both ${found.join(" and ")} exist; keep one`);
+    if (found[0]) return path.join(d, found[0]);
     const pkg = path.join(d, "package.json");
     if (fs.existsSync(pkg)) {
       // A broken package.json is not ours to report.

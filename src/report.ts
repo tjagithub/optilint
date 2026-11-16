@@ -33,8 +33,12 @@ export function formatPretty(results: readonly FileResult[], cwd: string, fixing
     applied += r.fixesApplied;
     if (!r.findings.length) continue;
     lines.push(c.bold(path.relative(cwd, r.file) || r.file));
-    const pad = Math.max(...r.findings.map((f) => `${f.line}:${f.col}`.length));
-    const rulePad = Math.max(...r.findings.map((f) => f.rule.length));
+    // A loop, not Math.max(...): a generated file can have more findings than a call takes arguments.
+    let pad = 0, rulePad = 0;
+    for (const f of r.findings) {
+      pad = Math.max(pad, `${f.line}:${f.col}`.length);
+      rulePad = Math.max(rulePad, f.rule.length);
+    }
     for (const f of r.findings) {
       counts[f.impact]++;
       if (f.fix && applies(f.fix, settings(r.file))) now++;

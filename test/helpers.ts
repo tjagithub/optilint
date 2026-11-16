@@ -4,7 +4,7 @@ import type { Tier } from "../src/core/types.ts";
 
 /** The highest tier to apply; obscure fixes are included. */
 type FixMode = Tier | "none";
-import { allRules, ruleByName } from "../src/rules/index.ts";
+import { allRules, retiredByName, ruleByName } from "../src/rules/index.ts";
 
 const OPTIONS: ts.CompilerOptions = { types: [], strict: true };
 
@@ -16,7 +16,8 @@ interface RunOptions {
 }
 
 export function run(code: string, { rule, file = "/virtual/test.ts", fix = "none", compilerOptions }: RunOptions = {}) {
-  const rules = rule ? [ruleByName.get(rule)!] : allRules;
+  // Retired rules never run in optilint, but their tests still call them by name.
+  const rules = rule ? [(ruleByName.get(rule) ?? retiredByName.get(rule))!] : allRules;
   if (rule && !rules[0]) throw new Error(`unknown rule ${rule}`);
   const [result] = lint([file], {
     rules, fix: fix !== "none", settings: () => ({ tier: fix === "none" ? "typed" : fix, obscure: true }),

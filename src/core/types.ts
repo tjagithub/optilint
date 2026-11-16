@@ -53,6 +53,9 @@ export interface Rule {
   recommended?: false;
   /** Its fixes are obscure (see Fix). */
   obscure?: true;
+  /** Why it never runs, usually a measured loss (`bench/FINDINGS.md`). Its code, tests and bench case stay, so a
+   * later bench run can bring it back. */
+  retired?: string;
   group: string;
   description: string;
   why: string;

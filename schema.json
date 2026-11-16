@@ -223,7 +223,7 @@
           ]
         },
         "arrays": {
-          "description": "The arrays group: filter-first, filter-length-to-some, map-flat-to-flatmap, unused-map, array-from-map, redundant-array-copy, chained-array-methods, sort-for-extremum, math-minmax-spread. A level for all of them, or settings per rule.",
+          "description": "The arrays group: filter-first, filter-length-to-some, map-flat-to-flatmap, unused-map, redundant-array-copy, chained-array-methods, sort-for-extremum, math-minmax-spread. A level for all of them, or settings per rule.",
           "anyOf": [
             {
               "$ref": "#/$defs/Level"
@@ -246,10 +246,6 @@
                 "unused-map": {
                   "$ref": "#/$defs/RuleValue",
                   "markdownDescription": "`xs.map(f);` with the result ignored → `xs.forEach(f)`\n\nmap allocates and fills a result array that nobody reads.\n\nmedium impact. Fixes: typed or assumed."
-                },
-                "array-from-map": {
-                  "$ref": "#/$defs/RuleValue",
-                  "markdownDescription": "`Array.from(x).map(f)` → `Array.from(x, f)`\n\nArray.from takes a map function, which avoids building the array twice.\n\nlow impact. Fixes: typed or assumed."
                 },
                 "redundant-array-copy": {
                   "$ref": "#/$defs/RuleValue",
@@ -355,7 +351,7 @@
                 },
                 "object-entries-iteration": {
                   "$ref": "#/$defs/RuleValue",
-                  "markdownDescription": "`for (const [k, v] of Object.entries(o))` → iterate `Object.keys` / `Object.values`\n\nObject.entries allocates a [key, value] array per property, and destructuring each one goes through the iterator protocol. Keys plus an index load avoid all of that.\n\nmedium impact. Fixes: exact or assumed."
+                  "markdownDescription": "`for (const [k] / [, v] of Object.entries(o))` → `Object.keys` / `Object.values`\n\nObject.entries allocates a [key, value] array per property. A loop that uses only the keys or only the values gets them from Object.keys or Object.values without the pairs.\n\nmedium impact. Fixes: exact."
                 },
                 "delete-property": {
                   "$ref": "#/$defs/RuleValue",
@@ -456,10 +452,6 @@
           "$ref": "#/$defs/RuleValue",
           "markdownDescription": "`xs.map(f);` with the result ignored → `xs.forEach(f)`\n\nmap allocates and fills a result array that nobody reads.\n\nmedium impact. Fixes: typed or assumed."
         },
-        "array-from-map": {
-          "$ref": "#/$defs/RuleValue",
-          "markdownDescription": "`Array.from(x).map(f)` → `Array.from(x, f)`\n\nArray.from takes a map function, which avoids building the array twice.\n\nlow impact. Fixes: typed or assumed."
-        },
         "redundant-array-copy": {
           "$ref": "#/$defs/RuleValue",
           "markdownDescription": "`[...xs].map(f)` → `xs.map(f)` for non-mutating methods\n\nCopying an array before a method that does not mutate it costs an O(n) allocation for nothing.\n\nmedium impact. Fixes: typed or assumed."
@@ -522,7 +514,7 @@
         },
         "object-entries-iteration": {
           "$ref": "#/$defs/RuleValue",
-          "markdownDescription": "`for (const [k, v] of Object.entries(o))` → iterate `Object.keys` / `Object.values`\n\nObject.entries allocates a [key, value] array per property, and destructuring each one goes through the iterator protocol. Keys plus an index load avoid all of that.\n\nmedium impact. Fixes: exact or assumed."
+          "markdownDescription": "`for (const [k] / [, v] of Object.entries(o))` → `Object.keys` / `Object.values`\n\nObject.entries allocates a [key, value] array per property. A loop that uses only the keys or only the values gets them from Object.keys or Object.values without the pairs.\n\nmedium impact. Fixes: exact."
         },
         "delete-property": {
           "$ref": "#/$defs/RuleValue",

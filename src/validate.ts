@@ -1,5 +1,5 @@
 import { TIERS } from "./core/fix.ts";
-import { allRules, groups } from "./rules/index.ts";
+import { allRules, groups, retiredByName } from "./rules/index.ts";
 
 export const TOP_KEYS = ["$schema", "extends", "files", "ignore", "tier", "obscure", "minImpact", "rules", "overrides"];
 export const LEVELS = ["off", "on", "info", "warn", "error"];
@@ -62,6 +62,7 @@ function ruleValue(e: Errors, at: string, v: unknown) {
 }
 
 const RULE_NAMES = allRules.map((r) => r.name);
+const retired = (name: string) => retiredByName.get(name)?.retired;
 
 function validateRules(e: Errors, at: string, v: unknown) {
   if (!isObj(v)) return e.add(at, "expected an object");
@@ -82,9 +83,11 @@ function validateRules(e: Errors, at: string, v: unknown) {
         const other = allRules.find((r) => r.name === name);
         if (own.includes(name)) ruleValue(e, `${here}.${name}`, rv);
         else if (other) e.add(`${here}.${name}`, `rule is in group ${show(other.group)}, not ${show(key)}`);
+        else if (retired(name)) e.add(`${here}.${name}`, `rule is retired: ${retired(name)}`);
         else e.add(`${here}.${name}`, `unknown rule${suggest(name, own)}`);
       }
     } else if (RULE_NAMES.includes(key)) ruleValue(e, here, value);
+    else if (retired(key)) e.add(here, `rule is retired: ${retired(key)}`);
     else e.add(here, `unknown rule or group${suggest(key, [...RULE_NAMES, ...groups, "preset"])}`);
   }
 }
@@ -127,5 +130,6 @@ export function validate(raw: unknown): string[] {
 /** Problems with rule or group names given on the command line. */
 export function validateNames(names: readonly string[]): string[] {
   const known = [...RULE_NAMES, ...groups];
-  return names.filter((n) => !known.includes(n)).map((n) => `unknown rule or group ${show(n)}${suggest(n, known)}`);
+  return names.filter((n) => !known.includes(n))
+    .map((n) => (retired(n) ? `${show(n)} is retired: ${retired(n)}` : `unknown rule or group ${show(n)}${suggest(n, known)}`));
 }

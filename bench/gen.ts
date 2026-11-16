@@ -2,7 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import ts from "typescript";
-import { layer, run } from "../src/runner.ts";
+import { lint } from "../src/core/engine.ts";
+import { allRules, retiredRules } from "../src/rules/index.ts";
 import { type Case, PRELUDE } from "./case.ts";
 
 /** Fixable rules without a bench, and why a per-call CPU bench cannot show their gain. */
@@ -44,12 +45,15 @@ export function generate(file: string, cases: readonly Case[], outDir: string, p
     const id = c.name ? `${c.rule}:${c.name}` : c.rule;
     const base = path.join(outDir, id.replace(/[^\w-]/g, "_"));
     const before = PRELUDE + c.code.trim() + "\n";
-    const { results, errors } = run({
-      cwd: outDir, buffer: { file: `${base}.ts`, text: before }, fix: true,
-      layer: layer({ only: [c.rule], tier: "assumed", obscure: true }),
-    });
-    if (errors.length) throw new Error(`${id}: ${errors.join("; ")}`);
-    const after = results[0]?.output ?? before;
+    // The engine directly, not the runner: retired rules never run there, but they keep their benches.
+    const rule = [...allRules, ...retiredRules].find((r) => r.name === c.rule);
+    if (!rule) throw new Error(`${id}: no rule named ${c.rule}`);
+    const file = `${base}.ts`;
+    const [result] = lint([file], {
+      rules: [rule], fix: true, settings: () => ({ tier: "assumed", obscure: true }),
+      onRuleError: (_r, _f, e) => { throw new Error(`${id}: ${(e as Error).message}`); },
+    }, new Map([[file, before]]));
+    const after = result?.output ?? before;
     if (after === before) throw new Error(`${id}: optilint made no fix, so the case no longer matches the rule`);
     const emit = (kind: string, text: string) => {
       const out = `${base}.${kind}.mjs`;

@@ -3,7 +3,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { generate, loadCases, SKIPPED } from "../bench/gen.ts";
-import { allRules } from "../src/rules/index.ts";
+import { allRules, retiredRules } from "../src/rules/index.ts";
 
 const outDir = fs.mkdtempSync(path.join(os.tmpdir(), "optilint-bench-test-"));
 afterAll(() => fs.rmSync(outDir, { recursive: true, force: true }));
@@ -11,7 +11,7 @@ const loaded = await loadCases();
 
 test("every fixable rule has a bench case or a reason it has none", () => {
   const benched = new Set(loaded.flatMap(({ cases }) => cases.map((c) => c.rule)));
-  const fixable = allRules.filter((r) => r.tiers.length > 0).map((r) => r.name);
+  const fixable = [...allRules, ...retiredRules].filter((r) => r.tiers.length > 0).map((r) => r.name);
   expect(fixable.filter((r) => !benched.has(r) && !(r in SKIPPED))).toEqual([]);
   expect(Object.keys(SKIPPED).filter((r) => !fixable.includes(r) || benched.has(r))).toEqual([]);
 });

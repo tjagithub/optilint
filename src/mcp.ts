@@ -5,7 +5,7 @@ import readline from "node:readline";
 import type { FileResult } from "./core/engine.ts";
 import { TIERS } from "./core/fix.ts";
 import { formatExplain, TOOL } from "./report.ts";
-import { allRules, ruleByName } from "./rules/index.ts";
+import { allRules, retiredByName, ruleByName } from "./rules/index.ts";
 import { layer, type Request, run, unifiedDiff, UsageError } from "./runner.ts";
 import type { Finding } from "./core/types.ts";
 import { IMPACTS, validateNames } from "./validate.ts";
@@ -97,7 +97,7 @@ const findings = (root: string, results: FileResult[]) => results.flatMap((r) =>
 function call(root: string, name: string, a: Args): unknown {
   if (name === "rules") {
     if (a.rule === undefined) return allRules.map((r) => ({ name: r.name, group: r.group, impact: r.impact, tiers: r.tiers, description: r.description }));
-    const r = ruleByName.get(a.rule);
+    const r = ruleByName.get(a.rule) ?? retiredByName.get(a.rule);
     if (!r) throw new UsageError(validateNames([a.rule]).join("\n") || `unknown rule: ${a.rule}`);
     return formatExplain(r);
   }

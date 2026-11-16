@@ -25,17 +25,24 @@ describe("object-entries-iteration", () => {
     expect(fixed(`${pre}for (const [k] of Object.entries(o)) console.log(k);`, "object-entries-iteration"))
       .toBe(`${pre}for (const k of Object.keys(o)) console.log(k);`);
   });
+  test("key and value is left to object-entries-pair", () => {
+    expect(rulesHit(`${pre}for (const [k, v] of Object.entries(o)) console.log(k, v);`, { rule: "object-entries-iteration" })).toEqual([]);
+  });
+});
+
+describe("object-entries-pair (retired)", () => {
+  const pre = "declare const o: Record<string, number>;\n";
   test("key and value → keys + lookup (unsafe)", () => {
     const code = `${pre}for (const [k, v] of Object.entries(o)) {\n  console.log(k, v);\n}`;
-    expect(run(code, { rule: "object-entries-iteration" }).findings[0]?.fix?.tier).toBe("assumed");
-    expect(fixed(code, "object-entries-iteration", "assumed"))
+    expect(run(code, { rule: "object-entries-pair" }).findings[0]?.fix?.tier).toBe("assumed");
+    expect(fixed(code, "object-entries-pair", "assumed"))
       .toBe(`${pre}for (const k of Object.keys(o)) {\n  const v = o[k];\n  console.log(k, v);\n}`);
   });
   test("a cast receiver keeps its parentheses, and the assumption names the object", () => {
     const code = `function main() {\n  const o: unknown = { a: 1, b: 2 };\n  const out: string[] = [];\n  for (const [k, v] of Object.entries(o as Record<string, number>)) out.push(k + v);\n  return out;\n}`;
-    const out = fixed(code, "object-entries-iteration", "assumed");
+    const out = fixed(code, "object-entries-pair", "assumed");
     expect(out).toContain("const v = (o as Record<string, number>)[k];");
-    expect(run(code, { rule: "object-entries-iteration" }).findings[0]?.fix?.assumes).toBe("the loop does not write to `o` or rely on getters running up front");
+    expect(run(code, { rule: "object-entries-pair" }).findings[0]?.fix?.assumes).toBe("the loop does not write to `o` or rely on getters running up front");
     const evaluate = (src: string) => new Function(`${new Bun.Transpiler({ loader: "ts" }).transformSync(src)}\nreturn main();`)();
     expect(evaluate(out)).toEqual(["a1", "b2"]);
     expect(evaluate(out)).toEqual(evaluate(code));

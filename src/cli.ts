@@ -3,7 +3,7 @@ import fs from "node:fs";
 import { parseArgs } from "node:util";
 import { serve } from "./mcp.ts";
 import { formatExplain, formatJson, formatPretty, formatRules, ruleMeta, TOOL } from "./report.ts";
-import { allRules, ruleByName } from "./rules/index.ts";
+import { allRules, retiredByName, ruleByName } from "./rules/index.ts";
 import { layer, run, unifiedDiff, UsageError } from "./runner.ts";
 import { formatSarif } from "./sarif.ts";
 import { configSchema, outputSchema } from "./schema.ts";
@@ -105,7 +105,7 @@ function main() {
     return json({ version: 1, tool: TOOL, rules: allRules.map(ruleMeta) });
   }
   if (values.explain) {
-    const r = ruleByName.get(values.explain);
+    const r = ruleByName.get(values.explain) ?? retiredByName.get(values.explain);
     if (!r) fail(`unknown rule: ${values.explain}`);
     return console.log(formatExplain(r));
   }

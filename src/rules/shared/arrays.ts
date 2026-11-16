@@ -113,6 +113,7 @@ export const arrayFromMap: RuleDef = {
   name: "array-from-map",
   impact: "low",
   tiers: ["typed", "assumed"],
+  retired: "the fix is slower on every V8 and JSC tier (TurboFan 0.12–0.15x); see bench/FINDINGS.md, 2026-11-16",
   description: "`Array.from(x).map(f)` → `Array.from(x, f)`",
   why: "Array.from takes a map function, which avoids building the array twice.",
   kinds: [K.CallExpression],

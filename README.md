@@ -87,12 +87,14 @@ An agent with a shell does as well with the CLI and the skill, and does not pay 
 |---|---|
 | Complexity (O(n²)) | `spread-in-accumulator`, `accumulate-by-copy-in-loop`, `lookup-in-loop`, `quadratic-array-mutation`, `sort-for-extremum` |
 | Async | `await-in-loop`, `sequential-await` |
-| Allocation | `filter-first`, `filter-length-to-some`, `map-flat-to-flatmap`, `unused-map`, `array-from-map`, `redundant-array-copy`, `chained-array-methods`, `array-literal-lookup`, `object-entries-iteration`, `object-keys-emptiness`, `date-now` |
+| Allocation | `filter-first`, `filter-length-to-some`, `map-flat-to-flatmap`, `unused-map`, `redundant-array-copy`, `chained-array-methods`, `array-literal-lookup`, `object-entries-iteration`, `object-keys-emptiness`, `date-now` |
 | Loops | `foreach-to-for`, `for-of-to-indexed`, `for-in-array`, `cache-array-length` |
 | Strings and regex | `split-join-to-replaceall`, `regex-to-string-method`, `match-to-test`, `indexof-to-startswith`, `regexp-constructor-literal`, `catastrophic-regex` |
 | Engine | `object-assign-to-spread`, `delete-property`, `large-object-literal` (JSON.parse trick), `math-pow-to-mul`, `bitwise-trunc`, `math-minmax-spread`, `arguments-object`, `dynamic-code`, `dom-in-loop` |
 
 `--list-rules` shows each rule's impact and fix tiers. `--explain <rule>` says why it is faster.
+
+Retired rules never run, because their fix measured slower (`bench/FINDINGS.md`): `array-from-map` and `object-entries-pair` (`[k, v]` from `Object.entries`). They are kept so a later bench run on newer engines can bring them back; `--explain` gives the reason.
 
 ### Left out on purpose
 

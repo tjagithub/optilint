@@ -6,11 +6,19 @@ export const cases: Case[] = [
     code: `export function run(xs: Item[]) { return xs.map((x) => Object.assign({}, x, { on: !x.on })); }`,
   },
   {
-    rule: "object-entries-iteration", sizes: SIZES, inputs: records,
+    rule: "object-entries-pair", sizes: SIZES, inputs: records,
     code: `export function run(o: Record<string, number>) {
   let n = 0;
   for (const [k, v] of Object.entries(o)) n += k.length + v;
   return n;
 }`,
+  },
+  {
+    rule: "object-entries-iteration", name: "values", sizes: SIZES, inputs: records,
+    code: `export function run(o: Record<string, number>) { let n = 0; for (const [, v] of Object.entries(o)) n += v; return n; }`,
+  },
+  {
+    rule: "object-entries-iteration", name: "keys", sizes: SIZES, inputs: records,
+    code: `export function run(o: Record<string, number>) { let n = 0; for (const [k] of Object.entries(o)) n += k.length; return n; }`,
   },
 ];

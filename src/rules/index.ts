@@ -22,6 +22,10 @@ const GROUPS: Record<string, readonly RuleDef[]> = {
   misc: [dateNow, powToMul, bitwiseTrunc, dynamicCode, domInLoop, argumentsObject],
 };
 
-export const allRules: readonly Rule[] = Object.entries(GROUPS).flatMap(([group, rules]) => rules.map((r) => ({ ...r, group })));
+const registered: readonly Rule[] = Object.entries(GROUPS).flatMap(([group, rules]) => rules.map((r) => ({ ...r, group })));
+/** The rules that can run. Retired rules are left out of presets, config, schema and output. */
+export const allRules: readonly Rule[] = registered.filter((r) => !r.retired);
+export const retiredRules: readonly Rule[] = registered.filter((r) => r.retired);
 export const groups: readonly string[] = Object.keys(GROUPS);
 export const ruleByName = new Map(allRules.map((r) => [r.name, r]));
+export const retiredByName = new Map(retiredRules.map((r) => [r.name, r]));

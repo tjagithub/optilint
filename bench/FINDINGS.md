@@ -11,9 +11,10 @@ Apple M4, Node v26.13.1 (V8 14.6), Bun 1.4.4 (JSC); `bun run bench --tiers all`,
 ### Loses: change or drop the fix
 
 - **`array-from-map`: slower on every tier of both engines** (0.12–0.96x). Worst on V8: TurboFan 0.12–0.15x, Maglev 0.41–0.50x; JSC 0.56–0.96x. `Array.from(set).map(f)` beats `Array.from(set, f)`. *Unverified cause:* the optimizing tiers inline `.map` and its callback, while `Array.from` calls `f` from a builtin.
-  **Action:** remove the fix (and the rule, unless a report-only form has a basis). This also settles its tier question in `proposals/shared.md`.
-- **`object-entries-iteration`: V8 loses at its top tiers** (TurboFan 0.61x at 10 keys and 0.11x at 1000; Maglev 0.18x at 1000). JSC wins at 10 keys (FTL 7.3x, DFG 6.0x, Baseline 3.9x) but is about even at 1000 (0.84–1.48x). The case uses 8 objects with different keys, so `o[k]` in the fixed loop sees several shapes; a single-shape case may differ.
-  **Action:** turn it off for shared targets. Bench a single-shape case before deciding whether it becomes JSC-only (`engines: ["jsc"]`).
+  **Done:** retired (it never runs; code, tests and bench case kept).
+- **`object-entries-iteration`, `[k, v]` form: V8 loses at its top tiers** (TurboFan 0.61x at 10 keys and 0.11x at 1000; Maglev 0.18x at 1000). JSC wins at 10 keys (FTL 7.3x, DFG 6.0x, Baseline 3.9x) but is about even at 1000 (0.84–1.48x). The case uses 8 objects with different keys, so `o[k]` in the fixed loop sees several shapes; a single-shape case may differ.
+  The other two forms win on every tier of both engines (benched separately the same day): `[, v]` → `Object.values` 2.69–9.60x, `[k]` → `Object.keys` 2.17–14.11x.
+  **Done:** the `[k, v]` form is now its own rule, `object-entries-pair`, and retired; `object-entries-iteration` keeps the two exact forms. Next: bench a single-shape case to see whether `object-entries-pair` should come back as JSC-only (`engines: ["jsc"]`).
 
 ### Mixed: loses on some tiers
 

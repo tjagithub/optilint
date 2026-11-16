@@ -29,37 +29,55 @@ export const objectAssignToSpread: RuleDef = {
   },
 };
 
+/** `for (const [k, v] of Object.entries(o))` with at most two plain bindings, split into its parts. */
+function entriesLoop(node: ts.Node) {
+  const n = node as ts.ForOfStatement;
+  const m = staticCall(unwrap(n.expression), "Object", "entries");
+  const init = n.initializer;
+  if (!m || m.args.length !== 1 || !ts.isVariableDeclarationList(init) || init.declarations.length !== 1) return;
+  const pattern = init.declarations[0]!.name;
+  if (!ts.isArrayBindingPattern(pattern) || pattern.elements.length > 2) return;
+  const [k, v] = pattern.elements;
+  const name = (el?: ts.ArrayBindingElement) =>
+    el && ts.isBindingElement(el) && !el.initializer && !el.dotDotDotToken ? el.name : undefined;
+  const keyName = name(k);
+  const valName = name(v);
+  // Only the key, or only the value: object-entries-iteration. Anything else: object-entries-pair.
+  const single = (!keyName && valName) || (keyName && !v);
+  return { n, init, obj: m.args[0]!, kind: init.flags & ts.NodeFlags.Const ? "const" : "let", keyName, valName, single };
+}
+
+const ENTRIES = "`Object.entries()` allocates an array per property.";
+
 export const objectEntries: RuleDef = {
   name: "object-entries-iteration",
   impact: "medium",
-  tiers: ["exact", "assumed"],
-  description: "`for (const [k, v] of Object.entries(o))` → iterate `Object.keys` / `Object.values`",
+  tiers: ["exact"],
+  description: "`for (const [k] / [, v] of Object.entries(o))` → `Object.keys` / `Object.values`",
+  why: "Object.entries allocates a [key, value] array per property. A loop that uses only the keys or only the values gets them from Object.keys or Object.values without the pairs.",
+  kinds: [K.ForOfStatement],
+  check(node, ctx) {
+    const l = entriesLoop(node);
+    if (!l?.single) return;
+    const [binding, call] = l.valName && !l.keyName ? [l.valName, "values"] : [l.keyName!, "keys"];
+    ctx.report(l.n.expression, ENTRIES,
+      fix("exact", [ctx.replace(l.init, `${l.kind} ${ctx.text(binding)}`), ctx.replace(l.n.expression, `Object.${call}(${ctx.text(l.obj)})`)]));
+  },
+};
+
+export const objectEntriesPair: RuleDef = {
+  name: "object-entries-pair",
+  impact: "medium",
+  tiers: ["assumed"],
+  retired: "the fix is slower on V8's top tiers (TurboFan 0.10–0.61x), though faster on JSC at 10 keys; see bench/FINDINGS.md, 2026-11-16",
+  description: "`for (const [k, v] of Object.entries(o))` → `Object.keys` plus `o[k]`",
   why: "Object.entries allocates a [key, value] array per property, and destructuring each one goes through the iterator protocol. Keys plus an index load avoid all of that.",
   kinds: [K.ForOfStatement],
   check(node, ctx) {
-    const n = node as ts.ForOfStatement;
-    const m = staticCall(unwrap(n.expression), "Object", "entries");
-    const init = n.initializer;
-    if (!m || m.args.length !== 1 || !ts.isVariableDeclarationList(init) || init.declarations.length !== 1) return;
-    const pattern = init.declarations[0]!.name;
-    if (!ts.isArrayBindingPattern(pattern) || pattern.elements.length > 2) return;
-    const [k, v] = pattern.elements;
-    const name = (el?: ts.ArrayBindingElement) =>
-      el && ts.isBindingElement(el) && !el.initializer && !el.dotDotDotToken ? el.name : undefined;
-    const kind = init.flags & ts.NodeFlags.Const ? "const" : "let";
-    const obj = m.args[0]!;
-    const keyName = name(k);
-    const valName = name(v);
-    const message = "`Object.entries()` allocates an array per property.";
-    if (!keyName && valName) {
-      return ctx.report(n.expression, message,
-        fix("exact", [ctx.replace(init, `${kind} ${ctx.text(valName)}`), ctx.replace(n.expression, `Object.values(${ctx.text(obj)})`)]));
-    }
-    if (keyName && !v) {
-      return ctx.report(n.expression, message,
-        fix("exact", [ctx.replace(init, `${kind} ${ctx.text(keyName)}`), ctx.replace(n.expression, `Object.keys(${ctx.text(obj)})`)]));
-    }
-    if (!keyName || !valName || !ts.isIdentifier(keyName) || !isSimpleRef(obj)) return ctx.report(n.expression, message);
+    const l = entriesLoop(node);
+    if (!l || l.single) return;
+    const { n, init, obj, kind, keyName, valName } = l;
+    if (!keyName || !valName || !ts.isIdentifier(keyName) || !isSimpleRef(obj)) return ctx.report(n.expression, ENTRIES);
     const body = n.statement;
     // `o as T` must keep its parentheses: `o as T[k]` would index the type, not the object.
     const target = ts.isParenthesizedExpression(obj) || unwrap(obj) === obj ? ctx.text(obj) : `(${ctx.text(obj)})`;
@@ -68,7 +86,7 @@ export const objectEntries: RuleDef = {
     const newBody = ts.isBlock(body)
       ? `{\n${indent}  ${decl}${ctx.sf.text.slice(body.getStart(ctx.sf) + 1, body.end)}`
       : `{\n${indent}  ${decl}\n${indent}  ${ctx.text(body)}\n${indent}}`;
-    ctx.report(n.expression, `${message} Values are read lazily after the fix, so writes inside the loop become visible.`, fix("assumed", [
+    ctx.report(n.expression, `${ENTRIES} Values are read lazily after the fix, so writes inside the loop become visible.`, fix("assumed", [
       ctx.replace(init, `${kind} ${keyName.text}`),
       ctx.replace(n.expression, `Object.keys(${ctx.text(obj)})`),
       ctx.replace(body, newBody),
@@ -173,4 +191,4 @@ export const largeObjectLiteral: RuleDef = {
   },
 };
 
-export const objectRules = [objectAssignToSpread, objectEntries, deleteProperty, objectKeysEmptiness, largeObjectLiteral];
+export const objectRules = [objectAssignToSpread, objectEntries, objectEntriesPair, deleteProperty, objectKeysEmptiness, largeObjectLiteral];

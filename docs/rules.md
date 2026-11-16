@@ -4,10 +4,12 @@
 |---|---|
 | Complexity (O(n²)) | `spread-in-accumulator`, `accumulate-by-copy-in-loop`, `lookup-in-loop`, `quadratic-array-mutation`, `sort-for-extremum` |
 | Async | `await-in-loop`, `sequential-await` |
-| Allocation | `filter-first`, `filter-length-to-some`, `map-flat-to-flatmap`, `unused-map`, `redundant-array-copy`, `typed-array-subarray`, `chained-array-methods`, `array-literal-lookup`, `object-entries-iteration`, `object-keys-emptiness`, `date-now` |
+| Allocation | `filter-first`, `filter-length-to-some`, `map-flat-to-flatmap`, `unused-map`, `redundant-array-copy`, `typed-array-subarray`, `typed-array-round-trip`, `chained-array-methods`, `array-literal-lookup`, `object-entries-iteration`, `object-keys-emptiness`, `date-now` |
 | Loops | `foreach-to-for`, `for-of-to-indexed`, `for-in-array`, `cache-array-length` |
-| Strings and regex | `split-join-to-replaceall`, `regex-to-string-method`, `match-to-test`, `indexof-to-startswith`, `regexp-constructor-literal`, `catastrophic-regex` |
-| Engine | `object-assign-to-spread`, `delete-property`, `large-object-literal` (JSON.parse trick), `math-pow-to-mul`, `bitwise-trunc`, `math-minmax-spread`, `arguments-object`, `dynamic-code`, `dom-in-loop` |
+| Strings and regex | `split-join-to-replaceall`, `regex-to-string-method`, `match-to-test`, `indexof-to-startswith`, `regexp-constructor-literal`, `catastrophic-regex`, `string-flatten-in-loop`, `regexp-in-loop` |
+| Objects and shapes | `object-keys-in-loop`, `late-property`, `prototype-mutation` |
+| Browser and workers | `dom-in-loop`, `passive-listener`, `scroll-layout-read`, `gpu-sync-in-frame`, `per-frame-allocation`, `postmessage-transfer` |
+| Engine | `object-assign-to-spread`, `delete-property`, `large-object-literal` (JSON.parse trick), `math-pow-to-mul`, `bitwise-trunc`, `math-minmax-spread`, `arguments-object`, `dynamic-code` |
 
 `optilint --list-rules` shows each rule's impact and fix tiers. `optilint --explain <rule>` says why it is faster, and what it measured.
 

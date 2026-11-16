@@ -4,11 +4,11 @@ import type { RuleDef } from "../../core/types.ts";
 
 const K = ts.SyntaxKind;
 
-const DOM_QUERIES = new Set([
+export const DOM_QUERIES = new Set([
   "querySelector", "querySelectorAll", "getElementById", "getElementsByClassName", "getElementsByTagName",
   "getElementsByName", "getComputedStyle", "getBoundingClientRect", "getClientRects",
 ]);
-const LAYOUT_PROPS = new Set([
+export const LAYOUT_PROPS = new Set([
   "offsetWidth", "offsetHeight", "offsetTop", "offsetLeft", "clientWidth", "clientHeight", "clientTop",
   "clientLeft", "scrollWidth", "scrollHeight", "scrollTop", "scrollLeft", "innerText",
 ]);

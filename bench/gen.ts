@@ -10,6 +10,7 @@ import { type Case, PRELUDE } from "./case.ts";
 export const SKIPPED: Record<string, string> = {
   "sequential-await": "the gain is concurrency (overlapping waits), not CPU time per call",
   "large-object-literal": "the gain is in parsing and compiling at load time, not per call",
+  "passive-listener": "the gain is scrolling that does not wait for the listener, not CPU time per call",
 };
 
 export const CASES_DIR = path.join(import.meta.dirname, "cases");

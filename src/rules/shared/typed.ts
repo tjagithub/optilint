@@ -51,3 +51,49 @@ export const typedArraySubarray: RuleDef = {
       fix(tier, [ctx.replace(callee, "subarray")], "neither array is written, and the result is not kept, while it is in use"));
   },
 };
+
+const isTyped = (e: ts.Expression, ctx: RuleContext) => TYPED.some((t) => ctx.isType(e, t) === "yes");
+
+/** `Array.from(ta)` or `[...ta]` → `ta` */
+function copied(e: ts.Expression) {
+  const from = staticCall(e, "Array", "from");
+  if (from?.args.length === 1) return from.args[0]!;
+  return ts.isArrayLiteralExpression(e) && e.elements.length === 1 && ts.isSpreadElement(e.elements[0]!) ? e.elements[0].expression : undefined;
+}
+
+export const typedArrayRoundTrip: RuleDef = {
+  name: "typed-array-round-trip",
+  impact: "medium",
+  tiers: ["typed"],
+  description: "`new Uint8Array(Array.from(ta))` or `new Uint8Array([...ta])` → `new Uint8Array(ta)`",
+  why: "The plain array in the middle boxes every element and is thrown away. A typed array constructor copies another typed array directly, converting each element the same way.",
+  kinds: [K.NewExpression],
+  check(node, ctx) {
+    const n = node as ts.NewExpression;
+    if (!ts.isIdentifier(n.expression) || !TYPED.includes(n.expression.text) || n.arguments?.length !== 1) return;
+    const source = copied(unwrap(n.arguments[0]!));
+    if (!source || !isTyped(source, ctx)) return;
+    ctx.report(n.arguments[0]!, "The typed array is copied into a plain array and back; pass it to the constructor directly.",
+      fix("typed", [ctx.replace(n.arguments[0]!, ctx.text(source))]));
+  },
+};
+
+export const postMessageTransfer: RuleDef = {
+  name: "postmessage-transfer",
+  impact: "medium",
+  tiers: [],
+  description: "`postMessage(buffer)` of an ArrayBuffer or typed array without a transfer list",
+  why: "Without a transfer list, `postMessage` copies the whole buffer (structured clone). Transferring moves it in constant time: `postMessage(ta, [ta.buffer])` for a worker or port, `postMessage(ta, origin, [ta.buffer])` for a window. The sender's buffer is then detached, so only do it when the sender is done with it.",
+  kinds: [K.CallExpression],
+  check(node, ctx) {
+    const call = node as ts.CallExpression;
+    const callee = call.expression;
+    const name = ts.isIdentifier(callee) ? callee.text : ts.isPropertyAccessExpression(callee) ? callee.name.text : "";
+    const [data, second] = call.arguments;
+    if (name !== "postMessage" || !data || call.arguments.length > 2) return;
+    if (second && ctx.isString(second) !== "yes") return;
+    if (!isTyped(data, ctx) && ctx.isType(data, "ArrayBuffer") !== "yes") return;
+    const buffer = ctx.isType(data, "ArrayBuffer") === "yes" ? ctx.text(data) : `${ctx.text(data)}.buffer`;
+    ctx.report(node, `\`postMessage\` copies the buffer; transfer it with \`[${buffer}]\` if the sender is done with it.`);
+  },
+};

@@ -20,7 +20,7 @@ function rootOf(expr: ts.Expression): ts.Expression {
 }
 
 /** The receiver is declared outside `loop`, so a lookup structure could be built once. */
-function invariant(expr: ts.Expression, loop: ts.Node, ctx: RuleContext) {
+export function invariant(expr: ts.Expression, loop: ts.Node, ctx: RuleContext) {
   const root = rootOf(expr);
   if (root.kind === K.ThisKeyword) return true;
   if (!ts.isIdentifier(root)) return false;

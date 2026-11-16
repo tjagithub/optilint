@@ -228,7 +228,7 @@
           ]
         },
         "arrays": {
-          "description": "The arrays group: filter-first, filter-length-to-some, map-flat-to-flatmap, unused-map, redundant-array-copy, chained-array-methods, sort-for-extremum, math-minmax-spread, typed-array-subarray. A level for all of them, or settings per rule.",
+          "description": "The arrays group: filter-first, filter-length-to-some, map-flat-to-flatmap, unused-map, redundant-array-copy, chained-array-methods, sort-for-extremum, math-minmax-spread, typed-array-subarray, typed-array-round-trip. A level for all of them, or settings per rule.",
           "anyOf": [
             {
               "$ref": "#/$defs/Level"
@@ -271,6 +271,10 @@
                 "typed-array-subarray": {
                   "$ref": "#/$defs/RuleValue",
                   "markdownDescription": "`ta.slice(a, b)` on a typed array → `ta.subarray(a, b)`\n\nOn a typed array, `slice` allocates a new buffer and copies the elements; `subarray` makes a view over the same memory in constant time. The view shares memory, so it is `typed` only when the result is read right away (`indexOf`, `TextDecoder.decode`, a spread into `Math.max`); otherwise writes to either array would show in the other.\n\nmedium impact. Fixes: typed or assumed."
+                },
+                "typed-array-round-trip": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`new Uint8Array(Array.from(ta))` or `new Uint8Array([...ta])` → `new Uint8Array(ta)`\n\nThe plain array in the middle boxes every element and is thrown away. A typed array constructor copies another typed array directly, converting each element the same way.\n\nmedium impact. Fixes: typed."
                 }
               },
               "additionalProperties": false
@@ -308,7 +312,7 @@
           ]
         },
         "strings": {
-          "description": "The strings group: split-join-to-replaceall, regex-to-string-method, match-to-test, indexof-to-startswith, regexp-constructor-literal, catastrophic-regex. A level for all of them, or settings per rule.",
+          "description": "The strings group: split-join-to-replaceall, regex-to-string-method, match-to-test, indexof-to-startswith, regexp-constructor-literal, catastrophic-regex, string-flatten-in-loop, regexp-in-loop. A level for all of them, or settings per rule.",
           "anyOf": [
             {
               "$ref": "#/$defs/Level"
@@ -339,6 +343,14 @@
                 "catastrophic-regex": {
                   "$ref": "#/$defs/RuleValue",
                   "markdownDescription": "Nested quantifiers like `(a+)+` or `(\\w+\\s?)*`\n\nA repeated group whose body can match the same text several ways backtracks exponentially when the match fails (ReDoS). Make the inner part unambiguous, or use a possessive-style rewrite.\n\nhigh impact. Report only."
+                },
+                "string-flatten-in-loop": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "A string grown with `+=` and searched or indexed in the same loop\n\n`s += x` builds a rope, which is cheap. A read such as `s.charCodeAt(i)`, `s[i]` or `s.indexOf(x)` flattens the rope into one buffer, copying the whole string. Doing both in each iteration copies the string every time: O(n²). Keep what you need to read in a separate variable, or collect parts in an array and `join` once.\n\nhigh impact. Report only."
+                },
+                "regexp-in-loop": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`new RegExp(x)` with the same `x` on every iteration of a loop\n\nThe pattern does not change between iterations, but each `new RegExp` allocates an object and looks the pattern up in the engine's regexp cache. Build it once before the loop. A hoisted regexp with the `g` or `y` flag keeps `lastIndex` between uses, so reset it or use `String.prototype.match`/`replace`, which do.\n\nlow impact. Report only."
                 }
               },
               "additionalProperties": false
@@ -346,7 +358,7 @@
           ]
         },
         "objects": {
-          "description": "The objects group: object-assign-to-spread, object-entries-iteration, delete-property, object-keys-emptiness, large-object-literal. A level for all of them, or settings per rule.",
+          "description": "The objects group: object-assign-to-spread, object-entries-iteration, delete-property, object-keys-emptiness, large-object-literal, object-keys-in-loop, late-property, prototype-mutation. A level for all of them, or settings per rule.",
           "anyOf": [
             {
               "$ref": "#/$defs/Level"
@@ -373,6 +385,18 @@
                 "large-object-literal": {
                   "$ref": "#/$defs/RuleValue",
                   "markdownDescription": "Large constant object/array literal → `JSON.parse('...')`\n\nFor big constant data (over ~10 kB), the JSON parser is much faster than the JavaScript parser and compiler, which have to handle a far richer grammar (see V8's \"cost of JavaScript\" guidance). The fix loses the static type in TypeScript, so it is only applied automatically in JS files.\n\nmedium impact. Fixes: typed or assumed (obscure). Not in the recommended preset."
+                },
+                "object-keys-in-loop": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`Object.keys(o)` (or values/entries) of an unchanged object inside a loop\n\nEach call allocates a fresh array of every key (and, for entries, a pair per key). When the loop never changes the object, the result is the same every time: compute it once before the loop. In a loop condition (`i < Object.keys(o).length`) it is rebuilt on every iteration.\n\nmedium impact. Report only."
+                },
+                "late-property": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`this.x = ...` in a method for a field the class never declares or sets in its constructor\n\nEngines give objects a shape (hidden class, Structure) from the properties they get at construction. Adding one later moves every instance to a new shape and can grow its property storage, and code that sees instances from before and after becomes polymorphic. Declare the field, or set it in the constructor (`this.x = undefined`).\n\nlow impact. Report only."
+                },
+                "prototype-mutation": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`Object.setPrototypeOf`, `Reflect.setPrototypeOf` or `__proto__ =` on an existing object\n\nChanging an object's prototype after it exists invalidates the engine's assumptions about it and about code that has seen it; V8 and JSC both deoptimize, and the object may stay slow. Create it with the right prototype: `Object.create(proto)`, a class, or `{ __proto__: proto, ... }` in a literal.\n\nmedium impact. Report only."
                 }
               },
               "additionalProperties": false
@@ -380,7 +404,7 @@
           ]
         },
         "misc": {
-          "description": "The misc group: date-now, math-pow-to-mul, bitwise-trunc, dynamic-code, dom-in-loop, arguments-object. A level for all of them, or settings per rule.",
+          "description": "The misc group: date-now, math-pow-to-mul, bitwise-trunc, dynamic-code, dom-in-loop, arguments-object, postmessage-transfer, passive-listener, scroll-layout-read, gpu-sync-in-frame, per-frame-allocation. A level for all of them, or settings per rule.",
           "anyOf": [
             {
               "$ref": "#/$defs/Level"
@@ -411,6 +435,26 @@
                 "arguments-object": {
                   "$ref": "#/$defs/RuleValue",
                   "markdownDescription": "`arguments` → rest parameters\n\nIn sloppy mode `arguments` aliases the parameters, and leaking it prevents engines from eliding its allocation. Rest parameters give a real array and are always cheap.\n\nlow impact. Report only."
+                },
+                "postmessage-transfer": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`postMessage(buffer)` of an ArrayBuffer or typed array without a transfer list\n\nWithout a transfer list, `postMessage` copies the whole buffer (structured clone). Transferring moves it in constant time: `postMessage(ta, [ta.buffer])` for a worker or port, `postMessage(ta, origin, [ta.buffer])` for a window. The sender's buffer is then detached, so only do it when the sender is done with it.\n\nmedium impact. Report only."
+                },
+                "passive-listener": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`wheel`/`touchstart`/`touchmove` listener that never calls `preventDefault`, without `{ passive: true }`\n\nThe browser cannot scroll until a non-passive wheel or touch listener returns, because it might call `preventDefault`. A listener that never does can say so with `{ passive: true }`, and scrolling no longer waits for it.\n\nmedium impact. Fixes: typed or assumed."
+                },
+                "scroll-layout-read": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "A `scroll` or `resize` listener that reads layout\n\nScroll and resize fire many times per frame, and each layout read (`getBoundingClientRect`, `offsetTop`) can force a synchronous reflow. `IntersectionObserver` answers visibility questions and `ResizeObserver` size ones without polling; otherwise read once per frame inside `requestAnimationFrame`.\n\nmedium impact. Report only."
+                },
+                "gpu-sync-in-frame": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`gl.getError()`, `getParameter`, `readPixels` and other GPU round trips inside a frame callback\n\nWebGL calls are queued for the GPU. A query such as `getError` or `readPixels` makes the CPU wait until the queue drains, every frame, which stalls the pipeline. Check errors only in debug builds, cache parameters at start-up, and read pixels asynchronously (a pixel buffer and `fenceSync` in WebGL2).\n\nhigh impact. Report only."
+                },
+                "per-frame-allocation": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "WebGL objects, canvas contexts or typed arrays created inside a frame callback\n\nCreating GPU buffers and textures, looking up a canvas context, or allocating typed arrays on every frame churns GPU memory and the garbage collector, which shows up as dropped frames. Create them once and reuse them (`bufferSubData`, `texSubImage2D`, a scratch typed array).\n\nmedium impact. Report only."
                 }
               },
               "additionalProperties": false
@@ -481,6 +525,10 @@
           "$ref": "#/$defs/RuleValue",
           "markdownDescription": "`ta.slice(a, b)` on a typed array → `ta.subarray(a, b)`\n\nOn a typed array, `slice` allocates a new buffer and copies the elements; `subarray` makes a view over the same memory in constant time. The view shares memory, so it is `typed` only when the result is read right away (`indexOf`, `TextDecoder.decode`, a spread into `Math.max`); otherwise writes to either array would show in the other.\n\nmedium impact. Fixes: typed or assumed."
         },
+        "typed-array-round-trip": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`new Uint8Array(Array.from(ta))` or `new Uint8Array([...ta])` → `new Uint8Array(ta)`\n\nThe plain array in the middle boxes every element and is thrown away. A typed array constructor copies another typed array directly, converting each element the same way.\n\nmedium impact. Fixes: typed."
+        },
         "foreach-to-for": {
           "$ref": "#/$defs/RuleValue",
           "markdownDescription": "`xs.forEach(x => ...)` → indexed `for` loop\n\nAn indexed loop has no per-element function call, so nothing has to be inlined. It is fastest in every engine tier, especially for large or polymorphic arrays. Holes in sparse arrays are skipped, as forEach does.\n\nmedium impact. Fixes: typed or assumed."
@@ -521,6 +569,14 @@
           "$ref": "#/$defs/RuleValue",
           "markdownDescription": "Nested quantifiers like `(a+)+` or `(\\w+\\s?)*`\n\nA repeated group whose body can match the same text several ways backtracks exponentially when the match fails (ReDoS). Make the inner part unambiguous, or use a possessive-style rewrite.\n\nhigh impact. Report only."
         },
+        "string-flatten-in-loop": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "A string grown with `+=` and searched or indexed in the same loop\n\n`s += x` builds a rope, which is cheap. A read such as `s.charCodeAt(i)`, `s[i]` or `s.indexOf(x)` flattens the rope into one buffer, copying the whole string. Doing both in each iteration copies the string every time: O(n²). Keep what you need to read in a separate variable, or collect parts in an array and `join` once.\n\nhigh impact. Report only."
+        },
+        "regexp-in-loop": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`new RegExp(x)` with the same `x` on every iteration of a loop\n\nThe pattern does not change between iterations, but each `new RegExp` allocates an object and looks the pattern up in the engine's regexp cache. Build it once before the loop. A hoisted regexp with the `g` or `y` flag keeps `lastIndex` between uses, so reset it or use `String.prototype.match`/`replace`, which do.\n\nlow impact. Report only."
+        },
         "object-assign-to-spread": {
           "$ref": "#/$defs/RuleValue",
           "markdownDescription": "`Object.assign({}, a, b)` → `{ ...a, ...b }`\n\nObject spread into a fresh literal uses the engine's clone fast path (CloneObjectIC in V8). Object.assign goes through the generic [[Set]] path, one property at a time.\n\nmedium impact. Fixes: typed."
@@ -540,6 +596,18 @@
         "large-object-literal": {
           "$ref": "#/$defs/RuleValue",
           "markdownDescription": "Large constant object/array literal → `JSON.parse('...')`\n\nFor big constant data (over ~10 kB), the JSON parser is much faster than the JavaScript parser and compiler, which have to handle a far richer grammar (see V8's \"cost of JavaScript\" guidance). The fix loses the static type in TypeScript, so it is only applied automatically in JS files.\n\nmedium impact. Fixes: typed or assumed (obscure). Not in the recommended preset."
+        },
+        "object-keys-in-loop": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`Object.keys(o)` (or values/entries) of an unchanged object inside a loop\n\nEach call allocates a fresh array of every key (and, for entries, a pair per key). When the loop never changes the object, the result is the same every time: compute it once before the loop. In a loop condition (`i < Object.keys(o).length`) it is rebuilt on every iteration.\n\nmedium impact. Report only."
+        },
+        "late-property": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`this.x = ...` in a method for a field the class never declares or sets in its constructor\n\nEngines give objects a shape (hidden class, Structure) from the properties they get at construction. Adding one later moves every instance to a new shape and can grow its property storage, and code that sees instances from before and after becomes polymorphic. Declare the field, or set it in the constructor (`this.x = undefined`).\n\nlow impact. Report only."
+        },
+        "prototype-mutation": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`Object.setPrototypeOf`, `Reflect.setPrototypeOf` or `__proto__ =` on an existing object\n\nChanging an object's prototype after it exists invalidates the engine's assumptions about it and about code that has seen it; V8 and JSC both deoptimize, and the object may stay slow. Create it with the right prototype: `Object.create(proto)`, a class, or `{ __proto__: proto, ... }` in a literal.\n\nmedium impact. Report only."
         },
         "date-now": {
           "$ref": "#/$defs/RuleValue",
@@ -564,6 +632,26 @@
         "arguments-object": {
           "$ref": "#/$defs/RuleValue",
           "markdownDescription": "`arguments` → rest parameters\n\nIn sloppy mode `arguments` aliases the parameters, and leaking it prevents engines from eliding its allocation. Rest parameters give a real array and are always cheap.\n\nlow impact. Report only."
+        },
+        "postmessage-transfer": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`postMessage(buffer)` of an ArrayBuffer or typed array without a transfer list\n\nWithout a transfer list, `postMessage` copies the whole buffer (structured clone). Transferring moves it in constant time: `postMessage(ta, [ta.buffer])` for a worker or port, `postMessage(ta, origin, [ta.buffer])` for a window. The sender's buffer is then detached, so only do it when the sender is done with it.\n\nmedium impact. Report only."
+        },
+        "passive-listener": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`wheel`/`touchstart`/`touchmove` listener that never calls `preventDefault`, without `{ passive: true }`\n\nThe browser cannot scroll until a non-passive wheel or touch listener returns, because it might call `preventDefault`. A listener that never does can say so with `{ passive: true }`, and scrolling no longer waits for it.\n\nmedium impact. Fixes: typed or assumed."
+        },
+        "scroll-layout-read": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "A `scroll` or `resize` listener that reads layout\n\nScroll and resize fire many times per frame, and each layout read (`getBoundingClientRect`, `offsetTop`) can force a synchronous reflow. `IntersectionObserver` answers visibility questions and `ResizeObserver` size ones without polling; otherwise read once per frame inside `requestAnimationFrame`.\n\nmedium impact. Report only."
+        },
+        "gpu-sync-in-frame": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`gl.getError()`, `getParameter`, `readPixels` and other GPU round trips inside a frame callback\n\nWebGL calls are queued for the GPU. A query such as `getError` or `readPixels` makes the CPU wait until the queue drains, every frame, which stalls the pipeline. Check errors only in debug builds, cache parameters at start-up, and read pixels asynchronously (a pixel buffer and `fenceSync` in WebGL2).\n\nhigh impact. Report only."
+        },
+        "per-frame-allocation": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "WebGL objects, canvas contexts or typed arrays created inside a frame callback\n\nCreating GPU buffers and textures, looking up a canvas context, or allocating typed arrays on every frame churns GPU memory and the garbage collector, which shows up as dropped frames. Create them once and reuse them (`bufferSubData`, `texSubImage2D`, a scratch typed array).\n\nmedium impact. Report only."
         }
       }
     }

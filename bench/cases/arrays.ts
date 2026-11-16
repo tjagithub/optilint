@@ -4,6 +4,10 @@ const bytes = (size: number) => numbers(size).map((xs) => Uint8Array.from(xs, (x
 
 export const cases: Case[] = [
   {
+    rule: "typed-array-round-trip", sizes: SIZES, inputs: bytes,
+    code: `export function run(xs: Uint8Array) { return new Uint8Array(Array.from(xs)); }`,
+  },
+  {
     // A search over the second half: the copy is what the fix saves.
     rule: "typed-array-subarray", sizes: SIZES, inputs: bytes,
     code: `export function run(xs: Uint8Array) { return xs.slice(xs.length >> 1).indexOf(255); }`,

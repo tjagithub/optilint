@@ -13,17 +13,19 @@ interface RunOptions {
   file?: string;
   fix?: FixMode;
   compilerOptions?: ts.CompilerOptions;
+  /** More files for the program (path → contents); only `file`'s result is returned. */
+  extra?: Record<string, string>;
 }
 
-export function run(code: string, { rule, file = "/virtual/test.ts", fix = "none", compilerOptions }: RunOptions = {}) {
+export function run(code: string, { rule, file = "/virtual/test.ts", fix = "none", compilerOptions, extra = {} }: RunOptions = {}) {
   // Retired rules never run in optilint, but their tests still call them by name.
   const rules = rule ? [(ruleByName.get(rule) ?? retiredByName.get(rule))!] : allRules;
   if (rule && !rules[0]) throw new Error(`unknown rule ${rule}`);
-  const [result] = lint([file], {
+  const [result] = lint([file, ...Object.keys(extra)], {
     rules, fix: fix !== "none", settings: () => ({ tier: fix === "none" ? "typed" : fix, obscure: true }),
     compilerOptions: { ...OPTIONS, ...compilerOptions },
     onRuleError: (r, _f, e) => { throw new Error(`${r}: ${(e as Error).stack}`); },
-  }, new Map([[file, code]]));
+  }, new Map([[file, code], ...Object.entries(extra)]));
   return result!;
 }
 

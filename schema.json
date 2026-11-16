@@ -216,7 +216,7 @@
               "properties": {
                 "await-in-loop": {
                   "$ref": "#/$defs/RuleValue",
-                  "markdownDescription": "`await` inside a loop body\n\nEach iteration waits for the previous one, so total time is the sum of all latencies. If iterations are independent, start them all and `await Promise.all(...)` (or batch them to bound concurrency).\n\nhigh impact. Report only."
+                  "markdownDescription": "`await` inside a loop body, or a promise chain built with `reduce`\n\nEach iteration waits for the previous one, so total time is the sum of all latencies. If iterations are independent, start them all and `await Promise.all(...)` (or batch them to bound concurrency). Loops that poll, retry, pace themselves, stop early, carry a value to the next iteration, or drive one browser page, editor or terminal are left alone.\n\nhigh impact. Report only."
                 },
                 "sequential-await": {
                   "$ref": "#/$defs/RuleValue",
@@ -435,7 +435,7 @@
         },
         "await-in-loop": {
           "$ref": "#/$defs/RuleValue",
-          "markdownDescription": "`await` inside a loop body\n\nEach iteration waits for the previous one, so total time is the sum of all latencies. If iterations are independent, start them all and `await Promise.all(...)` (or batch them to bound concurrency).\n\nhigh impact. Report only."
+          "markdownDescription": "`await` inside a loop body, or a promise chain built with `reduce`\n\nEach iteration waits for the previous one, so total time is the sum of all latencies. If iterations are independent, start them all and `await Promise.all(...)` (or batch them to bound concurrency). Loops that poll, retry, pace themselves, stop early, carry a value to the next iteration, or drive one browser page, editor or terminal are left alone.\n\nhigh impact. Report only."
         },
         "sequential-await": {
           "$ref": "#/$defs/RuleValue",

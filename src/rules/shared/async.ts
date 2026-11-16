@@ -1,23 +1,10 @@
 import ts from "typescript";
-import { boundNames, identifiersIn, repeatingAncestor, unwrap } from "../../core/ast.ts";
+import { boundNames, identifiersIn, unwrap } from "../../core/ast.ts";
+import { awaitInLoop } from "./awaitloop.ts";
 import { fix } from "../../core/fix.ts";
 import type { RuleDef } from "../../core/types.ts";
 
 const K = ts.SyntaxKind;
-
-export const awaitInLoop: RuleDef = {
-  name: "await-in-loop",
-  impact: "high",
-  tiers: [],
-  description: "`await` inside a loop body",
-  why: "Each iteration waits for the previous one, so total time is the sum of all latencies. If iterations are independent, start them all and `await Promise.all(...)` (or batch them to bound concurrency).",
-  kinds: [K.AwaitExpression],
-  check(node, ctx) {
-    const loop = repeatingAncestor(node, false);
-    if (!loop || (ts.isForOfStatement(loop) && loop.awaitModifier)) return;
-    ctx.report(node, "Sequential `await` in a loop; run independent iterations concurrently with `Promise.all`.");
-  },
-};
 
 interface AwaitDecl {
   stmt: ts.VariableStatement;

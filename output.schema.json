@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "optilint --format json output",
+  "type": "object",
+  "required": [
+    "version",
+    "tool",
+    "findings"
+  ],
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "tool": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "const": "optilint"
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "rule",
+          "group",
+          "impact",
+          "message",
+          "file",
+          "line",
+          "col",
+          "endLine",
+          "endCol",
+          "start",
+          "end",
+          "fix"
+        ],
+        "properties": {
+          "rule": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          },
+          "impact": {
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "severity": {
+            "enum": [
+              "info",
+              "warn",
+              "error"
+            ],
+            "description": "Only when the config sets a level."
+          },
+          "message": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "file": {
+            "type": "string"
+          },
+          "line": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "col": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "endLine": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "endCol": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Exclusive, 1-based."
+          },
+          "start": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "UTF-16 code units from the start of the file."
+          },
+          "end": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "UTF-16 code units from the start of the file."
+          },
+          "fix": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "required": [
+                  "tier",
+                  "edits"
+                ],
+                "properties": {
+                  "tier": {
+                    "enum": [
+                      "exact",
+                      "typed",
+                      "assumed"
+                    ]
+                  },
+                  "assumes": {
+                    "type": "string"
+                  },
+                  "obscure": {
+                    "type": "boolean"
+                  },
+                  "edits": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "start",
+                        "end",
+                        "text"
+                      ],
+                      "properties": {
+                        "start": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "description": "UTF-16 code units from the start of the file."
+                        },
+                        "end": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "description": "UTF-16 code units from the start of the file."
+                        },
+                        "text": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "optilint",
+  "version": "0.1.0",
+  "description": "A linter that finds and fixes JavaScript/TypeScript performance problems",
+  "type": "module",
+  "private": true,
+  "bin": {
+    "optilint": "./src/cli.ts"
+  },
+  "license": "MIT",
+  "scripts": {
+    "bundle": "bun scripts/bundle.ts",
+    "lint:self": "bun src/cli.ts src",
+    "schema": "bun src/cli.ts --print-schema config > schema.json && bun src/cli.ts --print-schema output > output.schema.json",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit -p ."
+  },
+  "dependencies": {
+    "typescript": "6.0.3"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "optilint",
+  "version": "0.1.0",
+  "license": "MIT",
+  "description": "Find and fix JS/TS performance problems with optilint: a skill that runs the CLI and applies fixes by safety tier."
+}

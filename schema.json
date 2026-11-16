@@ -1,0 +1,566 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "optilint configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "extends": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Config files to start from, relative to this one; later ones and this file win."
+    },
+    "files": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "include": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Globs of files to lint, relative to this file. Default: every JS/TS file."
+        },
+        "ignore": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Globs of files or folders to skip, relative to this file."
+        }
+      }
+    },
+    "ignore": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Same as files.ignore."
+    },
+    "tier": {
+      "description": "The highest tier --fix applies: exact (same behaviour for every input), typed (for every input the types allow) or assumed (relies on a stated assumption). Default: typed.",
+      "enum": [
+        "exact",
+        "typed",
+        "assumed"
+      ]
+    },
+    "obscure": {
+      "type": "boolean",
+      "description": "Let --fix apply fixes that are correct but hard to read, such as `x | 0`. Default: false."
+    },
+    "minImpact": {
+      "description": "Only report rules with at least this impact. Default: low.",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "rules": {
+      "$ref": "#/$defs/Rules"
+    },
+    "overrides": {
+      "description": "Settings for some files, applied in order after the rest of the config.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "include"
+        ],
+        "properties": {
+          "include": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Globs relative to this file."
+          },
+          "tier": {
+            "description": "The highest tier --fix applies: exact (same behaviour for every input), typed (for every input the types allow) or assumed (relies on a stated assumption). Default: typed.",
+            "enum": [
+              "exact",
+              "typed",
+              "assumed"
+            ]
+          },
+          "obscure": {
+            "type": "boolean",
+            "description": "Let --fix apply fixes that are correct but hard to read, such as `x | 0`. Default: false."
+          },
+          "rules": {
+            "$ref": "#/$defs/Rules"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "Level": {
+      "description": "off disables the rule; on enables it with its default severity; info, warn and error also set the severity.",
+      "enum": [
+        "off",
+        "on",
+        "info",
+        "warn",
+        "error"
+      ]
+    },
+    "RuleValue": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Level"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "level"
+          ],
+          "properties": {
+            "level": {
+              "$ref": "#/$defs/Level"
+            },
+            "tier": {
+              "description": "Treat this rule's fixes as at least this tier (it can only raise them), or none to drop them.",
+              "enum": [
+                "none",
+                "exact",
+                "typed",
+                "assumed"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "Rules": {
+      "type": "object",
+      "description": "Applied in order: preset, then groups, then single rules.",
+      "additionalProperties": false,
+      "properties": {
+        "preset": {
+          "description": "The starting set: recommended (default), all, or none.",
+          "enum": [
+            "recommended",
+            "all",
+            "none"
+          ]
+        },
+        "accumulate": {
+          "description": "The accumulate group: spread-in-accumulator, accumulate-by-copy-in-loop. A level for all of them, or settings per rule.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Level"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "spread-in-accumulator": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`xs.reduce((acc, x) => ({ ...acc, [k]: v }), {})` → mutate `acc`\n\nSpreading the accumulator copies everything collected so far on every step, which makes reduce O(n²). The initial value is a fresh literal, so mutating it is invisible to callers.\n\nhigh impact. Fixes: typed or assumed."
+                },
+                "accumulate-by-copy-in-loop": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`xs = [...xs, x]` / `xs = xs.concat(x)` / `o = {...o, k: v}` inside a loop\n\nRebuilding the collection on each iteration copies everything gathered so far: O(n²) time and garbage. Push or assign in place.\n\nhigh impact. Fixes: assumed."
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "lookup": {
+          "description": "The lookup group: lookup-in-loop, array-literal-lookup, quadratic-array-mutation. A level for all of them, or settings per rule.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Level"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "lookup-in-loop": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "Linear search (`includes`/`indexOf`/`find`/`some`) inside a loop\n\nA linear search inside a loop makes the whole thing O(n·m). Build a Set or Map once before the loop and each lookup becomes O(1).\n\nhigh impact. Report only."
+                },
+                "array-literal-lookup": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`['a', 'b'].includes(x)` inside a function → `x === 'a' || x === 'b'` or a hoisted Set\n\nThe array literal is rebuilt on every call and then searched linearly. A few comparisons need no allocation; for longer lists a module-level Set gives O(1) lookups.\n\nmedium impact. Fixes: exact."
+                },
+                "quadratic-array-mutation": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`shift`/`unshift`/`splice` inside a loop\n\nThese move every following element. Inside a loop over the same data that is O(n²); a head index, a reverse, or a single compaction pass is O(n).\n\nmedium impact. Report only."
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "async": {
+          "description": "The async group: await-in-loop, sequential-await. A level for all of them, or settings per rule.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Level"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "await-in-loop": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`await` inside a loop body\n\nEach iteration waits for the previous one, so total time is the sum of all latencies. If iterations are independent, start them all and `await Promise.all(...)` (or batch them to bound concurrency).\n\nhigh impact. Report only."
+                },
+                "sequential-await": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "Back-to-back independent `await`s → `Promise.all`\n\n`const a = await f(); const b = await g();` waits for f before starting g, even though g never reads `a`. Promise.all overlaps them. (Unsafe: g now starts before f settles, and a rejection in f no longer prevents g from running.)\n\nhigh impact. Fixes: assumed."
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "arrays": {
+          "description": "The arrays group: filter-first, filter-length-to-some, map-flat-to-flatmap, unused-map, array-from-map, redundant-array-copy, chained-array-methods, sort-for-extremum, math-minmax-spread. A level for all of them, or settings per rule.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Level"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "filter-first": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`xs.filter(f)[0]` → `xs.find(f)`\n\nfilter visits every element and allocates a new array; find stops at the first match and allocates nothing.\n\nmedium impact. Fixes: typed or assumed."
+                },
+                "filter-length-to-some": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`xs.filter(f).length > 0` → `xs.some(f)`\n\nCounting matches allocates an array and visits every element; some() short-circuits on the first match.\n\nmedium impact. Fixes: typed or assumed."
+                },
+                "map-flat-to-flatmap": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`xs.map(f).flat()` → `xs.flatMap(f)`\n\nflatMap does one pass and skips the intermediate array.\n\nlow impact. Fixes: typed or assumed."
+                },
+                "unused-map": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`xs.map(f);` with the result ignored → `xs.forEach(f)`\n\nmap allocates and fills a result array that nobody reads.\n\nmedium impact. Fixes: typed or assumed."
+                },
+                "array-from-map": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`Array.from(x).map(f)` → `Array.from(x, f)`\n\nArray.from takes a map function, which avoids building the array twice.\n\nlow impact. Fixes: typed or assumed."
+                },
+                "redundant-array-copy": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`[...xs].map(f)` → `xs.map(f)` for non-mutating methods\n\nCopying an array before a method that does not mutate it costs an O(n) allocation for nothing.\n\nmedium impact. Fixes: typed or assumed."
+                },
+                "chained-array-methods": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`xs.filter(f).map(g)` chains allocate an array per step\n\nEach map/filter step allocates a full intermediate array and walks it again. One loop (or one reduce) does it in a single pass.\n\nmedium impact. Report only."
+                },
+                "sort-for-extremum": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`xs.sort()[0]` to find a min/max\n\nSorting is O(n log n) (and sort() mutates); finding the min or max is a single O(n) pass.\n\nmedium impact. Report only."
+                },
+                "math-minmax-spread": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`Math.max(...xs)` on large arrays\n\nSpreading pushes every element onto the stack: slow for big arrays and a RangeError past ~100k elements. A loop is faster and safe.\n\nmedium impact. Report only."
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "loops": {
+          "description": "The loops group: foreach-to-for, for-of-to-indexed, for-in-array, cache-array-length. A level for all of them, or settings per rule.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Level"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "foreach-to-for": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`xs.forEach(x => ...)` → indexed `for` loop\n\nAn indexed loop has no per-element function call, so nothing has to be inlined. It is fastest in every engine tier, especially for large or polymorphic arrays. (Unlike forEach, it visits holes in sparse arrays.)\n\nmedium impact. Fixes: typed or assumed."
+                },
+                "for-of-to-indexed": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`for (const x of xs)` → indexed `for` loop (proven arrays only)\n\nfor-of runs the iterator protocol. Optimizing compilers can remove that cost, but baseline tiers and cold code still pay it on every step, and an indexed loop never does.\n\nlow impact. Fixes: typed. Not in the recommended preset."
+                },
+                "for-in-array": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`for (const k in array)` → indexed loop\n\nfor-in enumerates string keys, including inherited ones, through a slow generic path. Indices come back as strings, so every `xs[k]` also converts the key. Note: the fix makes the index a number.\n\nhigh impact. Fixes: assumed."
+                },
+                "cache-array-length": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`for (let i = 0; i < xs.length; i++)` → cache `xs.length`\n\nReading `.length` in the condition is a load per iteration, and engines can only hoist it when they can prove the body leaves the array alone. Caching it makes that explicit.\n\nlow impact. Fixes: typed or assumed."
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "strings": {
+          "description": "The strings group: split-join-to-replaceall, regex-to-string-method, match-to-test, indexof-to-startswith, regexp-constructor-literal, catastrophic-regex. A level for all of them, or settings per rule.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Level"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "split-join-to-replaceall": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`s.split(a).join(b)` → `s.replaceAll(a, b)`\n\nsplit/join allocates an array of every piece and then concatenates them again. replaceAll does a single pass. (Needs ES2021.)\n\nmedium impact. Fixes: typed or assumed."
+                },
+                "regex-to-string-method": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`/^abc/.test(s)` → `s.startsWith('abc')` (also endsWith, includes, ===)\n\nPlain-text patterns don't need the regex engine. String methods skip regex compilation and matcher setup and are usually several times faster.\n\nmedium impact. Fixes: typed or assumed."
+                },
+                "match-to-test": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`s.match(re)` / `re.exec(s)` used as a boolean → `re.test(s)`\n\nmatch and exec allocate a result array with captures; test only returns a boolean.\n\nmedium impact. Fixes: typed or assumed."
+                },
+                "indexof-to-startswith": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`s.indexOf(x) === 0` → `s.startsWith(x)`\n\nWhen the prefix is missing, indexOf keeps scanning the whole string. startsWith compares only the prefix.\n\nmedium impact. Fixes: typed or assumed."
+                },
+                "regexp-constructor-literal": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`new RegExp('a+b', 'g')` with constant arguments → `/a+b/g`\n\nA regex literal is parsed once and its compiled code is reused by the engine at that site. A constant RegExp constructor inside a function re-parses its source and looks up the cache on every call.\n\nlow impact. Fixes: exact."
+                },
+                "catastrophic-regex": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "Nested quantifiers like `(a+)+` or `(\\w+\\s?)*`\n\nA repeated group whose body can match the same text several ways backtracks exponentially when the match fails (ReDoS). Make the inner part unambiguous, or use a possessive-style rewrite.\n\nhigh impact. Report only."
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "objects": {
+          "description": "The objects group: object-assign-to-spread, object-entries-iteration, delete-property, object-keys-emptiness, large-object-literal. A level for all of them, or settings per rule.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Level"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "object-assign-to-spread": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`Object.assign({}, a, b)` → `{ ...a, ...b }`\n\nObject spread into a fresh literal uses the engine's clone fast path (CloneObjectIC in V8). Object.assign goes through the generic [[Set]] path, one property at a time.\n\nmedium impact. Fixes: typed."
+                },
+                "object-entries-iteration": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`for (const [k, v] of Object.entries(o))` → iterate `Object.keys` / `Object.values`\n\nObject.entries allocates a [key, value] array per property, and destructuring each one goes through the iterator protocol. Keys plus an index load avoid all of that.\n\nmedium impact. Fixes: exact or assumed."
+                },
+                "delete-property": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`delete obj.prop`\n\nDeleting a property usually drops the object from fast hidden-class mode into slow dictionary mode for good. Set it to undefined, or use a Map for dynamic keys. On arrays, delete leaves a hole.\n\nmedium impact. Report only."
+                },
+                "object-keys-emptiness": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`Object.keys(o).length === 0` to test for an empty object\n\nThis builds an array of every key just to see whether there is at least one. A `for (const k in o) { if (Object.hasOwn(o, k)) return false }` helper stops at the first key and allocates nothing.\n\nmedium impact. Report only."
+                },
+                "large-object-literal": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "Large constant object/array literal → `JSON.parse('...')`\n\nFor big constant data (over ~10 kB), the JSON parser is much faster than the JavaScript parser and compiler, which have to handle a far richer grammar (see V8's \"cost of JavaScript\" guidance). The fix loses the static type in TypeScript, so it is only applied automatically in JS files.\n\nmedium impact. Fixes: typed or assumed (obscure). Not in the recommended preset."
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "misc": {
+          "description": "The misc group: date-now, math-pow-to-mul, bitwise-trunc, dynamic-code, dom-in-loop, arguments-object. A level for all of them, or settings per rule.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Level"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "date-now": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`new Date().getTime()` / `+new Date()` → `Date.now()`\n\nDate.now() returns the timestamp without allocating a Date object.\n\nlow impact. Fixes: exact."
+                },
+                "math-pow-to-mul": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`Math.pow(x, 2)` / `x ** 2` → `x * x`\n\nSquaring with a multiply is one instruction, while pow goes through the generic power routine (or a builtin call in lower tiers). The results are bit-identical for numbers.\n\nlow impact. Fixes: typed or assumed."
+                },
+                "bitwise-trunc": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`Math.trunc(x)` / `Math.floor(x)` → `x | 0` (int32 only)\n\n`x | 0` truncates to a 32-bit integer in one instruction and tells the JIT the value is a small integer, which keeps the arithmetic after it in int32. It is wrong outside ±2³¹ and for negative values with floor, so the fix is unsafe: only use it where you know the range.\n\nlow impact. Fixes: assumed (obscure). Not in the recommended preset."
+                },
+                "dynamic-code": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`eval`, `new Function`, and `with`\n\nDirect eval and `with` make every variable in the enclosing scopes dynamically resolvable, which blocks inlining and register allocation for those functions. new Function re-parses and compiles its source on every call.\n\nhigh impact. Report only."
+                },
+                "dom-in-loop": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "DOM queries and layout reads inside loops\n\nQuerying the DOM walks the tree. Layout reads such as offsetHeight or getBoundingClientRect force a synchronous reflow when styles are dirty, and interleaving them with writes in a loop causes layout thrashing. Query once and batch reads before writes.\n\nhigh impact. Report only."
+                },
+                "arguments-object": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`arguments` → rest parameters\n\nIn sloppy mode `arguments` aliases the parameters, and leaking it prevents engines from eliding its allocation. Rest parameters give a real array and are always cheap.\n\nlow impact. Report only."
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "spread-in-accumulator": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`xs.reduce((acc, x) => ({ ...acc, [k]: v }), {})` → mutate `acc`\n\nSpreading the accumulator copies everything collected so far on every step, which makes reduce O(n²). The initial value is a fresh literal, so mutating it is invisible to callers.\n\nhigh impact. Fixes: typed or assumed."
+        },
+        "accumulate-by-copy-in-loop": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`xs = [...xs, x]` / `xs = xs.concat(x)` / `o = {...o, k: v}` inside a loop\n\nRebuilding the collection on each iteration copies everything gathered so far: O(n²) time and garbage. Push or assign in place.\n\nhigh impact. Fixes: assumed."
+        },
+        "lookup-in-loop": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "Linear search (`includes`/`indexOf`/`find`/`some`) inside a loop\n\nA linear search inside a loop makes the whole thing O(n·m). Build a Set or Map once before the loop and each lookup becomes O(1).\n\nhigh impact. Report only."
+        },
+        "array-literal-lookup": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`['a', 'b'].includes(x)` inside a function → `x === 'a' || x === 'b'` or a hoisted Set\n\nThe array literal is rebuilt on every call and then searched linearly. A few comparisons need no allocation; for longer lists a module-level Set gives O(1) lookups.\n\nmedium impact. Fixes: exact."
+        },
+        "quadratic-array-mutation": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`shift`/`unshift`/`splice` inside a loop\n\nThese move every following element. Inside a loop over the same data that is O(n²); a head index, a reverse, or a single compaction pass is O(n).\n\nmedium impact. Report only."
+        },
+        "await-in-loop": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`await` inside a loop body\n\nEach iteration waits for the previous one, so total time is the sum of all latencies. If iterations are independent, start them all and `await Promise.all(...)` (or batch them to bound concurrency).\n\nhigh impact. Report only."
+        },
+        "sequential-await": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "Back-to-back independent `await`s → `Promise.all`\n\n`const a = await f(); const b = await g();` waits for f before starting g, even though g never reads `a`. Promise.all overlaps them. (Unsafe: g now starts before f settles, and a rejection in f no longer prevents g from running.)\n\nhigh impact. Fixes: assumed."
+        },
+        "filter-first": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`xs.filter(f)[0]` → `xs.find(f)`\n\nfilter visits every element and allocates a new array; find stops at the first match and allocates nothing.\n\nmedium impact. Fixes: typed or assumed."
+        },
+        "filter-length-to-some": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`xs.filter(f).length > 0` → `xs.some(f)`\n\nCounting matches allocates an array and visits every element; some() short-circuits on the first match.\n\nmedium impact. Fixes: typed or assumed."
+        },
+        "map-flat-to-flatmap": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`xs.map(f).flat()` → `xs.flatMap(f)`\n\nflatMap does one pass and skips the intermediate array.\n\nlow impact. Fixes: typed or assumed."
+        },
+        "unused-map": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`xs.map(f);` with the result ignored → `xs.forEach(f)`\n\nmap allocates and fills a result array that nobody reads.\n\nmedium impact. Fixes: typed or assumed."
+        },
+        "array-from-map": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`Array.from(x).map(f)` → `Array.from(x, f)`\n\nArray.from takes a map function, which avoids building the array twice.\n\nlow impact. Fixes: typed or assumed."
+        },
+        "redundant-array-copy": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`[...xs].map(f)` → `xs.map(f)` for non-mutating methods\n\nCopying an array before a method that does not mutate it costs an O(n) allocation for nothing.\n\nmedium impact. Fixes: typed or assumed."
+        },
+        "chained-array-methods": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`xs.filter(f).map(g)` chains allocate an array per step\n\nEach map/filter step allocates a full intermediate array and walks it again. One loop (or one reduce) does it in a single pass.\n\nmedium impact. Report only."
+        },
+        "sort-for-extremum": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`xs.sort()[0]` to find a min/max\n\nSorting is O(n log n) (and sort() mutates); finding the min or max is a single O(n) pass.\n\nmedium impact. Report only."
+        },
+        "math-minmax-spread": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`Math.max(...xs)` on large arrays\n\nSpreading pushes every element onto the stack: slow for big arrays and a RangeError past ~100k elements. A loop is faster and safe.\n\nmedium impact. Report only."
+        },
+        "foreach-to-for": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`xs.forEach(x => ...)` → indexed `for` loop\n\nAn indexed loop has no per-element function call, so nothing has to be inlined. It is fastest in every engine tier, especially for large or polymorphic arrays. (Unlike forEach, it visits holes in sparse arrays.)\n\nmedium impact. Fixes: typed or assumed."
+        },
+        "for-of-to-indexed": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`for (const x of xs)` → indexed `for` loop (proven arrays only)\n\nfor-of runs the iterator protocol. Optimizing compilers can remove that cost, but baseline tiers and cold code still pay it on every step, and an indexed loop never does.\n\nlow impact. Fixes: typed. Not in the recommended preset."
+        },
+        "for-in-array": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`for (const k in array)` → indexed loop\n\nfor-in enumerates string keys, including inherited ones, through a slow generic path. Indices come back as strings, so every `xs[k]` also converts the key. Note: the fix makes the index a number.\n\nhigh impact. Fixes: assumed."
+        },
+        "cache-array-length": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`for (let i = 0; i < xs.length; i++)` → cache `xs.length`\n\nReading `.length` in the condition is a load per iteration, and engines can only hoist it when they can prove the body leaves the array alone. Caching it makes that explicit.\n\nlow impact. Fixes: typed or assumed."
+        },
+        "split-join-to-replaceall": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`s.split(a).join(b)` → `s.replaceAll(a, b)`\n\nsplit/join allocates an array of every piece and then concatenates them again. replaceAll does a single pass. (Needs ES2021.)\n\nmedium impact. Fixes: typed or assumed."
+        },
+        "regex-to-string-method": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`/^abc/.test(s)` → `s.startsWith('abc')` (also endsWith, includes, ===)\n\nPlain-text patterns don't need the regex engine. String methods skip regex compilation and matcher setup and are usually several times faster.\n\nmedium impact. Fixes: typed or assumed."
+        },
+        "match-to-test": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`s.match(re)` / `re.exec(s)` used as a boolean → `re.test(s)`\n\nmatch and exec allocate a result array with captures; test only returns a boolean.\n\nmedium impact. Fixes: typed or assumed."
+        },
+        "indexof-to-startswith": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`s.indexOf(x) === 0` → `s.startsWith(x)`\n\nWhen the prefix is missing, indexOf keeps scanning the whole string. startsWith compares only the prefix.\n\nmedium impact. Fixes: typed or assumed."
+        },
+        "regexp-constructor-literal": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`new RegExp('a+b', 'g')` with constant arguments → `/a+b/g`\n\nA regex literal is parsed once and its compiled code is reused by the engine at that site. A constant RegExp constructor inside a function re-parses its source and looks up the cache on every call.\n\nlow impact. Fixes: exact."
+        },
+        "catastrophic-regex": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "Nested quantifiers like `(a+)+` or `(\\w+\\s?)*`\n\nA repeated group whose body can match the same text several ways backtracks exponentially when the match fails (ReDoS). Make the inner part unambiguous, or use a possessive-style rewrite.\n\nhigh impact. Report only."
+        },
+        "object-assign-to-spread": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`Object.assign({}, a, b)` → `{ ...a, ...b }`\n\nObject spread into a fresh literal uses the engine's clone fast path (CloneObjectIC in V8). Object.assign goes through the generic [[Set]] path, one property at a time.\n\nmedium impact. Fixes: typed."
+        },
+        "object-entries-iteration": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`for (const [k, v] of Object.entries(o))` → iterate `Object.keys` / `Object.values`\n\nObject.entries allocates a [key, value] array per property, and destructuring each one goes through the iterator protocol. Keys plus an index load avoid all of that.\n\nmedium impact. Fixes: exact or assumed."
+        },
+        "delete-property": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`delete obj.prop`\n\nDeleting a property usually drops the object from fast hidden-class mode into slow dictionary mode for good. Set it to undefined, or use a Map for dynamic keys. On arrays, delete leaves a hole.\n\nmedium impact. Report only."
+        },
+        "object-keys-emptiness": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`Object.keys(o).length === 0` to test for an empty object\n\nThis builds an array of every key just to see whether there is at least one. A `for (const k in o) { if (Object.hasOwn(o, k)) return false }` helper stops at the first key and allocates nothing.\n\nmedium impact. Report only."
+        },
+        "large-object-literal": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "Large constant object/array literal → `JSON.parse('...')`\n\nFor big constant data (over ~10 kB), the JSON parser is much faster than the JavaScript parser and compiler, which have to handle a far richer grammar (see V8's \"cost of JavaScript\" guidance). The fix loses the static type in TypeScript, so it is only applied automatically in JS files.\n\nmedium impact. Fixes: typed or assumed (obscure). Not in the recommended preset."
+        },
+        "date-now": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`new Date().getTime()` / `+new Date()` → `Date.now()`\n\nDate.now() returns the timestamp without allocating a Date object.\n\nlow impact. Fixes: exact."
+        },
+        "math-pow-to-mul": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`Math.pow(x, 2)` / `x ** 2` → `x * x`\n\nSquaring with a multiply is one instruction, while pow goes through the generic power routine (or a builtin call in lower tiers). The results are bit-identical for numbers.\n\nlow impact. Fixes: typed or assumed."
+        },
+        "bitwise-trunc": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`Math.trunc(x)` / `Math.floor(x)` → `x | 0` (int32 only)\n\n`x | 0` truncates to a 32-bit integer in one instruction and tells the JIT the value is a small integer, which keeps the arithmetic after it in int32. It is wrong outside ±2³¹ and for negative values with floor, so the fix is unsafe: only use it where you know the range.\n\nlow impact. Fixes: assumed (obscure). Not in the recommended preset."
+        },
+        "dynamic-code": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`eval`, `new Function`, and `with`\n\nDirect eval and `with` make every variable in the enclosing scopes dynamically resolvable, which blocks inlining and register allocation for those functions. new Function re-parses and compiles its source on every call.\n\nhigh impact. Report only."
+        },
+        "dom-in-loop": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "DOM queries and layout reads inside loops\n\nQuerying the DOM walks the tree. Layout reads such as offsetHeight or getBoundingClientRect force a synchronous reflow when styles are dirty, and interleaving them with writes in a loop causes layout thrashing. Query once and batch reads before writes.\n\nhigh impact. Report only."
+        },
+        "arguments-object": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`arguments` → rest parameters\n\nIn sloppy mode `arguments` aliases the parameters, and leaking it prevents engines from eliding its allocation. Rest parameters give a real array and are always cheap.\n\nlow impact. Report only."
+        }
+      }
+    }
+  }
+}

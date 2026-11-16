@@ -1,0 +1,140 @@
+#!/usr/bin/env bun
+import fs from "node:fs";
+import { parseArgs } from "node:util";
+import { serve } from "./mcp.ts";
+import { formatExplain, formatJson, formatPretty, formatRules, ruleMeta, TOOL } from "./report.ts";
+import { allRules, ruleByName } from "./rules/index.ts";
+import { layer, run, unifiedDiff, UsageError } from "./runner.ts";
+import { formatSarif } from "./sarif.ts";
+import { configSchema, outputSchema } from "./schema.ts";
+
+const HELP = `optilint: find and fix JS/TS performance problems
+
+Usage: optilint [paths...] [options]
+
+Fixing:
+  --fix              apply fixes up to the configured tier (default: typed)
+  --tier TIER        exact | typed | assumed: the highest tier to apply
+  --obscure          also apply obscure fixes (correct but hard to read)
+  --fix-unsafe       same as --fix --tier assumed
+  --diff             print fixes as a unified diff instead of writing files
+
+Selecting:
+  --rule a,b         run only these rules or groups
+  --disable a,b      turn rules or groups off
+  --min-impact LVL   only report high | medium | low (default: low)
+  --ignore GLOB      skip matching paths (repeatable)
+  --config PATH      config file (default: nearest optilint.json or package.json "optilint")
+  --project PATH     tsconfig.json to read compiler options from
+
+Output:
+  --format FMT       pretty | json | sarif (default: pretty)
+  --stdin-filename F lint stdin as file F; with --fix, print the fixed text
+  --list-rules       list all rules (with --format json: their metadata)
+  --explain RULE     explain a rule
+  --print-schema K   print the JSON Schema of the config or the json output
+  --mcp              run as an MCP server on stdio (tools: lint, fix, rules)
+  -h, --help         show this help
+
+Tiers: exact = same behaviour for every input; typed = for every input the types
+allow; assumed = only if the stated assumption holds.
+
+Inline: // optilint-disable-next-line rule-a, rule-b
+        // optilint-disable-line
+        // optilint-disable-file rule-a`;
+
+function fail(message: string): never {
+  console.error(`optilint: ${message}`);
+  process.exit(2);
+}
+
+function guard<T>(fn: () => T): T {
+  try {
+    return fn();
+  } catch (e) {
+    if (e instanceof UsageError) fail(e.message);
+    throw e;
+  }
+}
+
+const describe = (rule: string) => ruleByName.get(rule)?.description;
+const list = (value?: string) => (value ? value.split(",").map((s) => s.trim()).filter(Boolean) : []);
+const json = (value: unknown) => console.log(JSON.stringify(value, null, 2));
+
+function parse() {
+  return parseArgs({
+    allowPositionals: true,
+    options: {
+      fix: { type: "boolean" }, "fix-unsafe": { type: "boolean" }, diff: { type: "boolean" },
+      tier: { type: "string" }, obscure: { type: "boolean" },
+      rule: { type: "string" }, disable: { type: "string" }, "min-impact": { type: "string" },
+      format: { type: "string" }, project: { type: "string" }, config: { type: "string" },
+      "list-rules": { type: "boolean" }, explain: { type: "string" }, "print-schema": { type: "string" },
+      help: { type: "boolean", short: "h" }, mcp: { type: "boolean" },
+      "stdin-filename": { type: "string" }, ignore: { type: "string", multiple: true },
+    },
+  });
+}
+
+function main() {
+  const { values, positionals } = parse();
+  const format = values.format ?? "pretty";
+  if (!["pretty", "json", "sarif"].includes(format)) fail(`invalid --format: ${format}`);
+  if (values.help) return console.log(HELP);
+  if (values.mcp) return serve(process.cwd());
+  if (values["print-schema"]) {
+    const kind = values["print-schema"];
+    if (kind !== "config" && kind !== "output") fail(`invalid --print-schema: ${kind} (config | output)`);
+    return json(kind === "config" ? configSchema() : outputSchema());
+  }
+  if (values["list-rules"]) {
+    if (format === "pretty") return console.log(formatRules(allRules));
+    return json({ version: 1, tool: TOOL, rules: allRules.map(ruleMeta) });
+  }
+  if (values.explain) {
+    const r = ruleByName.get(values.explain);
+    if (!r) fail(`unknown rule: ${values.explain}`);
+    return console.log(formatExplain(r));
+  }
+
+  const cwd = process.cwd();
+  const stdinName = values["stdin-filename"];
+  const text = stdinName ? fs.readFileSync(0, "utf8") : undefined;
+  const fix = !!(values.fix || values["fix-unsafe"] || values.diff);
+  const { results, rules, config, errors, excluded } = guard(() => run({
+    cwd, paths: positionals, buffer: stdinName ? { file: stdinName, text: text! } : undefined, fix,
+    config: values.config, project: values.project,
+    layer: layer({
+      only: list(values.rule), disable: list(values.disable), ignore: values.ignore,
+      tier: values["fix-unsafe"] ? "assumed" : values.tier, obscure: values.obscure, minImpact: values["min-impact"],
+    }),
+  }));
+  for (const e of errors) console.error(`optilint: internal error: ${e}`);
+
+  // An editor sends every file; one the config leaves out gets no findings.
+  if (excluded) {
+    if (fix) process.stdout.write(text!);
+    else if (format === "json") console.log(formatJson([]));
+    else if (format === "sarif") console.log(formatSarif([], rules, cwd));
+    process.exit(0);
+  }
+  if (stdinName && fix) {
+    process.stdout.write(results[0]!.output);
+    process.exit(0);
+  }
+  if (!stdinName) {
+    for (const r of results) {
+      if (r.output === r.original) continue;
+      if (values.diff) process.stdout.write(unifiedDiff(r.file, r.original, r.output, cwd));
+      else fs.writeFileSync(r.file, r.output);
+    }
+  }
+  const remaining = values.diff ? results.map((r) => ({ ...r, findings: [] })) : results;
+  if (format === "json") console.log(formatJson(remaining, describe));
+  else if (format === "sarif") console.log(formatSarif(remaining, rules, cwd));
+  else if (!values.diff) console.log(formatPretty(remaining, cwd, fix, (f) => config.settingsFor(f)));
+  // Findings set to "info" are advice; they do not fail a run.
+  process.exit(remaining.some((r) => r.findings.some((f) => f.severity !== "info")) ? 1 : 0);
+}
+
+main();

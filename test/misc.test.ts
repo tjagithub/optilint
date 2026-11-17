@@ -73,9 +73,13 @@ for (const el of els) {
 const h = document.body.offsetHeight;`;
     expect(rulesHit(code, { rule: "dom-in-loop" })).toEqual(["dom-in-loop", "dom-in-loop"]);
   });
-  test("arguments-object", () => {
-    expect(rulesHit("function f() { return arguments.length; }\nfunction g(arguments2: number) { return arguments2; }", {
-      rule: "arguments-object", file: "/virtual/a.js",
-    })).toEqual(["arguments-object"]);
+  test("arguments-object flags only an arguments object that escapes or is written", () => {
+    const code = `function reads() { return arguments.length + arguments[0]; }
+function forwards(f) { return f.apply(this, arguments); }
+function g(arguments2) { return arguments2; }
+function leaks() { return [].slice.call(arguments); }
+function stores() { const a = arguments; return a; }
+function writes() { arguments[0] = 1; arguments.length--; }`;
+    expect(run(code, { rule: "arguments-object", file: "/virtual/a.js" }).findings.map((f) => f.line)).toEqual([4, 5, 6, 6]);
   });
 });

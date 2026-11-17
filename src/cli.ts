@@ -61,7 +61,8 @@ function guard<T>(fn: () => T): T {
 }
 
 const describe = (rule: string) => ruleByName.get(rule)?.description;
-const list = (value?: string) => (value ? value.split(",").map((s) => s.trim()).filter(Boolean) : []);
+// Repeated flags add up: `--rule a --rule b` is `--rule a,b`.
+const list = (values?: string[]) => (values ?? []).flatMap((v) => v.split(",")).map((s) => s.trim()).filter(Boolean);
 const json = (value: unknown) => console.log(JSON.stringify(value, null, 2));
 
 // parseArgs throws TypeError (code ERR_PARSE_ARGS_*) with a long hint; keep its first sentence.
@@ -81,7 +82,7 @@ function parseOptions() {
     options: {
       fix: { type: "boolean" }, "fix-unsafe": { type: "boolean" }, diff: { type: "boolean" },
       tier: { type: "string" }, obscure: { type: "boolean" },
-      rule: { type: "string" }, disable: { type: "string" }, "min-impact": { type: "string" }, "max-slowdown": { type: "string" },
+      rule: { type: "string", multiple: true }, disable: { type: "string", multiple: true }, "min-impact": { type: "string" }, "max-slowdown": { type: "string" },
       format: { type: "string" }, project: { type: "string" }, config: { type: "string" },
       "list-rules": { type: "boolean" }, explain: { type: "string" }, "print-schema": { type: "string" },
       help: { type: "boolean", short: "h" }, mcp: { type: "boolean" }, version: { type: "boolean" },

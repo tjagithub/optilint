@@ -1,7 +1,7 @@
 import ts from "typescript";
 import { isBooleanContext, isNumber, isSimpleRef, isStringLit, staticCall, unwrap } from "../../core/ast.ts";
 import { fix } from "../../core/fix.ts";
-import type { RuleDef } from "../../core/types.ts";
+import type { RuleContext, RuleDef } from "../../core/types.ts";
 
 const K = ts.SyntaxKind;
 
@@ -94,6 +94,21 @@ export const objectEntriesPair: RuleDef = {
   },
 };
 
+// The global object is a dictionary already; deleting from it costs nothing extra.
+const GLOBALS = new Set(["window", "globalThis", "global", "self"]);
+
+function isGlobalObject(e: ts.Expression, ctx: RuleContext) {
+  const u = unwrap(e);
+  return (ts.isIdentifier(u) && GLOBALS.has(u.text)) || ctx.isType(u, "Window") === "yes";
+}
+
+/** A computed key, or a receiver typed with an index signature: the object is a dictionary, not a shape. */
+function isDictionary(target: ts.PropertyAccessExpression | ts.ElementAccessExpression, ctx: RuleContext) {
+  if (ts.isElementAccessExpression(target) && !ts.isStringLiteralLike(unwrap(target.argumentExpression))) return true;
+  const type = ctx.checker.getApparentType(ctx.checker.getTypeAtLocation(target.expression));
+  return ctx.checker.getIndexInfosOfType(type).length > 0;
+}
+
 export const deleteProperty: RuleDef = {
   name: "delete-property",
   impact: "medium",
@@ -104,10 +119,14 @@ export const deleteProperty: RuleDef = {
   check(node, ctx) {
     const target = unwrap((node as ts.DeleteExpression).expression);
     if (!ts.isPropertyAccessExpression(target) && !ts.isElementAccessExpression(target)) return;
-    const message = ctx.isArray(target.expression) === "yes"
-      ? "`delete` on an array element leaves a hole and makes the array holey (slower element access); use splice or reassign."
-      : "`delete` switches the object to slow dictionary mode; assign `undefined` or use a Map for dynamic keys.";
-    ctx.report(node, message);
+    if (isGlobalObject(target.expression, ctx)) return;
+    if (ctx.isArray(target.expression) === "yes") {
+      ctx.report(node, "`delete` on an array element leaves a hole and makes the array holey (slower element access); use splice or reassign.");
+    } else if (isDictionary(target, ctx)) {
+      ctx.report(node, "This object is used as a dictionary (keys added and deleted at run time); a `Map` is faster for that.", undefined, "low");
+    } else {
+      ctx.report(node, "`delete` switches the object to slow dictionary mode; assign `undefined` or use a Map for dynamic keys.");
+    }
   },
 };
 

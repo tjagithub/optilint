@@ -11,8 +11,10 @@ describe("string-flatten-in-loop", () => {
 let s = "";
 for (const p of parts) { s += p; if (s.charCodeAt(s.length - 1) === 10) {} }
 let t = "";
-for (const p of parts) { t += p; t[0]; }`;
-    expect(lines(code, R)).toEqual([3, 5]);
+for (const p of parts) { t += p; t[0]; }
+let u = "";
+for (const p of parts) { if (p) u += p; else u += "-"; u.endsWith("-"); }`;
+    expect(lines(code, R)).toEqual([3, 5, 7]);
   });
   test("a read after the loop, a length read, or a non-string is fine", () => {
     const code = `declare const parts: string[];

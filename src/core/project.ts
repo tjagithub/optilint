@@ -55,7 +55,10 @@ export class ProjectResolver {
     const parsed = this.parse(configPath);
     if (parsed.fileNames.some((f) => path.resolve(f) === file)) return configPath;
     for (const ref of parsed.projectReferences ?? []) {
-      const found = this.owner(ts.resolveProjectReferencePath(ref), file, seen);
+      // A reference to a missing project (a partial checkout) is skipped, as tsc -b would report it.
+      const refPath = ts.resolveProjectReferencePath(ref);
+      if (!ts.sys.fileExists(refPath)) continue;
+      const found = this.owner(refPath, file, seen);
       if (found) return found;
     }
     return undefined;

@@ -53,6 +53,17 @@ describe("report-only object rules", () => {
   test("delete-property", () => {
     expect(rulesHit("const o: { a?: number } = {};\ndelete o.a;", { rule: "delete-property" })).toEqual(["delete-property"]);
   });
+  test("delete-property calls dictionaries dictionaries, at low impact, and skips the global object", () => {
+    const code = `declare const cache: Record<string, number>; declare const k: string; declare const o: { a?: number };
+delete cache[k];
+delete cache.x;
+delete o["a"];
+delete (window as any).__x;
+delete globalThis.foo;`;
+    const r = run(code, { rule: "delete-property" }).findings;
+    expect(r.map((f) => [f.line, f.impact])).toEqual([[2, "low"], [3, "low"], [4, "medium"]]);
+    expect(r[0]?.message).toContain("Map");
+  });
   test("object-keys-emptiness", () => {
     const code = "declare const o: object;\nif (Object.keys(o).length === 0) {}\nif (!Object.keys(o).length) {}\nconst n = Object.keys(o).length;";
     expect(rulesHit(code, { rule: "object-keys-emptiness" })).toEqual(["object-keys-emptiness", "object-keys-emptiness"]);

@@ -74,6 +74,10 @@ describe("array method rewrites", () => {
 });
 
 describe("report-only array rules", () => {
+  test("chained-array-methods is low impact for two steps outside a loop", () => {
+    const code = `${ARR}xs.map(String).join(",");\nfor (const x of xs) xs.map(String).join(",");\nxs.map(String).filter(Boolean).join(",");`;
+    expect(run(code, { rule: "chained-array-methods" }).findings.map((f) => f.impact)).toEqual(["low", "medium", "medium"]);
+  });
   test("chained-array-methods reports once per chain", () => {
     expect(rulesHit(`${ARR}xs.map((x) => x).filter(Boolean).map(String);`, { rule: "chained-array-methods" }))
       .toEqual(["chained-array-methods"]);

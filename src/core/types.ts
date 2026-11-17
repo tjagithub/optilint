@@ -72,7 +72,7 @@ export interface RuleContext {
   readonly checker: ts.TypeChecker;
   readonly isTS: boolean;
   readonly options: ts.CompilerOptions;
-  report(node: ts.Node, message: string, fix?: Fix): void;
+  report(node: ts.Node, message: string, fix?: Fix, impact?: Impact): void;
   text(node: ts.Node): string;
   replace(node: ts.Node, text: string): Edit;
   isArray(expr: ts.Expression): Tri;

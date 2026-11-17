@@ -304,7 +304,7 @@
                 },
                 "cache-array-length": {
                   "$ref": "#/$defs/RuleValue",
-                  "markdownDescription": "`for (let i = 0; i < xs.length; i++)` → cache `xs.length`\n\nReading `.length` in the condition is a load per iteration, and engines can only hoist it when they can prove the body leaves the array alone. Caching it makes that explicit.\n\nlow impact. Fixes: typed or assumed."
+                  "markdownDescription": "`for (let i = 0; i < xs.length; i++)` → cache `xs.length`\n\nMeasured, it makes no difference once a loop is optimized: TurboFan, FTL and DFG already keep the length in a register (1.00–1.01x). It helps only in the interpreter and baseline tiers (about 1.2x on Sparkplug and LLInt), i.e. code that never gets hot. Off by default for that reason (`bench/FINDINGS.md`).\n\nlow impact. Fixes: typed or assumed. Not in the recommended preset."
                 }
               },
               "additionalProperties": false
@@ -434,7 +434,7 @@
                 },
                 "arguments-object": {
                   "$ref": "#/$defs/RuleValue",
-                  "markdownDescription": "`arguments` → rest parameters\n\nIn sloppy mode `arguments` aliases the parameters, and leaking it prevents engines from eliding its allocation. Rest parameters give a real array and are always cheap.\n\nlow impact. Report only."
+                  "markdownDescription": "`arguments` that escapes, or is written → rest parameters\n\nOptimizing compilers never allocate `arguments` when the function only reads `arguments.length` or `arguments[i]`, or passes it to `f.apply(this, arguments)`. Passing it anywhere else, storing it, or writing to it forces a real object (in sloppy mode one that aliases the parameters). Rest parameters give a real array and are always cheap.\n\nlow impact. Report only."
                 },
                 "postmessage-transfer": {
                   "$ref": "#/$defs/RuleValue",
@@ -543,7 +543,7 @@
         },
         "cache-array-length": {
           "$ref": "#/$defs/RuleValue",
-          "markdownDescription": "`for (let i = 0; i < xs.length; i++)` → cache `xs.length`\n\nReading `.length` in the condition is a load per iteration, and engines can only hoist it when they can prove the body leaves the array alone. Caching it makes that explicit.\n\nlow impact. Fixes: typed or assumed."
+          "markdownDescription": "`for (let i = 0; i < xs.length; i++)` → cache `xs.length`\n\nMeasured, it makes no difference once a loop is optimized: TurboFan, FTL and DFG already keep the length in a register (1.00–1.01x). It helps only in the interpreter and baseline tiers (about 1.2x on Sparkplug and LLInt), i.e. code that never gets hot. Off by default for that reason (`bench/FINDINGS.md`).\n\nlow impact. Fixes: typed or assumed. Not in the recommended preset."
         },
         "split-join-to-replaceall": {
           "$ref": "#/$defs/RuleValue",
@@ -631,7 +631,7 @@
         },
         "arguments-object": {
           "$ref": "#/$defs/RuleValue",
-          "markdownDescription": "`arguments` → rest parameters\n\nIn sloppy mode `arguments` aliases the parameters, and leaking it prevents engines from eliding its allocation. Rest parameters give a real array and are always cheap.\n\nlow impact. Report only."
+          "markdownDescription": "`arguments` that escapes, or is written → rest parameters\n\nOptimizing compilers never allocate `arguments` when the function only reads `arguments.length` or `arguments[i]`, or passes it to `f.apply(this, arguments)`. Passing it anywhere else, storing it, or writing to it forces a real object (in sloppy mode one that aliases the parameters). Rest parameters give a real array and are always cheap.\n\nlow impact. Report only."
         },
         "postmessage-transfer": {
           "$ref": "#/$defs/RuleValue",

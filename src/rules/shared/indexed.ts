@@ -119,9 +119,10 @@ function isWriteTarget(n: ts.Node) {
 export const cacheLength: RuleDef = {
   name: "cache-array-length",
   impact: "low",
+  recommended: false,
   tiers: ["typed", "assumed"],
   description: "`for (let i = 0; i < xs.length; i++)` → cache `xs.length`",
-  why: "Reading `.length` in the condition is a load per iteration, and engines can only hoist it when they can prove the body leaves the array alone. Caching it makes that explicit.",
+  why: "Measured, it makes no difference once a loop is optimized: TurboFan, FTL and DFG already keep the length in a register (1.00–1.01x). It helps only in the interpreter and baseline tiers (about 1.2x on Sparkplug and LLInt), i.e. code that never gets hot. Off by default for that reason (`bench/FINDINGS.md`).",
   kinds: [K.ForStatement],
   check(node, ctx) {
     const n = node as ts.ForStatement;

@@ -56,6 +56,11 @@ describe("cli", () => {
       .toMatchObject({ group: "misc", tiers: ["assumed"], recommended: false, obscure: true, why: expect.any(String) });
   });
 
+  test("repeated --rule flags add up", () => {
+    const rules = (args: string[]) => JSON.parse(cli([...args, "--format", "json", "--stdin-filename", "buf.js"], CODE).out).findings.map((f: { rule: string }) => f.rule);
+    expect(rules(["--rule", "filter-first", "--rule", "date-now"])).toEqual(["filter-first", "date-now"]);
+    expect(rules(["--rule", "filter-first,date-now"])).toEqual(["filter-first", "date-now"]);
+  });
   test("unknown rules are a usage error with a suggestion", () => {
     const r = cli(["--rule", "filter-frist", "--stdin-filename", "a.js"], "");
     expect(r.code).toBe(2);

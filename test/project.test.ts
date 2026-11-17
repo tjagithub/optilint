@@ -28,6 +28,14 @@ test("a solution-style tsconfig resolves to the referenced project that lists th
   expect(tierOf(mono, ["packages/app/a.ts"], "tsconfig.json")).toEqual(["typed"]);
 });
 
+test("a reference to a missing project is skipped, not a crash", () => {
+  const partial = path.join(root, "partial");
+  pkg(path.join(partial, "packages", "app"), { compilerOptions: { composite: true }, include: ["*.ts"] });
+  const references = [{ path: "codemods/gone" }, { path: "packages/app" }];
+  fs.writeFileSync(path.join(partial, "tsconfig.json"), JSON.stringify({ files: [], references }));
+  expect(tierOf(partial, ["packages/app/a.ts"])).toEqual(["typed"]);
+});
+
 test("the tsconfig is looked up from each linted file, not from the cwd", () => {
   const ws = path.join(root, "ws");
   pkg(path.join(ws, "one"), { include: ["*.ts"] });

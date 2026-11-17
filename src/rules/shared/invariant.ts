@@ -38,7 +38,9 @@ export const stringFlattenInLoop: RuleDef = {
       if (m) return isName(m.object, name);
       return ts.isElementAccessExpression(n) && isName(n.expression, name) && !(isAssignment(n.parent) && n.parent.left === n);
     });
-    if (!read) return;
+    // One finding per string per loop, at its first `+=`.
+    const first = find(loop, (n) => ts.isBinaryExpression(n) && n.operatorToken.kind === K.PlusEqualsToken && isName(n.left, name));
+    if (!read || first !== node) return;
     const what = ts.isElementAccessExpression(read) ? `\`${name}[…]\`` : `\`.${methodCall(read)!.name}()\``;
     ctx.report(node, `\`${name}\` grows with \`+=\` and is read with ${what} in the same loop; each read copies the whole string (O(n²)).`);
   },

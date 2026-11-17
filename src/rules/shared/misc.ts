@@ -93,17 +93,33 @@ export const dynamicCode: RuleDef = {
   },
 };
 
+/** Whether this use of `arguments` makes the engine build the object. */
+function escapes(id: ts.Identifier) {
+  const p = id.parent;
+  if (ts.isPropertyAccessExpression(p) && p.name.text === "length") return isWritten(p);
+  if (ts.isElementAccessExpression(p) && p.expression === id) return isWritten(p);
+  const apply = ts.isCallExpression(p) && p.arguments[1] === id && p.arguments.length === 2 ? methodCall(p, "apply") : undefined;
+  return !apply;
+}
+
+function isWritten(e: ts.Expression) {
+  const p = e.parent;
+  return (ts.isBinaryExpression(p) && p.left === e && p.operatorToken.kind >= K.FirstAssignment && p.operatorToken.kind <= K.LastAssignment) ||
+    ((ts.isPrefixUnaryExpression(p) || ts.isPostfixUnaryExpression(p)) && (p.operator === K.PlusPlusToken || p.operator === K.MinusMinusToken)) ||
+    ts.isDeleteExpression(p);
+}
+
 export const argumentsObject: RuleDef = {
   name: "arguments-object",
   impact: "low",
   tiers: [],
-  description: "`arguments` → rest parameters",
-  why: "In sloppy mode `arguments` aliases the parameters, and leaking it prevents engines from eliding its allocation. Rest parameters give a real array and are always cheap.",
+  description: "`arguments` that escapes, or is written → rest parameters",
+  why: "Optimizing compilers never allocate `arguments` when the function only reads `arguments.length` or `arguments[i]`, or passes it to `f.apply(this, arguments)`. Passing it anywhere else, storing it, or writing to it forces a real object (in sloppy mode one that aliases the parameters). Rest parameters give a real array and are always cheap.",
   kinds: [K.Identifier],
   check(node, ctx) {
     const id = node as ts.Identifier;
     if (id.text !== "arguments" || ts.isPropertyAccessExpression(id.parent) && id.parent.name === id) return;
-    if (ctx.checker.getSymbolAtLocation(id)?.valueDeclaration) return;
-    ctx.report(id, "Use rest parameters (`...args`) instead of `arguments`.");
+    if (ctx.checker.getSymbolAtLocation(id)?.valueDeclaration || !escapes(id)) return;
+    ctx.report(id, "`arguments` escapes here, so the engine must allocate it; use rest parameters (`...args`).");
   },
 };

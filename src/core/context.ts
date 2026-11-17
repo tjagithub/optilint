@@ -1,5 +1,5 @@
 import ts from "typescript";
-import type { Edit, Finding, Fix, Rule, RuleContext, Tri } from "./types.ts";
+import type { Edit, Finding, Fix, Impact, Rule, RuleContext, Tri } from "./types.ts";
 
 const TYPED_ARRAYS = new Set([
   "Int8Array", "Uint8Array", "Uint8ClampedArray", "Int16Array", "Uint16Array",
@@ -49,13 +49,14 @@ export class FileContext implements RuleContext {
     return hit(this.disabledFile) || hit(this.disabledLines.get(line));
   }
 
-  report(node: ts.Node, message: string, fix?: Fix) {
+  /** `impact` overrides the rule's for this finding, e.g. lower outside loops. */
+  report(node: ts.Node, message: string, fix?: Fix, impact: Impact = this.rule.impact) {
     const start = node.getStart(this.sf);
     const { line, character } = this.sf.getLineAndCharacterOfPosition(start);
     if (this.isDisabled(line, this.rule.name)) return;
     const endPos = this.sf.getLineAndCharacterOfPosition(node.end);
     this.findings.push({
-      rule: this.rule.name, group: this.rule.group, impact: this.rule.impact, message,
+      rule: this.rule.name, group: this.rule.group, impact, message,
       file: this.sf.fileName, line: line + 1, col: character + 1,
       endLine: endPos.line + 1, endCol: endPos.character + 1,
       start, end: node.end, fix,

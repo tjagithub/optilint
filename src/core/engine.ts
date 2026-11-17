@@ -43,11 +43,14 @@ export interface FileResult {
   fixesApplied: number;
 }
 
+/** The options every lint program uses: the project's, with JS allowed and nothing emitted. */
+export const programOptions = (project?: ts.CompilerOptions): ts.CompilerOptions => ({
+  ...DEFAULT_OPTIONS, ...project, noEmit: true, allowJs: true, checkJs: false,
+});
+
 /** Lint (and optionally fix) files. `sources` overrides file contents, e.g. for tests or stdin. */
 export function lint(files: readonly string[], opts: LintOptions, sources = new Map<string, string>()): FileResult[] {
-  const options: ts.CompilerOptions = {
-    ...DEFAULT_OPTIONS, ...opts.compilerOptions, noEmit: true, allowJs: true, checkJs: false,
-  };
+  const options = programOptions(opts.compilerOptions);
   const overlay = new Map(sources);
   const host = cachingHost(options, overlay);
   const results = new Map<string, FileResult>();

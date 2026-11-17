@@ -2,6 +2,7 @@ import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { LintCache, lintCached } from "./cache.ts";
 import { type CliLayer, type Config, ConfigError, findConfig, loadConfig, SKIP_DIRS } from "./config.ts";
 import { type FileResult, lint } from "./core/engine.ts";
 import { TIERS } from "./core/fix.ts";
@@ -73,6 +74,8 @@ export interface Request {
   layer: CliLayer;
   config?: string;
   project?: string;
+  /** Cache file for findings; used only without fixes and without a buffer. */
+  cache?: string;
 }
 
 export interface Run {
@@ -82,6 +85,8 @@ export interface Run {
   errors: string[];
   /** The config leaves the buffer's file out, so nothing ran. */
   excluded: boolean;
+  /** Files whose findings came from the cache. */
+  cached: number;
 }
 
 export function run(req: Request): Run {
@@ -100,7 +105,7 @@ export function run(req: Request): Run {
   const files: string[] = [];
   const sources = new Map<string, string>();
   if (bufferFile) {
-    if (!config.selects(bufferFile)) return { results: [], rules, config, errors: [], excluded: true };
+    if (!config.selects(bufferFile)) return { results: [], rules, config, errors: [], excluded: true, cached: 0 };
     files.push(bufferFile);
     sources.set(bufferFile, req.buffer!.text);
   } else {
@@ -119,13 +124,22 @@ export function run(req: Request): Run {
     else byProject.set(p, [f]);
   }
   const errors = new Set<string>();
-  const results = [...byProject].flatMap(([project, group]) => lint(group, {
-    rules, fix: req.fix, settings: (f) => config.settingsFor(f), compilerOptions: project.options, extraRoots: project.ambient,
-    onRuleError: (rule, file, e) => errors.add(`${rule} crashed on ${path.relative(cwd, file)}: ${(e as Error).message}`),
-  }, sources));
+  const cache = req.cache && !req.fix && !bufferFile ? new LintCache(path.resolve(cwd, req.cache)) : undefined;
+  let cached = 0;
+  const results = [...byProject].flatMap(([project, group]) => {
+    const opts = {
+      rules, fix: req.fix, settings: (f: string) => config.settingsFor(f), compilerOptions: project.options, extraRoots: project.ambient,
+      onRuleError: (rule: string, file: string, e: unknown) => errors.add(`${rule} crashed on ${path.relative(cwd, file)}: ${(e as Error).message}`),
+    };
+    if (!cache) return lint(group, opts, sources);
+    const r = lintCached(group, opts, cache, cwd);
+    cached += r.hits;
+    return r.results;
+  });
+  cache?.save();
   const order = new Map(files.map((f, i) => [f, i]));
   results.sort((a, b) => order.get(a.file)! - order.get(b.file)!);
-  return { results, rules, config, errors: [...errors], excluded: false };
+  return { results, rules, config, errors: [...errors], excluded: false, cached };
 }
 
 export function unifiedDiff(file: string, before: string, after: string, cwd: string): string {

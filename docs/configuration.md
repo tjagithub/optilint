@@ -31,7 +31,11 @@ optilint uses the nearest `optilint.json` or `optilint.jsonc` (or an `"optilint"
 - Globs are relative to the file that declares them; a folder name also covers what is inside it. `extends` paths are relative too, and later files win.
 - Unknown keys, rules and groups are errors with a suggestion. `schema.json` (also printed by `optilint --print-schema config`) gives editors completion and hover docs.
 
-The command line overrides the config: `--rule a,b` and `--disable a,b` (rules or groups), `--tier`, `--obscure`, `--min-impact`, `--max-slowdown`, `--ignore GLOB` (repeatable), `--project tsconfig.json`. `--fix-unsafe` is short for `--fix --tier assumed`.
+The command line overrides the config: `--rule a,b` and `--disable a,b` (rules or groups), `--tier`, `--obscure`, `--min-impact`, `--max-slowdown`, `--ignore GLOB` (repeatable), `--project tsconfig.json`. `--rule` and `--disable` can repeat. `--fix-unsafe` is short for `--fix --tier assumed`.
+
+## Cache
+
+`--cache` stores each file's findings (in `node_modules/.cache/optilint/cache.json`, or `.optilintcache` without a `node_modules`; `--cache-location PATH` to choose) and reuses them while the file's key holds. Types cross files, so the key covers more than the file: its content, the content of everything it imports (transitively, through `.d.ts` files in `node_modules` too), every script and `declare global` / `declare module` file the run reaches, the compiler options, the file's rule settings, and the optilint and TypeScript versions. An import that does not resolve is part of the key, so the file is linted again once it does. `--fix` and `--diff` ignore the cache.
 
 ## Disable comments
 

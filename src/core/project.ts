@@ -25,6 +25,7 @@ const NO_PROJECT: Project = { options: DEFAULT_OPTIONS, ambient: [] };
  * `references`) resolves to the referenced project that lists the file, as tsserver does. */
 export class ProjectResolver {
   private readonly parsed = new Map<string, ts.ParsedCommandLine>();
+  private readonly listed = new Map<string, Set<string>>();
   private readonly nearest = new Map<string, string | undefined>();
   private readonly projects = new Map<string, Project>();
 
@@ -53,7 +54,9 @@ export class ProjectResolver {
     if (seen.has(configPath)) return undefined;
     seen.add(configPath);
     const parsed = this.parse(configPath);
-    if (parsed.fileNames.some((f) => path.resolve(f) === file)) return configPath;
+    let names = this.listed.get(configPath);
+    if (!names) this.listed.set(configPath, (names = new Set(parsed.fileNames.map((f) => path.resolve(f)))));
+    if (names.has(file)) return configPath;
     for (const ref of parsed.projectReferences ?? []) {
       // A reference to a missing project (a partial checkout) is skipped, as tsc -b would report it.
       const refPath = ts.resolveProjectReferencePath(ref);

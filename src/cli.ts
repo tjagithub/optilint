@@ -2,6 +2,7 @@
 import fs from "node:fs";
 import { parseArgs } from "node:util";
 import { serve } from "./mcp.ts";
+import { defaultCacheLocation } from "./cache.ts";
 import { formatExplain, formatJson, formatPretty, formatRules, ruleMeta, TOOL } from "./report.ts";
 import { allRules, retiredByName, ruleByName } from "./rules/index.ts";
 import { layer, run, unifiedDiff, UsageError } from "./runner.ts";
@@ -28,6 +29,9 @@ Selecting:
   --ignore GLOB      skip matching paths (repeatable)
   --config PATH      config file (default: nearest optilint.json(c) or package.json "optilint")
   --project PATH     tsconfig.json to read compiler options from
+  --cache            reuse findings for files whose content and imports are unchanged
+                     (not with --fix or --diff)
+  --cache-location P the cache file (default: node_modules/.cache/optilint/cache.json)
 
 Output:
   --format FMT       pretty | json | sarif (default: pretty)
@@ -86,7 +90,7 @@ function parseOptions() {
       format: { type: "string" }, project: { type: "string" }, config: { type: "string" },
       "list-rules": { type: "boolean" }, explain: { type: "string" }, "print-schema": { type: "string" },
       help: { type: "boolean", short: "h" }, mcp: { type: "boolean" }, version: { type: "boolean" },
-      "stdin-filename": { type: "string" }, ignore: { type: "string", multiple: true },
+      "stdin-filename": { type: "string" }, cache: { type: "boolean" }, "cache-location": { type: "string" }, ignore: { type: "string", multiple: true },
     },
   });
 }
@@ -120,6 +124,7 @@ function main() {
   const { results, rules, config, errors, excluded } = guard(() => run({
     cwd, paths: positionals, buffer: stdinName ? { file: stdinName, text: text! } : undefined, fix,
     config: values.config, project: values.project,
+    cache: values.cache || values["cache-location"] ? (values["cache-location"] ?? defaultCacheLocation(cwd)) : undefined,
     layer: layer({
       only: list(values.rule), disable: list(values.disable), ignore: values.ignore,
       tier: values["fix-unsafe"] ? "assumed" : values.tier, obscure: values.obscure, minImpact: values["min-impact"], maxSlowdown: values["max-slowdown"],

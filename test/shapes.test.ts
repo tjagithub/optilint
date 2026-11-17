@@ -13,6 +13,14 @@ describe("late-property", () => {
 }`;
     expect(lines(code, R)).toEqual([3, 4]);
   });
+  test("fields set by a method the constructor calls are fine", () => {
+    const code = "class D {\n  constructor() { this.init(); }\n  init() { this.hull = []; }\n  update() { this.hull = [1]; }\n}";
+    expect(lines(code, R)).toEqual([]);
+  });
+  test("a field declared on a base class is fine", () => {
+    const code = "class A { protected log?: string; }\nclass B extends A {\n  constructor() { super(); }\n  set(l: string) { this.log = l; }\n}";
+    expect(lines(code, R, "/virtual/a.ts")).toEqual([]);
+  });
   test("declared fields, constructor or parameter properties, statics and inherited fields are fine", () => {
     const ts = `class A {
   x = 0;
@@ -36,6 +44,13 @@ Reflect.setPrototypeOf(o, null);
 o.__proto__ = proto;
 Object.setPrototypeOf({ a: 1 }, proto);`;
     expect(lines(code, R)).toEqual([2, 3, 4, 5]);
+  });
+  test("class setup is fine: constructors, prototypes, inheritance helpers", () => {
+    const code = `function Base() {} function Child() {}
+Object.setPrototypeOf(Child, Base);
+Object.setPrototypeOf(Child.prototype, Base.prototype);
+function _inheritsLoose(a, b) { a.__proto__ = b; }`;
+    expect(lines(code, R)).toEqual([]);
   });
   test("the Error subclass idiom and literal __proto__ are fine", () => {
     const code = `class MyError extends Error { constructor(m) { super(m); Object.setPrototypeOf(this, MyError.prototype); } }

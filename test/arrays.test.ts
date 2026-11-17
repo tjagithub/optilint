@@ -89,7 +89,7 @@ describe("report-only array rules", () => {
 });
 
 describe("typed-array-subarray", () => {
-  const TA = "declare const ta: Uint8Array; declare const d: TextDecoder;\n";
+  const TA = "declare const ta: Uint8Array<ArrayBuffer>; declare const d: TextDecoder;\n";
   const tier = (code: string) => run(`${TA}${code}`, { rule: "typed-array-subarray" }).findings.map((f) => f.fix?.tier);
   test("typed when the copy is read at once", () => {
     expect(fixed(`${TA}const i = ta.slice(1, 4).indexOf(0);`, "typed-array-subarray")).toBe(`${TA}const i = ta.subarray(1, 4).indexOf(0);`);
@@ -99,6 +99,10 @@ describe("typed-array-subarray", () => {
     expect(tier("const c = ta.slice(); ta.slice(1).indexOf(f()); ta.slice().forEach(() => {});\ndeclare function f(): number;"))
       .toEqual(["assumed", "assumed", "assumed"]);
     expect(fixed(`${TA}const c = ta.slice();`, "typed-array-subarray")).toBe(`${TA}const c = ta.slice();`);
+  });
+  test("assumed for possibly shared buffers, which TextDecoder rejects; unused copies are skipped", () => {
+    const code = "declare const sab: SharedArrayBuffer; declare const any8: Uint8Array<ArrayBufferLike>; declare const d: TextDecoder;\nd.decode(new Uint8Array(sab).slice()); d.decode(any8.slice(1));\nnew Int8Array(1).slice();";
+    expect(run(code, { rule: "typed-array-subarray" }).findings.map((f) => f.fix?.tier)).toEqual(["assumed", "assumed"]);
   });
   test("ignores plain arrays, Buffer-like and unknown receivers", () => {
     const code = "declare const xs: number[]; declare const u: any;\nxs.slice(1).indexOf(2); u.slice(1).indexOf(2);";

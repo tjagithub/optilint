@@ -36,7 +36,8 @@ words.filter((w) => RegExp(term).test(w));`;
   test("skips patterns that change, constant patterns, and calls without arguments", () => {
     const code = `declare const words: string[]; declare function next(): string;
 let p = "a";
-for (const w of words) { new RegExp(w); new RegExp("x+"); new RegExp(next()); new RegExp(p); p = w; }`;
+for (const w of words) { new RegExp(w); new RegExp("x+"); new RegExp(next()); new RegExp(p); p = w; }
+for (const w of words) if (w) return new RegExp(p);`;
     expect(lines(code, R)).toEqual([]);
   });
 });
@@ -55,7 +56,9 @@ for (const id of ids) { Object.keys(o); o[id] = 1; }
 for (const id of ids) { Object.keys(o); delete o[id]; }
 for (const id of ids) { Object.entries(o); touch(o); }
 for (const id of ids) { const local = { id }; Object.keys(local); }
-for (const k of Object.keys(o)) {}`;
+for (const k of Object.keys(o)) {}
+declare const byId: Record<string, object>;
+for (const id of ids) Object.keys(byId[id]).length;`;
     expect(lines(code, R)).toEqual([]);
   });
 });

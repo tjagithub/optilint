@@ -44,8 +44,14 @@ export const stringFlattenInLoop: RuleDef = {
   },
 };
 
+/** `node` is part of a `return` or `throw` inside `loop`, so it runs once. */
+function exitsWith(node: ts.Node, loop: ts.Node) {
+  for (let p = node.parent; p && p !== loop; p = p.parent) if (ts.isReturnStatement(p) || ts.isThrowStatement(p)) return true;
+  return false;
+}
+
 /** Every identifier in `args` is declared outside `loop` and not assigned in it; calls must take arguments. */
-function invariantArgs(args: readonly ts.Expression[], loop: ts.Node, ctx: RuleContext) {
+export function invariantArgs(args: readonly ts.Expression[], loop: ts.Node, ctx: RuleContext) {
   const names: string[] = [];
   const varies = (n: ts.Node): boolean => {
     if (ts.isCallExpression(n) && n.arguments.length === 0) return true;
@@ -71,7 +77,7 @@ export const regexpInLoop: RuleDef = {
     const args = call.arguments ?? [];
     if (!args.length || args.every((a) => ts.isStringLiteralLike(unwrap(a)))) return;
     const loop = repeatingAncestor(node);
-    if (!loop || !invariantArgs(args, loop, ctx)) return;
+    if (!loop || !invariantArgs(args, loop, ctx) || exitsWith(node, loop)) return;
     ctx.report(node, "The same `RegExp` is built on every iteration; build it once before the loop.");
   },
 };
@@ -102,7 +108,7 @@ export const objectKeysInLoop: RuleDef = {
     const m = KEYS.map((k) => staticCall(node, "Object", k)).find(Boolean);
     const arg = m?.args.length === 1 ? m.args[0]! : undefined;
     const loop = arg && repeatingAncestor(node);
-    if (!m || !arg || !loop || !invariant(arg, loop, ctx)) return;
+    if (!m || !arg || !loop || !invariantArgs([arg], loop, ctx)) return;
     let root = unwrap(arg);
     while (ts.isPropertyAccessExpression(root) || ts.isElementAccessExpression(root)) root = unwrap(root.expression);
     if (!ts.isIdentifier(root) || writesTo(loop, root.text)) return;

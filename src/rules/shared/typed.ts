@@ -11,6 +11,12 @@ const TYPED = [
 // Methods that read the copy and return without running user code.
 const READS = new Set(["indexOf", "lastIndexOf", "includes", "join", "at", "toString"]);
 
+/** The view is over an `ArrayBuffer`, not possibly a `SharedArrayBuffer` (which `TextDecoder` rejects). */
+function unshared(e: ts.Expression, ctx: RuleContext) {
+  const [buffer] = ctx.checker.getTypeArguments(ctx.checker.getTypeAtLocation(e) as ts.TypeReference);
+  return buffer?.getSymbol()?.getName() === "ArrayBuffer";
+}
+
 function parentOf(node: ts.Node) {
   let p = node.parent;
   while (ts.isParenthesizedExpression(p)) p = p.parent;
@@ -32,7 +38,8 @@ function readAtOnce(call: ts.CallExpression, ctx: RuleContext) {
       !!(staticCall(use, "Math", "max") ?? staticCall(use, "Math", "min") ?? staticCall(use, "String", "fromCharCode"));
   }
   const decode = methodCall(p, "decode");
-  return !!decode && decode.args.length === 1 && ctx.isType(decode.object, "TextDecoder") === "yes";
+  return !!decode && decode.args.length === 1 && ctx.isType(decode.object, "TextDecoder") === "yes" &&
+    unshared((call.expression as ts.PropertyAccessExpression).expression, ctx);
 }
 
 export const typedArraySubarray: RuleDef = {
@@ -45,6 +52,8 @@ export const typedArraySubarray: RuleDef = {
   check(node, ctx) {
     const m = methodCall(node, "slice");
     if (!m || m.args.length > 2 || !TYPED.some((t) => ctx.isType(m.object, t) === "yes")) return;
+    // An unused copy is a feature test (`new Int8Array(1).slice()`), not a cost.
+    if (ts.isExpressionStatement(parentOf(m.call))) return;
     const callee = (m.call.expression as ts.PropertyAccessExpression).name;
     const tier = readAtOnce(m.call, ctx) ? "typed" : "assumed";
     ctx.report(node, "`.slice()` copies the typed array; `.subarray()` is a view over the same memory.",

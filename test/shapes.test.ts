@@ -17,6 +17,14 @@ describe("late-property", () => {
     const code = "class D {\n  constructor() { this.init(); }\n  init() { this.hull = []; }\n  update() { this.hull = [1]; }\n}";
     expect(lines(code, R)).toEqual([]);
   });
+  test("a JS field set in the base constructor is fine", () => {
+    const code = "class Base { constructor() { this.meta = undefined; } }\nclass M extends Base {\n  constructor() { super(); }\n  build() { this.meta = {}; this.extra = 1; }\n}";
+    expect(lines(code, R)).toEqual([4]);
+  });
+  test("a class whose base cannot be resolved is skipped", () => {
+    const code = "const Base = require(\"./base\");\nclass M extends Base {\n  constructor() { super(); }\n  build() { this.buildMeta = {}; }\n}";
+    expect(lines(code, R)).toEqual([]);
+  });
   test("a field declared on a base class is fine", () => {
     const code = "class A { protected log?: string; }\nclass B extends A {\n  constructor() { super(); }\n  set(l: string) { this.log = l; }\n}";
     expect(lines(code, R, "/virtual/a.ts")).toEqual([]);

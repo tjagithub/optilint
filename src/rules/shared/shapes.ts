@@ -18,7 +18,13 @@ function thisAssignments(body: ts.Node, out: ts.BinaryExpression[] = []) {
 
 /** The checker places the property on a base class or a declared field. */
 function declaredElsewhere(a: ts.BinaryExpression, cls: ts.ClassLikeDeclaration, ctx: RuleContext) {
-  const decls = ctx.checker.getSymbolAtLocation((unwrap(a.left) as ts.PropertyAccessExpression).name)?.declarations ?? [];
+  const name = (unwrap(a.left) as ts.PropertyAccessExpression).name;
+  // In JS the subclass assignment is itself a declaration that shadows the base's, so ask the base types.
+  const sym = cls.name && ctx.checker.getSymbolAtLocation(cls.name);
+  const inst = sym ? ctx.checker.getDeclaredTypeOfSymbol(sym) : undefined;
+  const bases = inst?.isClassOrInterface() ? ctx.checker.getBaseTypes(inst) : [];
+  if (bases.some((b) => ctx.checker.getPropertyOfType(b, name.text))) return true;
+  const decls = ctx.checker.getSymbolAtLocation(name)?.declarations ?? [];
   return decls.some((d) => ts.findAncestor(d, ts.isClassLike) !== cls || ts.isPropertyDeclaration(d) || ts.isPropertySignature(d));
 }
 
@@ -71,8 +77,9 @@ export const lateProperty: RuleDef = {
         for (const a of thisAssignments(m.body)) declared.add(propName(a));
       }
     }
-    // Without its own constructor a subclass may get the field from the base's.
-    if (cls.heritageClauses?.some((h) => h.token === K.ExtendsKeyword) && !cls.members.some(ts.isConstructorDeclaration)) return;
+    // The base constructor may set the field: skip when there is no own constructor, or the base is unresolved.
+    const base = cls.heritageClauses?.find((h) => h.token === K.ExtendsKeyword)?.types[0];
+    if (base && (!cls.members.some(ts.isConstructorDeclaration) || ctx.checker.getTypeAtLocation(base.expression).flags & ts.TypeFlags.Any)) return;
     const reported = new Set<string>();
     for (const m of cls.members) {
       const isStatic = ts.getCombinedModifierFlags(m as ts.Declaration) & ts.ModifierFlags.Static;

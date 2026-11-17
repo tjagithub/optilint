@@ -1,9 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import ts from "typescript";
-import { type FileResult, type FileSettings, lint, type LintOptions, programOptions } from "./core/engine.ts";
+import { type FileResult, type FileSettings, programOptions } from "./core/engine.ts";
 import type { Finding } from "./core/types.ts";
 import { digest, type GraphNode, importGraph, scanFile } from "./graph.ts";
+import type { Job, JobResult } from "./job.ts";
 import { TOOL } from "./report.ts";
 
 const FORMAT = 1;
@@ -89,36 +90,47 @@ export class LintCache {
 
 const settingsKey = (s?: FileSettings) => JSON.stringify(s ? [s.tier, s.obscure, s.rules ? [...s.rules] : null] : null);
 
-/** `lint` without fixes, reusing stored findings for every file whose key is unchanged. */
-export function lintCached(files: readonly string[], opts: LintOptions, cache: LintCache, cwd: string) {
-  const options = programOptions(opts.compilerOptions);
-  const extra = opts.extraRoots ?? [];
-  const graph = importGraph([...files, ...extra], options, cache, cwd);
-  const base = digest(cache.version, JSON.stringify(options), opts.rules.map((r) => r.name).join(","), graph.globalKey);
-  const keys = new Map(files.map((f) => [f, digest(base, graph.keys.get(f) ?? "", settingsKey(opts.settings?.(f)))]));
-  const results: FileResult[] = [];
+export interface CachePlan {
+  /** Files whose stored findings still hold. */
+  hits: FileResult[];
+  /** The job for the rest, if any. */
+  misses?: Job;
+  /** Each file's key, to store its findings under once linted. */
+  keys: Map<string, string>;
+}
+
+/** Splits a report-mode job into the files the cache answers and a job for the others. */
+export function planCached(job: Job, cache: LintCache, cwd: string): CachePlan {
+  const options = programOptions(job.compilerOptions);
+  const graph = importGraph([...job.files, ...job.extraRoots], options, cache, cwd);
+  const base = digest(cache.version, JSON.stringify(options), job.rules.join(","), graph.globalKey);
+  const settings = new Map(job.settings);
+  const keys = new Map(job.files.map((f) => [f, digest(base, graph.keys.get(f) ?? "", settingsKey(settings.get(f)))]));
+  const hits: FileResult[] = [];
   const misses: string[] = [];
-  for (const file of files) {
+  for (const file of job.files) {
     const findings = cache.findings(file, keys.get(file)!);
     if (!findings) {
       misses.push(file);
       continue;
     }
     const text = fs.readFileSync(file, "utf8");
-    results.push({ file, original: text, output: text, findings, fixesApplied: 0 });
+    hits.push({ file, original: text, output: text, findings, fixesApplied: 0 });
   }
-  if (misses.length) {
-    // Global declarations in files that hit still shape the types of the files that missed.
-    const crashed = new Set<string>();
-    const fresh = lint(misses, {
-      ...opts, fix: false, extraRoots: [...new Set([...extra, ...graph.globals])],
-      onRuleError: (rule, file, e) => {
-        crashed.add(file);
-        opts.onRuleError?.(rule, file, e);
-      },
-    });
-    for (const r of fresh) if (!crashed.has(r.file)) cache.store(r.file, keys.get(r.file)!, r.findings);
-    results.push(...fresh);
+  if (!misses.length) return { hits, keys };
+  // Global declarations in files that hit still shape the types of the files that missed.
+  const extraRoots = [...new Set([...job.extraRoots, ...graph.globals])];
+  const missing = new Set(misses);
+  return { hits, keys, misses: { ...job, files: misses, settings: job.settings.filter(([f]) => missing.has(f)), extraRoots } };
+}
+
+/** Stores the findings of linted files, except where a rule crashed. */
+export function recordCached(cache: LintCache, keys: ReadonlyMap<string, string>, done: readonly JobResult[]) {
+  for (const { results, errors } of done) {
+    const crashed = new Set(errors.map((e) => e.file));
+    for (const r of results) {
+      const key = keys.get(r.file);
+      if (key && !crashed.has(r.file)) cache.store(r.file, key, r.findings);
+    }
   }
-  return { results, hits: files.length - misses.length };
 }

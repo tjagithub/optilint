@@ -31,7 +31,7 @@ optilint uses the nearest `optilint.json` or `optilint.jsonc` (or an `"optilint"
 - Globs are relative to the file that declares them; a folder name also covers what is inside it. `extends` paths are relative too, and later files win.
 - Unknown keys, rules and groups are errors with a suggestion. `schema.json` (also printed by `optilint --print-schema config`) gives editors completion and hover docs.
 
-The command line overrides the config: `--rule a,b` and `--disable a,b` (rules or groups), `--tier`, `--obscure`, `--min-impact`, `--max-slowdown`, `--ignore GLOB` (repeatable), `--project tsconfig.json`. `--rule` and `--disable` can repeat. `--fix-unsafe` is short for `--fix --tier assumed`.
+The command line overrides the config: `--rule a,b` and `--disable a,b` (rules or groups), `--tier`, `--obscure`, `--min-impact`, `--max-slowdown`, `--ignore GLOB` (repeatable), `--project tsconfig.json`. `--rule` and `--disable` can repeat. `--workers N` lints projects on N threads (default: up to 4); it pays off in monorepos with many tsconfig projects and is skipped when one project holds most files, since one program cannot be split. `--fix-unsafe` is short for `--fix --tier assumed`.
 
 ## Cache
 

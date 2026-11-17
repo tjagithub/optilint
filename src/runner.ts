@@ -2,11 +2,13 @@ import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { LintCache, lintCached } from "./cache.ts";
+import { LintCache, planCached, recordCached } from "./cache.ts";
 import { type CliLayer, type Config, ConfigError, findConfig, loadConfig, SKIP_DIRS } from "./config.ts";
-import { type FileResult, lint } from "./core/engine.ts";
+import type { FileResult, FileSettings } from "./core/engine.ts";
 import { TIERS } from "./core/fix.ts";
 import { type Project, ProjectResolver } from "./core/project.ts";
+import { type Job, type JobResult, lintJob } from "./job.ts";
+import { LintPool } from "./pool.ts";
 import { allRules } from "./rules/index.ts";
 import type { Impact, Rule, Tier } from "./core/types.ts";
 import { allowed, parseSlowdown } from "./slowdown.ts";
@@ -89,7 +91,39 @@ export interface Run {
   cached: number;
 }
 
+/** The jobs a request needs, and how to turn their results into the run. */
+interface Prepared {
+  jobs: Job[];
+  finish(done: JobResult[]): Run;
+}
+
 export function run(req: Request): Run {
+  const p = prepare(req);
+  return p.finish(p.jobs.map(lintJob));
+}
+
+/** Measured on babel (150 projects): 4 workers beat 6 and 10 on Bun and on Node; each worker warms its own JIT. */
+export const defaultWorkers = () => Math.min(4, Math.max(1, os.availableParallelism() - 1));
+
+// Each worker loads TypeScript and re-parses the files its programs share, so a run with few files stays inline.
+const MIN_PARALLEL_FILES = 100;
+
+/** `run`, with the projects spread over `workers` threads when there are enough files and no project dominates.
+ * One program cannot be split: each part would rebuild it, which measured slower than linting it inline. */
+export async function runParallel(req: Request, workers: number): Promise<Run> {
+  const p = prepare(req);
+  const sizes = p.jobs.map((j) => j.files.length);
+  const files = sizes.reduce((a, b) => a + b, 0);
+  if (workers < 2 || files < MIN_PARALLEL_FILES || Math.max(0, ...sizes) > files / 2) return p.finish(p.jobs.map(lintJob));
+  const pool = new LintPool(Math.min(workers, p.jobs.length));
+  try {
+    return p.finish(await pool.run(p.jobs));
+  } finally {
+    await pool.close();
+  }
+}
+
+function prepare(req: Request): Prepared {
   const { cwd } = req;
   const bufferFile = req.buffer && path.resolve(cwd, req.buffer.file);
   let config: Config;
@@ -105,7 +139,7 @@ export function run(req: Request): Run {
   const files: string[] = [];
   const sources = new Map<string, string>();
   if (bufferFile) {
-    if (!config.selects(bufferFile)) return { results: [], rules, config, errors: [], excluded: true, cached: 0 };
+    if (!config.selects(bufferFile)) return { jobs: [], finish: () => ({ results: [], rules, config, errors: [], excluded: true, cached: 0 }) };
     files.push(bufferFile);
     sources.set(bufferFile, req.buffer!.text);
   } else {
@@ -123,23 +157,37 @@ export function run(req: Request): Run {
     if (group) group.push(f);
     else byProject.set(p, [f]);
   }
-  const errors = new Set<string>();
   const cache = req.cache && !req.fix && !bufferFile ? new LintCache(path.resolve(cwd, req.cache)) : undefined;
-  let cached = 0;
-  const results = [...byProject].flatMap(([project, group]) => {
-    const opts = {
-      rules, fix: req.fix, settings: (f: string) => config.settingsFor(f), compilerOptions: project.options, extraRoots: project.ambient,
-      onRuleError: (rule: string, file: string, e: unknown) => errors.add(`${rule} crashed on ${path.relative(cwd, file)}: ${(e as Error).message}`),
+  const names = rules.map((r) => r.name);
+  const jobs: Job[] = [];
+  const hits: FileResult[] = [];
+  const keys = new Map<string, string>();
+  for (const [project, group] of byProject) {
+    const job: Job = {
+      files: group, rules: names, fix: req.fix, settings: group.map((f): [string, FileSettings] => [f, config.settingsFor(f)]),
+      compilerOptions: project.options, extraRoots: project.ambient, sources: sources.size ? [...sources] : undefined,
     };
-    if (!cache) return lint(group, opts, sources);
-    const r = lintCached(group, opts, cache, cwd);
-    cached += r.hits;
-    return r.results;
-  });
-  cache?.save();
-  const order = new Map(files.map((f, i) => [f, i]));
-  results.sort((a, b) => order.get(a.file)! - order.get(b.file)!);
-  return { results, rules, config, errors: [...errors], excluded: false, cached };
+    if (!cache) {
+      jobs.push(job);
+      continue;
+    }
+    const plan = planCached(job, cache, cwd);
+    hits.push(...plan.hits);
+    for (const [f, k] of plan.keys) keys.set(f, k);
+    if (plan.misses) jobs.push(plan.misses);
+  }
+  const finish = (done: JobResult[]): Run => {
+    if (cache) {
+      recordCached(cache, keys, done);
+      cache.save();
+    }
+    const errors = new Set(done.flatMap((d) => d.errors.map((e) => `${e.rule} crashed on ${path.relative(cwd, e.file)}: ${e.message}`)));
+    const results = [...hits, ...done.flatMap((d) => d.results)];
+    const order = new Map(files.map((f, i) => [f, i]));
+    results.sort((a, b) => order.get(a.file)! - order.get(b.file)!);
+    return { results, rules, config, errors: [...errors], excluded: false, cached: hits.length };
+  };
+  return { jobs, finish };
 }
 
 export function unifiedDiff(file: string, before: string, after: string, cwd: string): string {

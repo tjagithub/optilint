@@ -4,6 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { globMatch } from "../src/core/glob.ts";
+import { twoProjects } from "./projects.ts";
 
 describe("globMatch", () => {
   const cases: [string, string, boolean][] = [
@@ -45,6 +46,16 @@ describe.skipIf(!node)("bundle on Node", () => {
     expect(r.stderr).toBe("");
     const { findings } = JSON.parse(r.stdout);
     expect(findings.map((f: { rule: string; fix: { tier: string } }) => `${f.rule}:${f.fix.tier}`)).toEqual(["filter-length-to-some:typed"]);
+  });
+
+  test("lint workers give the same findings as an inline run", () => {
+    const dir = path.join(out, "projects");
+    twoProjects(dir);
+    const lint = (workers: string) => spawnSync(node!, [path.join(out, "optilint.mjs"), "--format=json", `--workers=${workers}`], { cwd: dir, encoding: "utf8" });
+    const [inline, parallel] = [lint("0"), lint("2")];
+    expect(parallel.stderr).toBe("");
+    expect(JSON.parse(parallel.stdout).findings).toEqual(JSON.parse(inline.stdout).findings);
+    expect(JSON.parse(inline.stdout).findings).toHaveLength(240);
   });
 
   test("carries the skill", () => {

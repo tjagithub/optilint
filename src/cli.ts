@@ -1,11 +1,12 @@
 #!/usr/bin/env bun
 import fs from "node:fs";
 import { parseArgs } from "node:util";
+import { isMainThread } from "node:worker_threads";
 import { serve } from "./mcp.ts";
 import { defaultCacheLocation } from "./cache.ts";
 import { formatExplain, formatJson, formatPretty, formatRules, ruleMeta, TOOL } from "./report.ts";
 import { allRules, retiredByName, ruleByName } from "./rules/index.ts";
-import { layer, run, unifiedDiff, UsageError } from "./runner.ts";
+import { defaultWorkers, layer, runParallel, unifiedDiff, UsageError } from "./runner.ts";
 import { formatSarif } from "./sarif.ts";
 import { configSchema, outputSchema } from "./schema.ts";
 
@@ -29,6 +30,7 @@ Selecting:
   --ignore GLOB      skip matching paths (repeatable)
   --config PATH      config file (default: nearest optilint.json(c) or package.json "optilint")
   --project PATH     tsconfig.json to read compiler options from
+  --workers N        lint projects on N threads (default: up to 4; 0 or 1: none)
   --cache            reuse findings for files whose content and imports are unchanged
                      (not with --fix or --diff)
   --cache-location P the cache file (default: node_modules/.cache/optilint/cache.json)
@@ -90,12 +92,12 @@ function parseOptions() {
       format: { type: "string" }, project: { type: "string" }, config: { type: "string" },
       "list-rules": { type: "boolean" }, explain: { type: "string" }, "print-schema": { type: "string" },
       help: { type: "boolean", short: "h" }, mcp: { type: "boolean" }, version: { type: "boolean" },
-      "stdin-filename": { type: "string" }, cache: { type: "boolean" }, "cache-location": { type: "string" }, ignore: { type: "string", multiple: true },
+      "stdin-filename": { type: "string" }, workers: { type: "string" }, cache: { type: "boolean" }, "cache-location": { type: "string" }, ignore: { type: "string", multiple: true },
     },
   });
 }
 
-function main() {
+async function main() {
   const { values, positionals } = guard(parse);
   const format = values.format ?? "pretty";
   if (!["pretty", "json", "sarif"].includes(format)) fail(`invalid --format: ${format}`);
@@ -121,7 +123,9 @@ function main() {
   const stdinName = values["stdin-filename"];
   const text = stdinName ? fs.readFileSync(0, "utf8") : undefined;
   const fix = !!(values.fix || values["fix-unsafe"] || values.diff);
-  const { results, rules, config, errors, excluded } = guard(() => run({
+  const workers = values.workers === undefined ? defaultWorkers() : Number(values.workers);
+  if (!Number.isInteger(workers) || workers < 0) fail(`invalid --workers: ${values.workers}`);
+  const { results, rules, config, errors, excluded } = await runParallel(guard(() => ({
     cwd, paths: positionals, buffer: stdinName ? { file: stdinName, text: text! } : undefined, fix,
     config: values.config, project: values.project,
     cache: values.cache || values["cache-location"] ? (values["cache-location"] ?? defaultCacheLocation(cwd)) : undefined,
@@ -129,7 +133,10 @@ function main() {
       only: list(values.rule), disable: list(values.disable), ignore: values.ignore,
       tier: values["fix-unsafe"] ? "assumed" : values.tier, obscure: values.obscure, minImpact: values["min-impact"], maxSlowdown: values["max-slowdown"],
     }),
-  }));
+  })), workers).catch((e: unknown) => {
+    if (e instanceof UsageError) fail(e.message);
+    throw e;
+  });
   for (const e of errors) console.error(`optilint: internal error: ${e}`);
 
   // An editor sends every file; one the config leaves out gets no findings.
@@ -158,4 +165,5 @@ function main() {
   process.exit(remaining.some((r) => r.findings.some((f) => f.severity !== "info")) ? 1 : 0);
 }
 
-main();
+// A lint worker of the Node bundle loads this file too; only the main thread runs the CLI.
+if (isMainThread) void main();

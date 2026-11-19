@@ -4,6 +4,13 @@ What `bench/` measured, per rule, and what to do about it. Newest run first; whe
 
 Ratios are before time ÷ after time: above 1.00x the fix is faster. "Every tier" means all eight: V8 TurboFan, Maglev, Sparkplug, Ignition and JSC FTL, DFG, Baseline, LLInt. Causes marked *unverified* are guesses that still need a look at the engine source (`proposals/README.md`, Sources). Ranges leave out unsteady cells (`?`, spread over 1.2), as `src/speedups.ts` does.
 
+## 2026-11-19: `foreach-to-for` hole test, objects, closures and proxies
+
+Apple M4, Node v26.13.1, Bun 1.4.4; every tier, 150 ms, 5 rounds, sizes 10, 1000 and 100 000. A one-off driver timed hand-written `forEach`, the loop with the hole test (`if (x === undefined && !(i in xs)) continue;`) and the loop without it, with `child.ts` and the inputs of the four `foreach-to-for` cases (numbers, `objects`, `closures`, `proxy`).
+
+- **The hole test is about free.** Dropping it is 1.00–1.25x on objects and closures (LLInt and Baseline gain most, peak tiers nothing), and mixed on numbers: 1.17x on LLInt, but 0.67x on Maglev at 10 items (steady over four runs; *unverified*: the `undefined` compare may feed Maglev a type check it then uses). Both loops beat `forEach` on plain arrays everywhere (1.00–6.84x). **Decided (user, 2026-11-19):** the fix leaves the test out when the array provably has no holes, for readability.
+- **Proxies lose on V8.** Over a Proxy with pass-through `get`/`has` traps, `forEach` beats the loop on V8: 0.75–0.82x on TurboFan and Maglev, 0.89–1.02x on Sparkplug and Ignition. JSC goes the other way (1.45–2.15x). *Unverified:* V8's builtin `forEach` reaches the traps from C++/Torque, while `xs[i]` in JS code goes through a generic keyed load each time. Proxied arrays are common (Vue `reactive`, MobX), but no type tells them apart, so **decided (user, 2026-11-19):** the `proxy` case is `outOfScope`: it is benched and reported here, but `src/speedups.ts` leaves it out, and `docs/rules.md` says that tiers do not cover proxies.
+
 ## 2026-11-16
 
 Apple M4, Node v26.13.1 (V8 14.6), Bun 1.4.4 (JSC); `bun run bench --tiers all`, 150 ms per measurement, 3 rounds. Full table: [`results/2026-11-16.txt`](results/2026-11-16.txt), data: [`results/2026-11-16.json`](results/2026-11-16.json) (the second full run that day; `src/speedups.ts` comes from it). Sizes are 10 and 1000 items (10 and 100 for the quadratic accumulator cases).

@@ -2,7 +2,7 @@
 // Usage: bun bench/speedups.ts [results.json] (default: the newest in bench/results/).
 import fs from "node:fs";
 import path from "node:path";
-import { UNSTEADY } from "./gen.ts";
+import { loadCases, UNSTEADY } from "./gen.ts";
 import { TIERS } from "./tiers.ts";
 
 export const OUT = path.join(import.meta.dirname, "..", "src", "speedups.ts");
@@ -19,13 +19,20 @@ export const newestResults = () => {
   return path.join(RESULTS, files.at(-1)!);
 };
 
+/** Ids of the cases marked `outOfScope`: benched, but not part of what a fix promises. */
+export async function outOfScopeIds(): Promise<Set<string>> {
+  const cases = (await loadCases()).flatMap((f) => f.cases).filter((c) => c.outOfScope);
+  return new Set(cases.map((c) => (c.name ? `${c.rule}:${c.name}` : c.rule)));
+}
+
 /** The text of src/speedups.ts for one results file, and the unsteady cells it left out. */
-export function render(file: string): { text: string; skipped: string[] } {
+export function render(file: string, outOfScope: ReadonlySet<string> = new Set()): { text: string; skipped: string[] } {
   const data = JSON.parse(fs.readFileSync(file, "utf8")) as Results;
   const engineOf = new Map(TIERS.map((t) => [t.id, t.cmd === "node" ? "v8" : "jsc"] as const));
   const byRule = new Map<string, { v8: number[]; jsc: number[] }>();
   const skipped: string[] = [];
   for (const r of data.results) {
+    if (outOfScope.has(r.id)) continue;
     if (r.spread > UNSTEADY) {
       skipped.push(`${r.id} @${r.size} on ${r.tier}`);
       continue;
@@ -66,7 +73,7 @@ export function worstSpeedup(rule: string): number | undefined {
 
 if (import.meta.main) {
   const file = path.resolve(process.argv[2] ?? newestResults());
-  const { text, skipped } = render(file);
+  const { text, skipped } = render(file, await outOfScopeIds());
   fs.writeFileSync(OUT, text);
   console.log(`wrote ${path.relative(process.cwd(), OUT)} from ${path.relative(process.cwd(), file)}`);
   if (skipped.length) console.log(`left out ${skipped.length} unsteady results:\n  ${skipped.join("\n  ")}`);

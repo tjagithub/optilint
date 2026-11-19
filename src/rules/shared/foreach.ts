@@ -1,8 +1,9 @@
 import ts from "typescript";
 import {
   asMemberTarget, asStatements, boundNames, identifiersIn, isAssignedIn, isFunction, isLoop, isSimpleRef,
-  methodCall, unwrap, walk,
+  isDense, methodCall, unwrap, walk,
 } from "../../core/ast.ts";
+import { denseConst } from "../../core/dense.ts";
 import { byType, fix } from "../../core/fix.ts";
 import type { RuleContext, RuleDef } from "../../core/types.ts";
 
@@ -95,14 +96,17 @@ export const forEachToFor: RuleDef = {
     const i = idx ? (idx.name as ts.Identifier).text : ctx.uniqueName("i", stmt);
     const len = ctx.uniqueName("len", stmt);
     // forEach skips holes; the `in` test runs only when the read gives undefined, so dense arrays pay one compare.
-    let decl = `\n${indent}  if (!(${i} in ${arr})) continue;`;
+    // An array that provably has none (fresh from `filter` or a literal, or a `const` that is only read) needs no test.
+    const recv = unwrap(m.object);
+    const holes = !isDense(recv) && !(ts.isIdentifier(recv) && denseConst(recv, ctx));
+    let decl = holes ? `\n${indent}  if (!(${i} in ${arr})) continue;` : "";
     if (elem) {
       const kind = isAssignedIn(fn.body, boundNames(elem.name)) ? "let" : "const";
       const type = elem.type ? `: ${ctx.text(elem.type)}` : "";
       const bang = ctx.isTS && ctx.options.noUncheckedIndexedAccess ? "!" : "";
       const read = `\n${indent}  ${kind} ${ctx.text(elem.name)}${type} = ${arr}[${i}]${bang};`;
-      decl = ts.isIdentifier(elem.name)
-        ? `${read}\n${indent}  if (${elem.name.text} === undefined && !(${i} in ${arr})) continue;`
+      decl = !holes ? read
+        : ts.isIdentifier(elem.name) ? `${read}\n${indent}  if (${elem.name.text} === undefined && !(${i} in ${arr})) continue;`
         : `${decl}${read}`;
     }
     const loop = `${pre}for (let ${i} = 0, ${len} = ${arr}.length; ${i} < ${len}; ${i}++) {${decl}${bodyText(fn, plan, ctx, indent)}}`;

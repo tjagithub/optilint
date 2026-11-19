@@ -5,7 +5,7 @@ import path from "node:path";
 import { PRELUDE } from "../bench/case.ts";
 import { loadCases } from "../bench/gen.ts";
 import { CHART, chart } from "../bench/chart.ts";
-import { newestResults, OUT, render } from "../bench/speedups.ts";
+import { newestResults, OUT, outOfScopeIds, render } from "../bench/speedups.ts";
 import { allRules, retiredRules } from "../src/rules/index.ts";
 import { layer, run, UsageError } from "../src/runner.ts";
 import { offByDefault, parseSlowdown, percent, worstSlowdown } from "../src/slowdown.ts";
@@ -23,8 +23,8 @@ const active = new Set(allRules.map((r) => r.name));
 const cases = (await loadCases()).flatMap(({ cases }) => cases).filter((c) => active.has(c.rule));
 
 describe("maxSlowdown", () => {
-  test("src/speedups.ts is generated from the newest bench results", () => {
-    expect(fs.readFileSync(OUT, "utf8")).toBe(render(newestResults()).text);
+  test("src/speedups.ts is generated from the newest bench results", async () => {
+    expect(fs.readFileSync(OUT, "utf8")).toBe(render(newestResults(), await outOfScopeIds()).text);
   });
 
   test("docs/speedups.svg is drawn from src/speedups.ts", () => {

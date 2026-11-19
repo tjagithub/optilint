@@ -37,6 +37,27 @@ describe("foreach-to-for", () => {
     expect(out).toContain("  if (!(i in ps)) continue;\n  const [a, b] = ps[i];");
     expect(fixed(`${ARR}xs.forEach((_, i) => console.log(i));`, "foreach-to-for")).toContain("const _ = xs[i];\n  if (_ === undefined && !(i in xs)) continue;");
   });
+  test("no hole test for a fresh array without holes, or a module const that is only read", () => {
+    const plain = (code: string) => fixed(code, "foreach-to-for");
+    const fresh = plain(`${ARR}xs.filter((x) => x > 0).forEach((x) => console.log(x));`);
+    expect(fresh).toContain("const x = arr[i];\n  console.log(x);");
+    const local = plain(`export {};\nconst ids = [1, 2, 3];\nconsole.log(ids.length, ids[0], ids.includes(2));\nids.forEach((id) => console.log(id));`);
+    expect(local).toContain("const id = ids[i];\n  console.log(id);");
+    expect(plain(`export {};\nconst ids = [1, 2, 3];\nids.forEach((_, i) => console.log(i));`)).not.toContain(" in ids");
+  });
+  test.each([
+    ["deleted", "delete ids[1];"],
+    ["length written", "ids.length = 9;"],
+    ["element written", "ids[5] = 1;"],
+    ["grown", "ids.push(4);"],
+    ["passed on", "keep(ids);"],
+    ["aliased", "const b = ids;"],
+    ["callback that can take the array", "ids.map(keep);"],
+    ["exported", "export { ids };"],
+  ])("keeps the hole test for a const array that is %s", (_name, use) => {
+    const code = `declare function keep(...a: unknown[]): void;\nexport {};\nconst ids = [1, 2, 3];\n${use}\nids.forEach((id) => console.log(id));`;
+    expect(fixed(code, "foreach-to-for")).toContain("if (id === undefined && !(i in ids)) continue;");
+  });
   test("reassigned element uses let; noUncheckedIndexedAccess adds !", () => {
     const out = fixed(`${ARR}xs.forEach((x: number) => { x++; });`, "foreach-to-for", "typed", {
       compilerOptions: { noUncheckedIndexedAccess: true },

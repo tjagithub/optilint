@@ -1,5 +1,5 @@
 {
-  "name": "optilint",
+  "name": "@optilint/cli",
   "version": "0.0.1",
   "description": "A linter that finds and fixes JavaScript/TypeScript performance problems",
   "type": "module",

@@ -14,6 +14,7 @@
     "bench:speedups": "bun bench/speedups.ts && bun bench/chart.ts",
     "bundle": "bun scripts/bundle.ts",
     "lint:self": "bun src/cli.ts src",
+    "release": "scripts/release.sh",
     "schema": "bun src/cli.ts --print-schema config > schema.json && bun src/cli.ts --print-schema output > output.schema.json",
     "test": "bun test",
     "typecheck": "tsc -b"

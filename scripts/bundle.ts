@@ -41,6 +41,8 @@ fs.cpSync(path.join(root, "skills"), path.join(out, "skills"), { recursive: true
 const pkg = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
 const manifest = {
   name: pkg.name, version: pkg.version, description: pkg.description, license: pkg.license, type: "module",
+  // npm provenance checks this against the repository that ran the publish workflow.
+  repository: pkg.repository,
   keywords: ["linter", "performance", "javascript", "typescript", "codemod"],
   bin: { optilint: "optilint.mjs" },
   // npm makes scoped packages private by default; without this, publishing fails with 402.

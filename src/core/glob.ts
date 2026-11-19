@@ -13,6 +13,7 @@ export function globRegExp(glob: string): RegExp {
       const slashAfter = glob[i + 2] === "/";
       const atSegmentStart = i === 0 || glob[i - 1] === "/";
       if (atSegmentStart && slashAfter) {
+        // optilint-disable-next-line string-flatten-in-loop -- the one read runs once, on a trailing `**`
         out += "(?:[^/]*/)*";
         i += 2;
       } else if (atSegmentStart && i + 2 === glob.length) {

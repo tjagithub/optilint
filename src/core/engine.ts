@@ -110,7 +110,7 @@ function configure(f: Finding, setting: RuleSetting | undefined): Finding {
   if (setting?.severity) f.severity = setting.severity;
   const floor = setting?.floor;
   if (!f.fix || !floor) return f;
-  if (floor === "none") delete f.fix;
+  if (floor === "none") f.fix = undefined;
   else f.fix = { ...f.fix, tier: maxTier(f.fix.tier, floor) };
   return f;
 }

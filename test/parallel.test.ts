@@ -2,11 +2,19 @@ import { afterAll, expect, test } from "bun:test";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { run, runParallel } from "../src/runner.ts";
+import { layer, run, runParallel } from "../src/runner.ts";
 import { twoProjects } from "./projects.ts";
 
 const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "optilint-parallel-")));
 afterAll(() => fs.rmSync(root, { recursive: true, force: true }));
+
+test("minImpact filters each finding by its own impact, not its rule's", () => {
+  const code = "declare const xs: number[];\nxs.map(String).join();\nfor (const x of xs) xs.map(String).join();\n";
+  const lines = (minImpact?: string) => run({ cwd: root, buffer: { file: "c.ts", text: code }, fix: false, layer: layer({ only: ["chained-array-methods"], minImpact }) })
+    .results.flatMap((r) => r.findings.map((f) => f.line));
+  expect(lines()).toEqual([2, 3]);
+  expect(lines("medium")).toEqual([3]);
+});
 
 test("worker threads give the same findings as an inline run", async () => {
   twoProjects(root);

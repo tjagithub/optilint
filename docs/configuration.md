@@ -45,4 +45,4 @@ doSomething(); // optilint-disable-line
 /* optilint-disable-file rule-a */
 ```
 
-Without rule names, a comment disables every rule.
+Without rule names, a comment disables every rule. As in ESLint, text after ` -- ` gives the reason: `// optilint-disable-next-line lookup-in-loop -- at most 5 items`.

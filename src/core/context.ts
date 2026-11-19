@@ -33,7 +33,9 @@ export class FileContext implements RuleContext {
     const text = this.sf.text;
     if (!text.includes("optilint-disable")) return;
     for (const m of text.matchAll(DIRECTIVE)) {
-      const list = (m[2] ?? "").split(/[\s,]+/).filter((r) => /^[a-z0-9-]+$/.test(r));
+      // As in ESLint, text after ` -- ` is the reason, not rule names.
+      const names = (m[2] ?? "").split(/\s--(?:\s|$)/)[0]!;
+      const list = names.split(/[\s,]+/).filter((r) => /^[a-z0-9-]+$/.test(r));
       const rules: Set<string> | "all" = list.length ? new Set(list) : "all";
       const { line } = this.sf.getLineAndCharacterOfPosition(m.index);
       if (m[1] === "-file") this.disabledFile = merge(this.disabledFile, rules);

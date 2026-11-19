@@ -1,5 +1,8 @@
 {
   "$schema": "./schema.json",
+  // optilint itself is a CLI that runs each function a few times: low-impact findings (short array chains,
+  // dictionary deletes) would cost readability for nothing. `bun run lint:self` must stay clean at medium.
+  "minImpact": "medium",
   "overrides": [
     // The semantics tests run generated code through Function(...) on purpose.
     { "include": ["test/**"], "rules": { "dynamic-code": "off" } },

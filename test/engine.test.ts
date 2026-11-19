@@ -13,6 +13,10 @@ describe("disable directives", () => {
   test("same line, all rules", () => {
     expect(rulesHit(`${ARR}xs.filter(Boolean)[0]; // optilint-disable-line`)).toEqual([]);
   });
+  test("text after -- is a reason, not rule names", () => {
+    const code = `${ARR}// optilint-disable-next-line filter-first -- date-now is fine\nxs.filter(Boolean)[0]; new Date().getTime();`;
+    expect(rulesHit(code)).toEqual(["date-now"]);
+  });
   test("whole file for one rule", () => {
     const code = `/* optilint-disable-file filter-first */\n${ARR}xs.filter(Boolean)[0];\nconst t = new Date().getTime();`;
     expect(rulesHit(code)).toEqual(["date-now"]);

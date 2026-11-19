@@ -4,7 +4,7 @@ import {
   repeatingAncestor, unwrap,
 } from "../../core/ast.ts";
 import { fix } from "../../core/fix.ts";
-import { knownSmall } from "../../core/size.ts";
+import { fewIterations, knownSmall } from "../../core/size.ts";
 import type { RuleContext, RuleDef } from "../../core/types.ts";
 
 const K = ts.SyntaxKind;
@@ -56,6 +56,7 @@ export const lookupInLoop: RuleDef = {
     if (arr === "no" || (arr === "maybe" && STRINGY.has(m.name))) return;
     if (!STRINGY.has(m.name) && !isEqualityPredicate(m.args[0])) return;
     if (ts.isArrayLiteralExpression(unwrap(m.object)) || !invariant(m.object, loop, ctx) || knownSmall(m.object, ctx, SMALL)) return;
+    if (fewIterations(loop, ctx, SMALL)) return;
     const what = STRINGY.has(m.name) ? "a Set" : "a Map keyed by what you match on";
     ctx.report(node, `\`.${m.name}()\` scans the array on every iteration (O(n·m)); build ${what} once outside the loop.`);
   },

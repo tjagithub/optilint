@@ -1,7 +1,7 @@
 import ts from "typescript";
 import { asMemberTarget, isBooleanContext, isDense, isFunction, isNumber, methodCall, repeatingAncestor, staticCall, unwrap } from "../../core/ast.ts";
 import { byType, fix } from "../../core/fix.ts";
-import { knownSmall } from "../../core/size.ts";
+import { fewIterations, knownSmall } from "../../core/size.ts";
 import type { RuleContext, RuleDef } from "../../core/types.ts";
 
 const K = ts.SyntaxKind;
@@ -193,9 +193,16 @@ export const chainedMethods: RuleDef = {
     if (!outer || !inner || ctx.isArray(inner.object) === "no") return;
     if (methodCall(node.parent?.parent, CHAIN_NEXT)?.object === node) return;
     let steps = 2;
-    for (let m = methodCall(unwrap(inner.object), CHAIN_NEXT); m; m = methodCall(unwrap(m.object), CHAIN_NEXT)) steps++;
+    let root = inner.object;
+    for (let m = methodCall(unwrap(root), CHAIN_NEXT); m; m = methodCall(unwrap(m.object), CHAIN_NEXT)) {
+      steps++;
+      root = m.object;
+    }
+    // A chain over a handful of items allocates a handful of slots; fusing it buys nothing.
+    if (knownSmall(root, ctx, 16)) return;
     // Fusing saves tens of nanoseconds per call (`bench/FINDINGS.md`): it matters in loops and long chains.
-    const impact = steps > 2 || repeatingAncestor(node) ? "medium" : "low";
+    const loop = repeatingAncestor(node);
+    const impact = steps > 2 || (loop && !fewIterations(loop, ctx, 16)) ? "medium" : "low";
     ctx.report(node, `\`.${inner.name}(...).${outer.name}(...)\` builds an intermediate array; fuse into one loop.`, undefined, impact);
   },
 };

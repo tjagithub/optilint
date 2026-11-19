@@ -136,6 +136,24 @@ function f(...names: number[]) { for (const y of ys) names.includes(y); }
 for (const y of ys) { FEW.includes(y); pair.includes(y); GROWN.includes(y); }`;
     expect(run(code, { rule: "lookup-in-loop" }).findings.map((f) => f.line)).toEqual([6]);
   });
+  test("lookup-in-loop knows Object.keys of a small const literal, through imports too", () => {
+    const code = `declare const ys: string[];
+import { NAMES } from "./names";
+const OPTS = { a: 1, b: 2 };
+const KEYS = Object.keys(OPTS);
+const BIG = Object.keys(OPTS); BIG.push("c");
+for (const y of ys) { KEYS.includes(y); NAMES.includes(y); BIG.includes(y); }`;
+    const extra = { "/virtual/names.ts": "const ALL = { x: 1, y: 2 };\nexport const NAMES = Object.keys(ALL);\n" };
+    expect(run(code, { rule: "lookup-in-loop", extra }).findings.map((f) => f.line)).toEqual([6]);
+  });
+  test("lookup-in-loop skips lookups only when every enclosing loop is small", () => {
+    const code = `declare const ys: string[]; declare const zs: string[];
+const T = [["a", 1], ["b", 2]] as const;
+T.filter(([k]) => ys.includes(k));
+for (const t of T) ys.indexOf(t[0]);
+for (const z of zs) for (const t of T) ys.includes(t[0] + z);`;
+    expect(run(code, { rule: "lookup-in-loop" }).findings.map((f) => f.line)).toEqual([5]);
+  });
   test("lookup-in-loop skips throw paths and non-equality predicates", () => {
     const code = `${ARR}declare const ys: number[];
 for (const y of ys) { if (y < 0) throw new Error(String(xs.indexOf(y))); }

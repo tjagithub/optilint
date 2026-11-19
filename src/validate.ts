@@ -1,5 +1,5 @@
 import { TIERS } from "./core/fix.ts";
-import { allRules, groups, retiredByName } from "./rules/index.ts";
+import { allRules, groups, retiredByName, ruleByName } from "./rules/index.ts";
 import { parseSlowdown } from "./slowdown.ts";
 
 export const LEVELS = ["off", "on", "info", "warn", "error"];
@@ -48,7 +48,8 @@ class Errors {
     return false;
   }
   keys(at: string, v: Obj, allowed: readonly string[]) {
-    for (const k of Object.keys(v)) if (!allowed.includes(k)) this.add(at, `unknown key ${show(k)}${suggest(k, allowed)}`);
+    const known = new Set(allowed);
+    for (const k of Object.keys(v)) if (!known.has(k)) this.add(at, `unknown key ${show(k)}${suggest(k, allowed)}`);
   }
 }
 
@@ -62,6 +63,7 @@ function ruleValue(e: Errors, at: string, v: unknown) {
 }
 
 const RULE_NAMES = allRules.map((r) => r.name);
+const NAMES_BY_GROUP = new Map(groups.map((g) => [g, allRules.filter((r) => r.group === g).map((r) => r.name)]));
 const retired = (name: string) => retiredByName.get(name)?.retired;
 
 function validateRules(e: Errors, at: string, v: unknown) {
@@ -78,15 +80,15 @@ function validateRules(e: Errors, at: string, v: unknown) {
         e.add(here, "expected a level or an object of this group's rules");
         continue;
       }
-      const own = allRules.filter((r) => r.group === key).map((r) => r.name);
+      const own = NAMES_BY_GROUP.get(key)!;
       for (const [name, rv] of Object.entries(value)) {
-        const other = allRules.find((r) => r.name === name);
-        if (own.includes(name)) ruleValue(e, `${here}.${name}`, rv);
+        const other = ruleByName.get(name);
+        if (other?.group === key) ruleValue(e, `${here}.${name}`, rv);
         else if (other) e.add(`${here}.${name}`, `rule is in group ${show(other.group)}, not ${show(key)}`);
         else if (retired(name)) e.add(`${here}.${name}`, `rule is retired: ${retired(name)}`);
         else e.add(`${here}.${name}`, `unknown rule${suggest(name, own)}`);
       }
-    } else if (RULE_NAMES.includes(key)) ruleValue(e, here, value);
+    } else if (ruleByName.has(key)) ruleValue(e, here, value);
     else if (retired(key)) e.add(here, `rule is retired: ${retired(key)}`);
     else e.add(here, `unknown rule or group${suggest(key, [...RULE_NAMES, ...groups, "preset"])}`);
   }
@@ -101,7 +103,7 @@ function checkObject(e: Errors, at: string, v: unknown, checks: Record<string, C
   for (const [k, x] of Object.entries(v)) {
     const check = checks[k];
     if (check) check(e, `${prefix}${k}`, x);
-    else e.add(at, `unknown key ${show(k)}${suggest(k, Object.keys(checks))}`);
+    else e.add(at, `unknown key ${show(k)}${suggest(k, Object.keys(checks))}`); // optilint-disable-line object-keys-in-loop -- error path only
   }
 }
 
@@ -124,10 +126,11 @@ const CONFIG: Record<string, Check> = {
   rules,
   overrides: (e, at, v) => {
     if (!Array.isArray(v)) return e.add(at, "expected an array");
-    v.forEach((o, i) => {
+    for (let i = 0; i < v.length; i++) {
+      const o: unknown = v[i];
       if (isObj(o) && !("include" in o)) e.add(`${at}[${i}]`, `missing "include"`);
       checkObject(e, `${at}[${i}]`, o, OVERRIDE);
-    });
+    }
   },
 };
 export const TOP_KEYS = Object.keys(CONFIG);
@@ -143,6 +146,7 @@ export function validate(raw: unknown): string[] {
 /** Problems with rule or group names given on the command line. */
 export function validateNames(names: readonly string[]): string[] {
   const known = [...RULE_NAMES, ...groups];
-  return names.filter((n) => !known.includes(n))
+  const knownSet = new Set(known);
+  return names.filter((n) => !knownSet.has(n))
     .map((n) => (retired(n) ? `${show(n)} is retired: ${retired(n)}` : `unknown rule or group ${show(n)}${suggest(n, known)}`));
 }

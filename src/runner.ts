@@ -182,7 +182,10 @@ function prepare(req: Request): Prepared {
       cache.save();
     }
     const errors = new Set(done.flatMap((d) => d.errors.map((e) => `${e.rule} crashed on ${path.relative(cwd, e.file)}: ${e.message}`)));
-    const results = [...hits, ...done.flatMap((d) => d.results)];
+    // A finding can be less important than its rule (a short chain outside a loop), so filter findings too.
+    const min = IMPACT_RANK[config.minImpact];
+    const results = [...hits, ...done.flatMap((d) => d.results)]
+      .map((r) => ({ ...r, findings: r.findings.filter((f) => IMPACT_RANK[f.impact] >= min) }));
     const order = new Map(files.map((f, i) => [f, i]));
     results.sort((a, b) => order.get(a.file)! - order.get(b.file)!);
     return { results, rules, config, errors: [...errors], excluded: false, cached: hits.length };

@@ -78,6 +78,10 @@ describe("report-only array rules", () => {
     const code = `${ARR}xs.map(String).join(",");\nfor (const x of xs) xs.map(String).join(",");\nxs.map(String).filter(Boolean).join(",");`;
     expect(run(code, { rule: "chained-array-methods" }).findings.map((f) => f.impact)).toEqual(["low", "medium", "medium"]);
   });
+  test("chained-array-methods skips small roots and counts small loops as cold", () => {
+    const code = `${ARR}const FEW = [1, 2, 3];\nFEW.map(String).filter(Boolean).join(",");\nfor (const t of FEW) xs.map(String).join(t);\nfor (const x of xs) xs.map(String).join(",");`;
+    expect(run(code, { rule: "chained-array-methods" }).findings.map((f) => [f.line - 1, f.impact])).toEqual([[3, "low"], [4, "medium"]]);
+  });
   test("chained-array-methods reports once per chain", () => {
     expect(rulesHit(`${ARR}xs.map((x) => x).filter(Boolean).map(String);`, { rule: "chained-array-methods" }))
       .toEqual(["chained-array-methods"]);

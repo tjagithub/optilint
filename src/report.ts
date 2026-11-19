@@ -87,7 +87,7 @@ function measured(r: Rule) {
 const tiersText = (r: Rule) => (r.tiers.length ? `fix: ${r.tiers.join("/")}${r.obscure ? ", obscure" : ""}` : "");
 
 export function formatRules(rules: readonly Rule[]) {
-  const pad = Math.max(...rules.map((r) => r.name.length));
+  const pad = rules.reduce((n, r) => Math.max(n, r.name.length), 0);
   return rules.map((r) => {
     const fix = r.tiers.length ? c.green(` [${tiersText(r)}]`) : "";
     const off = offByDefault(r.name) ? c.dim(` (up to ${percent(worstSlowdown(r.name)!)} slower on some tier: off unless maxSlowdown allows it)`)

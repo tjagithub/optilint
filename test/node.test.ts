@@ -37,6 +37,20 @@ describe.skipIf(!node)("bundle on Node", () => {
   }, 60_000);
   afterAll(() => fs.rmSync(out, { recursive: true, force: true }));
 
+  test("is an npm package with a Node bin and no dependencies", () => {
+    const manifest = JSON.parse(fs.readFileSync(path.join(out, "package.json"), "utf8"));
+    expect(manifest.bin).toEqual({ optilint: "optilint.mjs" });
+    expect(manifest.dependencies).toBeUndefined();
+    expect(fs.readFileSync(path.join(out, "optilint.mjs"), "utf8")).toStartWith("#!/usr/bin/env node\n");
+    const npm = Bun.which("npm");
+    if (!npm) return;
+    const packed = spawnSync(npm, ["pack", "--dry-run", "--json"], { cwd: out, encoding: "utf8" });
+    const files: string[] = JSON.parse(packed.stdout)[0].files.map((f: { path: string }) => f.path);
+    expect(files).toContain("optilint.mjs");
+    expect(files).toContain("lib.es5.d.ts");
+    expect(files).toContain("skills/optilint/SKILL.md");
+  });
+
   test("lints stdin with the type checker's libs", () => {
     const r = spawnSync(node!, [path.join(out, "optilint.mjs"), "--format=json", "--stdin-filename=a.ts"], {
       cwd: out,

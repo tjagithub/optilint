@@ -1,7 +1,10 @@
 {
   "name": "@optilint/cli",
-  "version": "0.0.1",
-  "repository": { "type": "git", "url": "git+https://github.com/tjagithub/optilint.git" },
+  "version": "0.0.2",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tjagithub/optilint.git"
+  },
   "description": "A linter that finds and fixes JavaScript/TypeScript performance problems",
   "type": "module",
   "private": true,

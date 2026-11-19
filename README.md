@@ -10,7 +10,9 @@ A linter for JavaScript and TypeScript that only cares about speed. It finds slo
 
 ## Installation
 
-optilint is not on npm yet. To run it from a checkout, see [CONTRIBUTING.md](CONTRIBUTING.md).
+```bash
+npm install @optilint/cli
+```
 
 ## Usage
 

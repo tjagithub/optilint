@@ -41,6 +41,7 @@ describe.skipIf(!node)("bundle on Node", () => {
     const manifest = JSON.parse(fs.readFileSync(path.join(out, "package.json"), "utf8"));
     expect(manifest.bin).toEqual({ optilint: "optilint.mjs" });
     expect(manifest.dependencies).toBeUndefined();
+    expect(manifest.publishConfig).toEqual({ access: "public" });
     expect(fs.readFileSync(path.join(out, "optilint.mjs"), "utf8")).toStartWith("#!/usr/bin/env node\n");
     const npm = Bun.which("npm");
     if (!npm) return;

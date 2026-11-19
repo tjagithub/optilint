@@ -43,6 +43,8 @@ const manifest = {
   name: pkg.name, version: pkg.version, description: pkg.description, license: pkg.license, type: "module",
   keywords: ["linter", "performance", "javascript", "typescript", "codemod"],
   bin: { optilint: "optilint.mjs" },
+  // npm makes scoped packages private by default; without this, publishing fails with 402.
+  publishConfig: { access: "public" },
   // `import.meta.dirname` (20.11) finds the bundled lib files.
   engines: { node: ">=20.11" },
 };

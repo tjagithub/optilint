@@ -34,6 +34,8 @@ Selecting:
   --cache            reuse findings for files whose content and imports are unchanged
                      (not with --fix or --diff)
   --cache-location P the cache file (default: node_modules/.cache/optilint/cache.json)
+  --profile FILE     rank findings by CPU time in a .cpuprofile (node --cpu-prof);
+                     code it never saw run drops to low impact (repeatable)
 
 Output:
   --format FMT       pretty | json | sarif (default: pretty)
@@ -93,6 +95,7 @@ function parseOptions() {
       "list-rules": { type: "boolean" }, explain: { type: "string" }, "print-schema": { type: "string" },
       help: { type: "boolean", short: "h" }, mcp: { type: "boolean" }, version: { type: "boolean" },
       "stdin-filename": { type: "string" }, workers: { type: "string" }, cache: { type: "boolean" }, "cache-location": { type: "string" }, ignore: { type: "string", multiple: true },
+      profile: { type: "string", multiple: true },
     },
   });
 }
@@ -127,7 +130,7 @@ async function main() {
   if (!Number.isInteger(workers) || workers < 0) fail(`invalid --workers: ${values.workers}`);
   const { results, rules, config, errors, excluded } = await runParallel(guard(() => ({
     cwd, paths: positionals, buffer: stdinName ? { file: stdinName, text: text! } : undefined, fix,
-    config: values.config, project: values.project,
+    config: values.config, project: values.project, profiles: values.profile,
     cache: values.cache || values["cache-location"] ? (values["cache-location"] ?? defaultCacheLocation(cwd)) : undefined,
     layer: layer({
       only: list(values.rule), disable: list(values.disable), ignore: values.ignore,

@@ -36,7 +36,13 @@ export const TOOLS = [
     name: "lint",
     title: "Find performance problems",
     description: "Reports performance findings for files or a code snippet. Each finding names its rule, impact and, when it has a fix, the fix's tier and what an assumed fix assumes.",
-    inputSchema: object({ ...target, minImpact: { type: "string", enum: IMPACTS, description: "Hide findings with less impact. Default: the config's." }, maxSlowdown }),
+    inputSchema: object({
+      ...target, minImpact: { type: "string", enum: IMPACTS, description: "Hide findings with less impact. Default: the config's." }, maxSlowdown,
+      profile: {
+        type: "array", items: { type: "string" },
+        description: ".cpuprofile files (node --cpu-prof). Findings get `cpu`, the share of CPU time in their function, and come hottest first; code the profile never saw run drops to low impact.",
+      },
+    }),
     annotations: { readOnlyHint: true, openWorldHint: false },
   },
   {
@@ -72,6 +78,7 @@ interface Args {
   obscure?: boolean;
   write?: boolean;
   rule?: string;
+  profile?: string[];
 }
 
 class RpcError extends Error {
@@ -89,14 +96,15 @@ function inside(root: string, p: string): string {
 }
 
 function request(root: string, a: Args, fix: boolean): Request {
-  for (const p of a.paths ?? []) inside(root, p);
+  for (const p of [...(a.paths ?? []), ...(a.profile ?? [])]) inside(root, p);
   const buffer = a.code === undefined ? undefined : { file: inside(root, a.filename ?? "snippet.ts"), text: a.code };
   if (!buffer && a.filename) throw new UsageError("`filename` needs `code`");
-  return { cwd: root, paths: a.paths, buffer, fix, layer: layer({ only: a.rules, tier: a.tier, obscure: a.obscure, minImpact: a.minImpact, maxSlowdown: a.maxSlowdown }) };
+  return { cwd: root, paths: a.paths, buffer, fix, profiles: a.profile, layer: layer({ only: a.rules, tier: a.tier, obscure: a.obscure, minImpact: a.minImpact, maxSlowdown: a.maxSlowdown }) };
 }
 
 const brief = (root: string) => (f: Finding) => ({
   file: path.relative(root, f.file), line: f.line, col: f.col, rule: f.rule, impact: f.impact, message: f.message,
+  ...(f.cpu !== undefined ? { cpu: f.cpu } : {}),
   ...(f.fix ? { fix: { tier: f.fix.tier, ...(f.fix.assumes ? { assumes: f.fix.assumes } : {}), ...(f.fix.obscure ? { obscure: true } : {}) } } : {}),
 });
 const findings = (root: string, results: FileResult[]) => results.flatMap((r) => r.findings.map(brief(root)));

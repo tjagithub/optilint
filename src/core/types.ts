@@ -42,6 +42,9 @@ export interface Finding {
   start: number;
   end: number;
   fix?: Fix;
+  /** With `--profile`: the share (0–1) of profiled CPU time spent in the function holding the finding, counting what
+   * it calls outside the linted files (builtins, libraries). 0: the profile never saw it run. */
+  cpu?: number;
 }
 
 export interface Rule {

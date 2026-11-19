@@ -108,6 +108,10 @@ export function outputSchema() {
             message: { type: "string" }, description: { type: "string" }, file: { type: "string" },
             line: pos, col: pos, endLine: pos, endCol: { ...pos, description: "Exclusive, 1-based." },
             start: offset, end: offset,
+            cpu: {
+              type: "number", minimum: 0, maximum: 1,
+              description: "With --profile: the share of profiled CPU time in the function holding the finding (with the builtins and libraries it calls). 0: never seen running.",
+            },
             fix: {
               oneOf: [{ type: "null" }, {
                 type: "object", required: ["tier", "edits"],

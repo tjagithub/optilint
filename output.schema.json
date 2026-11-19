@@ -98,6 +98,12 @@
             "minimum": 0,
             "description": "UTF-16 code units from the start of the file."
           },
+          "cpu": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "With --profile: the share of profiled CPU time in the function holding the finding (with the builtins and libraries it calls). 0: never seen running."
+          },
           "fix": {
             "oneOf": [
               {

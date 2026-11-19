@@ -9,6 +9,7 @@ import { TIERS } from "./core/fix.ts";
 import { type Project, ProjectResolver } from "./core/project.ts";
 import { type Job, type JobResult, lintJob } from "./job.ts";
 import { LintPool } from "./pool.ts";
+import { byHeat, Profile } from "./profile.ts";
 import { allRules } from "./rules/index.ts";
 import type { Impact, Rule, Tier } from "./core/types.ts";
 import { allowed, parseSlowdown } from "./slowdown.ts";
@@ -78,6 +79,8 @@ export interface Request {
   project?: string;
   /** Cache file for findings; used only without fixes and without a buffer. */
   cache?: string;
+  /** `.cpuprofile` files: rank findings by the CPU time of their function; ones that never ran drop to low. */
+  profiles?: readonly string[];
 }
 
 export interface Run {
@@ -148,6 +151,16 @@ function prepare(req: Request): Prepared {
     if (!files.length) throw new UsageError("no JavaScript or TypeScript files found");
   }
 
+  let profile: Profile | undefined;
+  if (req.profiles?.length) {
+    const paths = req.profiles.map((p) => path.resolve(cwd, p));
+    try {
+      profile = new Profile(paths, new Set(files));
+    } catch (e) {
+      throw new UsageError(`invalid --profile: ${e instanceof Error ? e.message : String(e)}`);
+    }
+  }
+
   // Each file belongs to the tsconfig nearest to it (in a monorepo, its package's), so lint per project.
   const resolver = new ProjectResolver(req.project && path.resolve(cwd, req.project));
   const byProject = new Map<Project, string[]>();
@@ -184,10 +197,12 @@ function prepare(req: Request): Prepared {
     const errors = new Set(done.flatMap((d) => d.errors.map((e) => `${e.rule} crashed on ${path.relative(cwd, e.file)}: ${e.message}`)));
     // A finding can be less important than its rule (a short chain outside a loop), so filter findings too.
     const min = IMPACT_RANK[config.minImpact];
-    const results = [...hits, ...done.flatMap((d) => d.results)]
+    let results = [...hits, ...done.flatMap((d) => d.results)]
+      .map((r) => (profile ? profile.annotate(r) : r))
       .map((r) => ({ ...r, findings: r.findings.filter((f) => IMPACT_RANK[f.impact] >= min) }));
     const order = new Map(files.map((f, i) => [f, i]));
     results.sort((a, b) => order.get(a.file)! - order.get(b.file)!);
+    if (profile) results = byHeat(results);
     return { results, rules, config, errors: [...errors], excluded: false, cached: hits.length };
   };
   return { jobs, finish };

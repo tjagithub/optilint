@@ -40,7 +40,7 @@ function result(f: Finding, index: Map<string, number>, cwd: string, describe: (
       }],
     } : {}),
     properties: {
-      impact: f.impact, group: f.group,
+      impact: f.impact, group: f.group, ...(f.cpu !== undefined ? { cpu: f.cpu } : {}),
       ...(f.fix ? { tier: f.fix.tier, ...(f.fix.assumes ? { assumes: f.fix.assumes } : {}), ...(f.fix.obscure ? { obscure: true } : {}) } : {}),
     },
   };

@@ -17,6 +17,13 @@ const IMPACT_COLOR: Record<Impact, (s: string) => string> = { high: c.red, mediu
 
 const TIER_COLOR: Record<Tier, (s: string) => string> = { exact: c.green, typed: c.green, assumed: c.cyan };
 
+/** `[cpu 12.3%]`, or `[cold]` when the profile never saw the function run. */
+export function cpuTag(f: Finding) {
+  if (f.cpu === undefined) return "";
+  const pct = f.cpu === 0 ? "cold" : f.cpu < 0.001 ? "cpu <0.1%" : `cpu ${(f.cpu * 100).toFixed(1)}%`;
+  return (f.cpu >= 0.01 ? c.bold : c.dim)(` [${pct}]`);
+}
+
 function fixTag(f: Finding) {
   if (!f.fix) return "";
   return TIER_COLOR[f.fix.tier](` [fix: ${f.fix.tier}${f.fix.obscure ? ", obscure" : ""}]`);
@@ -45,7 +52,7 @@ export function formatPretty(results: readonly FileResult[], cwd: string, fixing
       else if (f.fix) more++;
       const loc = `${f.line}:${f.col}`.padEnd(pad);
       const impact = IMPACT_COLOR[f.impact](f.impact.padEnd(6));
-      lines.push(`  ${c.dim(loc)}  ${impact}  ${c.cyan(f.rule.padEnd(rulePad))}  ${f.message}${fixTag(f)}`);
+      lines.push(`  ${c.dim(loc)}  ${impact}  ${c.cyan(f.rule.padEnd(rulePad))}  ${f.message}${cpuTag(f)}${fixTag(f)}`);
     }
     lines.push("");
   }

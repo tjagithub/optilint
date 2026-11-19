@@ -37,6 +37,15 @@ The command line overrides the config: `--rule a,b` and `--disable a,b` (rules o
 
 `--cache` stores each file's findings (in `node_modules/.cache/optilint/cache.json`, or `.optilintcache` without a `node_modules`; `--cache-location PATH` to choose) and reuses them while the file's key holds. Types cross files, so the key covers more than the file: its content, the content of everything it imports (transitively, through `.d.ts` files in `node_modules` too), every script and `declare global` / `declare module` file the run reaches, the compiler options, the file's rule settings, and the optilint and TypeScript versions. An import that does not resolve is part of the key, so the file is linted again once it does. `--fix` and `--diff` ignore the cache.
 
+## CPU profiles
+
+`--profile FILE` (repeatable) reads a `.cpuprofile`, as `node --cpu-prof`, `bun --cpu-prof` or a Chrome DevTools export writes it. Each finding gets `cpu`: the share of profiled time spent in the function that holds it, counting the builtins and libraries it calls (idle time is left out). Findings come hottest first, and files with the hottest finding first. A finding in a function the profile never saw run is marked `cold` and drops to `low` impact, so `--min-impact medium` hides it. Profiles of compiled code map back to the linted sources through `sourceMappingURL` comments (a file or an inline map). Profile a run that does the real work: a short script spends most of its time starting up. The MCP `lint` tool takes the same files as `profile`.
+
+```sh
+node --cpu-prof --cpu-prof-dir=prof dist/server.js
+optilint src --profile prof/*.cpuprofile --min-impact medium
+```
+
 ## Disable comments
 
 ```ts

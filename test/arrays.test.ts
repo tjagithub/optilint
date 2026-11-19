@@ -152,4 +152,19 @@ describe("accumulate-by-copy-in-loop", () => {
     expect(rulesHit(`${ARR}let out: number[] = [];\nwhile (true) { out = out.concat(xs); }`, { rule: "accumulate-by-copy-in-loop" }))
       .toEqual(["accumulate-by-copy-in-loop"]);
   });
+  // From zod: a copy-on-write over two keys is neither O(n²) nor safe to make in place.
+  test("skips loops over a few known items", () => {
+    const code = `function f(o: Record<string, unknown>) {\n  for (const k of ["anyOf", "oneOf"] as const) o = { ...o, [k]: 1 };\n  return o;\n}`;
+    expect(rulesHit(code, { rule: "accumulate-by-copy-in-loop" })).toEqual([]);
+    // The same loop after for-of-to-indexed, which runs first in a multi-pass --fix.
+    const indexed = `function f(o: Record<string, unknown>) {\n  const arr = ["anyOf", "oneOf"] as const;\n  for (let i = 0, len = arr.length; i < len; i++) o = { ...o, [arr[i]]: 1 };\n  return o;\n}`;
+    expect(rulesHit(indexed, { rule: "accumulate-by-copy-in-loop" })).toEqual([]);
+    const big = `${ARR}function f(o: Record<string, unknown>) {\n  for (let i = 0; i < xs.length; i++) o = { ...o, [i]: 1 };\n  return o;\n}`;
+    expect(rulesHit(big, { rule: "accumulate-by-copy-in-loop" })).toEqual(["accumulate-by-copy-in-loop"]);
+  });
+  test("names the caller when the accumulator is a parameter", () => {
+    const code = `${ARR}function f(o: Record<string, number>) {\n  for (const x of xs) { o = { ...o, [x]: x }; }\n  return o;\n}`;
+    const [finding] = run(code, { rule: "accumulate-by-copy-in-loop" }).findings;
+    expect(finding?.fix?.assumes).toContain("it is a parameter");
+  });
 });

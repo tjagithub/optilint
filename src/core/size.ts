@@ -57,9 +57,23 @@ export function knownSmall(expr: ts.Expression, ctx: RuleContext, max: number): 
   return ts.isArrayLiteralExpression(init) ? knownSmall(init, ctx, max) : smallObjectKeys(init, ctx, max);
 }
 
-/** What a loop or iteration callback walks: `for (x of xs)`, `xs.map(cb)`. */
+/** `xs` in `i < xs.length`, or in `i < len` where the loop declares `len = xs.length`. */
+function indexedOver(loop: ts.ForStatement): ts.Expression | undefined {
+  const cond = loop.condition;
+  if (!cond || !ts.isBinaryExpression(cond) || cond.operatorToken.kind !== ts.SyntaxKind.LessThanToken) return undefined;
+  let bound: ts.Expression | undefined = unwrap(cond.right);
+  if (ts.isIdentifier(bound) && loop.initializer && ts.isVariableDeclarationList(loop.initializer)) {
+    const name = bound.text;
+    bound = loop.initializer.declarations.find((d) => ts.isIdentifier(d.name) && d.name.text === name)?.initializer;
+  }
+  bound = bound && unwrap(bound);
+  return bound && ts.isPropertyAccessExpression(bound) && bound.name.text === "length" ? bound.expression : undefined;
+}
+
+/** What a loop or iteration callback walks: `for (x of xs)`, `for (i = 0; i < xs.length; i++)`, `xs.map(cb)`. */
 function iterated(loop: ts.Node): ts.Expression | undefined {
   if (ts.isForOfStatement(loop)) return loop.expression;
+  if (ts.isForStatement(loop)) return indexedOver(loop);
   const call = loop.parent;
   if (isFunction(loop) && ts.isCallExpression(call) && ts.isPropertyAccessExpression(call.expression)) return call.expression.expression;
   return undefined;

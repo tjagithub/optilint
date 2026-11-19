@@ -1,6 +1,7 @@
 import ts from "typescript";
 import { isFunction, methodCall, repeatingAncestor, unwrap, walk } from "../../core/ast.ts";
 import { fix } from "../../core/fix.ts";
+import { fewIterations } from "../../core/size.ts";
 import type { Edit, RuleContext, RuleDef } from "../../core/types.ts";
 
 const K = ts.SyntaxKind;
@@ -110,8 +111,10 @@ export const copyInLoop: RuleDef = {
   kinds: [K.BinaryExpression],
   check(node, ctx) {
     const n = node as ts.BinaryExpression;
-    if (n.operatorToken.kind !== K.EqualsToken || !ts.isIdentifier(n.left) || !repeatingAncestor(n)) return;
-    const name = n.left.text;
+    const loop = n.operatorToken.kind === K.EqualsToken && ts.isIdentifier(n.left) ? repeatingAncestor(n) : undefined;
+    // A loop over a few known items copies a few times: no O(n²) to fix.
+    if (!loop || fewIterations(loop, ctx, 16)) return;
+    const name = (n.left as ts.Identifier).text;
     const right = unwrap(n.right);
     const concat = methodCall(right, "concat");
     if (concat && isRef(unwrap(concat.object), name)) {
@@ -122,7 +125,12 @@ export const copyInLoop: RuleDef = {
     if (text === undefined || text === name) return;
     const tail = `, ${name})`;
     const stmt = text.startsWith("(") && text.endsWith(tail) ? text.slice(1, -tail.length) : text;
-    const rewrite = ts.isExpressionStatement(n.parent) ? fix("assumed", [ctx.replace(n, stmt)], `nothing else holds a reference to the old \`${name}\``) : undefined;
+    // The first copy of a parameter is what keeps the caller's object unchanged; in place, the caller sees the writes.
+    const param = ctx.checker.getSymbolAtLocation(n.left)?.valueDeclaration;
+    const assumes = param && ts.isParameter(param)
+      ? `the caller does not use \`${name}\` after the call (it is a parameter, so the fix writes to the caller's object)`
+      : `nothing else holds a reference to the old \`${name}\``;
+    const rewrite = ts.isExpressionStatement(n.parent) ? fix("assumed", [ctx.replace(n, stmt)], assumes) : undefined;
     ctx.report(n, `Re-spreading \`${name}\` copies it every iteration (O(n²)); mutate it in place.`, rewrite);
   },
 };

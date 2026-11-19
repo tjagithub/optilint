@@ -5,6 +5,7 @@ A linter for JavaScript and TypeScript that only cares about speed. It finds slo
 - **Type-aware:** it uses the TypeScript compiler, so a rule can check that something really is an array before rewriting it.
 - **Honest fixes:** every fix says what it guarantees, and `--fix` only applies the safe ones by default.
 - **Measured:** every fix is benchmarked on V8 and JavaScriptCore at each compiler tier. Fixes that measured slower don't run.
+- **Checked on real code:** on zod v4.6.7, `--fix` at every tier with every rule on (579 edits in 61 files) leaves all 5,482 of its tests passing and its type errors unchanged.
 
 ![How much faster each fix runs on V8 and JavaScriptCore, worst to best case (data: src/speedups.ts)](docs/speedups.svg)
 

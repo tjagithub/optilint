@@ -1,0 +1,3978 @@
+{
+  "date": "2026-11-19",
+  "node": "v26.13.1",
+  "bun": "1.4.4",
+  "cpu": "Apple M4",
+  "timeMs": 150,
+  "rounds": 3,
+  "results": [
+    {
+      "tier": "node:turbofan",
+      "id": "spread-in-accumulator:array",
+      "size": 10,
+      "before": 153.8291015625,
+      "after": 17.35400390625,
+      "spread": 1.0836277357815396
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "spread-in-accumulator:array",
+      "size": 100,
+      "before": 3739.625,
+      "after": 179.97216796875,
+      "spread": 1.0924812250893403
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "spread-in-accumulator:object",
+      "size": 10,
+      "before": 1067.75,
+      "after": 86.8935546875,
+      "spread": 1.0411614726273652
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "spread-in-accumulator:object",
+      "size": 100,
+      "before": 73656.25,
+      "after": 2322.875,
+      "spread": 1.0279706697680882
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "accumulate-by-copy-in-loop",
+      "size": 10,
+      "before": 151.30615234375,
+      "after": 16.56103515625,
+      "spread": 1.080070830527928
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "accumulate-by-copy-in-loop",
+      "size": 100,
+      "before": 3750,
+      "after": 180.46044921875,
+      "spread": 1.036100369515553
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "typed-array-round-trip",
+      "size": 10,
+      "before": 197.875,
+      "after": 21.3212890625,
+      "spread": 1.049592942766974
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "typed-array-round-trip",
+      "size": 1000,
+      "before": 10474,
+      "after": 117.81787109375,
+      "spread": 1.0986800519349191
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "typed-array-subarray",
+      "size": 10,
+      "before": 38.9814453125,
+      "after": 32.1044921875,
+      "spread": 1.0469554410954063
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "typed-array-subarray",
+      "size": 1000,
+      "before": 118.12353515625,
+      "after": 31.25,
+      "spread": 1.22359438651738
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "array-literal-lookup",
+      "size": 10,
+      "before": 37.82177734375,
+      "after": 11.43359375,
+      "spread": 1.0215516989595252
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "array-literal-lookup",
+      "size": 1000,
+      "before": 3317.75,
+      "after": 895.75,
+      "spread": 1.068086401748476
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "filter-first",
+      "size": 10,
+      "before": 14.81103515625,
+      "after": 7.7314453125,
+      "spread": 2.249905267146646
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "filter-first",
+      "size": 1000,
+      "before": 1270.875,
+      "after": 927.125,
+      "spread": 1.0790855806322137
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "filter-length-to-some",
+      "size": 10,
+      "before": 7.79248046875,
+      "after": 6.38818359375,
+      "spread": 1.0503458111410489
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "filter-length-to-some",
+      "size": 1000,
+      "before": 1114.625,
+      "after": 958.375,
+      "spread": 1.010825616277553
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "map-flat-to-flatmap",
+      "size": 10,
+      "before": 232.421875,
+      "after": 235.0869140625,
+      "spread": 1.0226502794512307
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "map-flat-to-flatmap",
+      "size": 1000,
+      "before": 17505.25,
+      "after": 18588.625,
+      "spread": 1.0447780116917307
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "unused-map",
+      "size": 10,
+      "before": 27.62841796875,
+      "after": 20.22314453125,
+      "spread": 1.0187374693173938
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "unused-map",
+      "size": 1000,
+      "before": 3317.75,
+      "after": 2479.125,
+      "spread": 1.012105192592189
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "array-from-map",
+      "size": 10,
+      "before": 23.15283203125,
+      "after": 179.3212890625,
+      "spread": 1.0577823766664012
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "array-from-map",
+      "size": 1000,
+      "before": 1682.25,
+      "after": 11057.375,
+      "spread": 1.0096377432594987
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "redundant-array-copy",
+      "size": 10,
+      "before": 19.32763671875,
+      "after": 12.65478515625,
+      "spread": 1.004218982896698
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "redundant-array-copy",
+      "size": 1000,
+      "before": 1838.5,
+      "after": 1500,
+      "spread": 1.0082270524868728
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "foreach-to-for",
+      "size": 10,
+      "before": 13.85498046875,
+      "after": 4.048828125,
+      "spread": 1.035845824492631
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "foreach-to-for",
+      "size": 1000,
+      "before": 1000,
+      "after": 306.4375,
+      "spread": 1.0120159213746684
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "foreach-to-for:objects",
+      "size": 10,
+      "before": 22.5830078125,
+      "after": 11.31201171875,
+      "spread": 1.0107802715652157
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "foreach-to-for:objects",
+      "size": 1000,
+      "before": 2312.5,
+      "after": 1468.75,
+      "spread": 1.0517837837837838
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "foreach-to-for:closures",
+      "size": 10,
+      "before": 21.40283203125,
+      "after": 13.4072265625,
+      "spread": 1.0018570636299124
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "foreach-to-for:closures",
+      "size": 1000,
+      "before": 1828.125,
+      "after": 1364.625,
+      "spread": 1.013304807663225
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "foreach-to-for:proxy",
+      "size": 10,
+      "before": 645.75,
+      "after": 791.625,
+      "spread": 1.0148159274108135
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "foreach-to-for:proxy",
+      "size": 1000,
+      "before": 58677.125,
+      "after": 76260.5,
+      "spread": 1.0291890216625161
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "for-of-to-indexed",
+      "size": 10,
+      "before": 5.35107421875,
+      "after": 4.55712890625,
+      "spread": 1.0835842686376493
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "for-of-to-indexed",
+      "size": 1000,
+      "before": 396.7490234375,
+      "after": 313.37451171875,
+      "spread": 1.0153383419688566
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "for-in-array",
+      "size": 10,
+      "before": 142.76123046875,
+      "after": 4.55712890625,
+      "spread": 1.0252244548952545
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "for-in-array",
+      "size": 1000,
+      "before": 10724,
+      "after": 313.04931640625,
+      "spread": 1.0070173667095028
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "cache-array-length",
+      "size": 10,
+      "before": 4.55712890625,
+      "after": 4.06884765625,
+      "spread": 1.0085388678593532
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "cache-array-length",
+      "size": 1000,
+      "before": 313.82275390625,
+      "after": 308.796875,
+      "spread": 1.0196970053436278
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "date-now",
+      "size": 10,
+      "before": 374.32861328125,
+      "after": 239.31884765625,
+      "spread": 1.0122115558318456
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "date-now",
+      "size": 1000,
+      "before": 37177,
+      "after": 23286.5,
+      "spread": 1.0179933004907005
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "math-pow-to-mul",
+      "size": 10,
+      "before": 8.26025390625,
+      "after": 7.71044921875,
+      "spread": 1.053508014814339
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "math-pow-to-mul",
+      "size": 1000,
+      "before": 630.125,
+      "after": 514.30224609375,
+      "spread": 1.0219403752670295
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "bitwise-trunc",
+      "size": 10,
+      "before": 8.60595703125,
+      "after": 6.3271484375,
+      "spread": 1.063506319927228
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "bitwise-trunc",
+      "size": 1000,
+      "before": 698,
+      "after": 449.15771484375,
+      "spread": 1.0127269456615315
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "object-assign-to-spread",
+      "size": 10,
+      "before": 181.3759765625,
+      "after": 166.158203125,
+      "spread": 1.0881180494706053
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "object-assign-to-spread",
+      "size": 1000,
+      "before": 16942.75,
+      "after": 15494.75,
+      "spread": 1.0359101027809228
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "object-entries-pair",
+      "size": 10,
+      "before": 36.5,
+      "after": 63.619140625,
+      "spread": 1.1241171564580286
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "object-entries-pair",
+      "size": 1000,
+      "before": 4375,
+      "after": 43546.875,
+      "spread": 1.0458936549689903
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "object-entries-iteration:values",
+      "size": 10,
+      "before": 197.875,
+      "after": 69.3564453125,
+      "spread": 1.0103375910848835
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "object-entries-iteration:values",
+      "size": 1000,
+      "before": 16635.375,
+      "after": 4828.125,
+      "spread": 1.021923024108381
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "object-entries-iteration:keys",
+      "size": 10,
+      "before": 36.5400390625,
+      "after": 15.2177734375,
+      "spread": 1.0356137704252077
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "object-entries-iteration:keys",
+      "size": 1000,
+      "before": 4156.25,
+      "after": 1119.875,
+      "spread": 1.010015037593985
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "split-join-to-replaceall",
+      "size": 10,
+      "before": 1557.25,
+      "after": 859.375,
+      "spread": 1.036446824968257
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "split-join-to-replaceall",
+      "size": 1000,
+      "before": 168651,
+      "after": 93484.375,
+      "spread": 1.063119954956188
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "regex-to-string-method",
+      "size": 10,
+      "before": 173.685546875,
+      "after": 118.8154296875,
+      "spread": 1.0345779677130917
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "regex-to-string-method",
+      "size": 1000,
+      "before": 18557.25,
+      "after": 12927,
+      "spread": 1.0681002516680895
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "match-to-test",
+      "size": 10,
+      "before": 155.09033203125,
+      "after": 122.25341796875,
+      "spread": 1.0226903904194968
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "match-to-test",
+      "size": 1000,
+      "before": 15953.125,
+      "after": 12703.125,
+      "spread": 1.0384974399238682
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "indexof-to-startswith",
+      "size": 10,
+      "before": 80.8916015625,
+      "after": 27.03857421875,
+      "spread": 1.0248287143333477
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "indexof-to-startswith",
+      "size": 1000,
+      "before": 7885.375,
+      "after": 2546.875,
+      "spread": 1.090407644267281
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "regexp-constructor-literal",
+      "size": 10,
+      "before": 557.29150390625,
+      "after": 88.07373046875,
+      "spread": 1.0231006155105433
+    },
+    {
+      "tier": "node:turbofan",
+      "id": "regexp-constructor-literal",
+      "size": 1000,
+      "before": 57708.25,
+      "after": 9239.625,
+      "spread": 1.0305041189632291
+    },
+    {
+      "tier": "node:maglev",
+      "id": "spread-in-accumulator:array",
+      "size": 10,
+      "before": 197.46923828125,
+      "after": 66.36572265625,
+      "spread": 1.027052782630884
+    },
+    {
+      "tier": "node:maglev",
+      "id": "spread-in-accumulator:array",
+      "size": 100,
+      "before": 4239.625,
+      "after": 552.125,
+      "spread": 1.0218070010888667
+    },
+    {
+      "tier": "node:maglev",
+      "id": "spread-in-accumulator:object",
+      "size": 10,
+      "before": 1151,
+      "after": 120.78857421869179,
+      "spread": 1.0507208837894122
+    },
+    {
+      "tier": "node:maglev",
+      "id": "spread-in-accumulator:object",
+      "size": 100,
+      "before": 76724,
+      "after": 2989.625,
+      "spread": 1.022330914390806
+    },
+    {
+      "tier": "node:maglev",
+      "id": "accumulate-by-copy-in-loop",
+      "size": 10,
+      "before": 203.125,
+      "after": 43.17236328125,
+      "spread": 1.0294542159025053
+    },
+    {
+      "tier": "node:maglev",
+      "id": "accumulate-by-copy-in-loop",
+      "size": 100,
+      "before": 4364.625,
+      "after": 345.74365234375,
+      "spread": 1.00792000265518
+    },
+    {
+      "tier": "node:maglev",
+      "id": "typed-array-round-trip",
+      "size": 10,
+      "before": 224,
+      "after": 30.6806640625,
+      "spread": 1.0224891149059883
+    },
+    {
+      "tier": "node:maglev",
+      "id": "typed-array-round-trip",
+      "size": 1000,
+      "before": 10697.875,
+      "after": 122.47705078125,
+      "spread": 1.2840547584634816
+    },
+    {
+      "tier": "node:maglev",
+      "id": "typed-array-subarray",
+      "size": 10,
+      "before": 44.51513671875,
+      "after": 39.2861328125,
+      "spread": 1.032882732020787
+    },
+    {
+      "tier": "node:maglev",
+      "id": "typed-array-subarray",
+      "size": 1000,
+      "before": 122.55859375,
+      "after": 38.7978515625,
+      "spread": 1.0434057021179046
+    },
+    {
+      "tier": "node:maglev",
+      "id": "array-literal-lookup",
+      "size": 10,
+      "before": 129.2724609375,
+      "after": 34.81005859375,
+      "spread": 1.041684755093267
+    },
+    {
+      "tier": "node:maglev",
+      "id": "array-literal-lookup",
+      "size": 1000,
+      "before": 11265.625,
+      "after": 2588.5,
+      "spread": 1.0133400128135521
+    },
+    {
+      "tier": "node:maglev",
+      "id": "filter-first",
+      "size": 10,
+      "before": 68.39990234375,
+      "after": 56.92529296875,
+      "spread": 1.0815114695073218
+    },
+    {
+      "tier": "node:maglev",
+      "id": "filter-first",
+      "size": 1000,
+      "before": 4968.75,
+      "after": 3812.5,
+      "spread": 1.0049391245706016
+    },
+    {
+      "tier": "node:maglev",
+      "id": "filter-length-to-some",
+      "size": 10,
+      "before": 57.6376953125,
+      "after": 51.9208984375,
+      "spread": 1.0446070241734877
+    },
+    {
+      "tier": "node:maglev",
+      "id": "filter-length-to-some",
+      "size": 1000,
+      "before": 4359.375,
+      "after": 3921.875,
+      "spread": 1.0090251880792243
+    },
+    {
+      "tier": "node:maglev",
+      "id": "map-flat-to-flatmap",
+      "size": 10,
+      "before": 281.08740234375,
+      "after": 239.72607421875,
+      "spread": 1.021864919580128
+    },
+    {
+      "tier": "node:maglev",
+      "id": "map-flat-to-flatmap",
+      "size": 1000,
+      "before": 22390.625,
+      "after": 18895.875,
+      "spread": 1.0284039209608469
+    },
+    {
+      "tier": "node:maglev",
+      "id": "unused-map",
+      "size": 10,
+      "before": 81.72607421875,
+      "after": 38.2080078125,
+      "spread": 1.0026138956926067
+    },
+    {
+      "tier": "node:maglev",
+      "id": "unused-map",
+      "size": 1000,
+      "before": 7114.625,
+      "after": 3432.25,
+      "spread": 1.0222735077598666
+    },
+    {
+      "tier": "node:maglev",
+      "id": "array-from-map",
+      "size": 10,
+      "before": 75.23583984375,
+      "after": 184.91650390625,
+      "spread": 1.051948202375425
+    },
+    {
+      "tier": "node:maglev",
+      "id": "array-from-map",
+      "size": 1000,
+      "before": 5645.875,
+      "after": 11119.75,
+      "spread": 1.0130819024310178
+    },
+    {
+      "tier": "node:maglev",
+      "id": "redundant-array-copy",
+      "size": 10,
+      "before": 73.38427734375,
+      "after": 60.2822265625,
+      "spread": 1.0773377130017114
+    },
+    {
+      "tier": "node:maglev",
+      "id": "redundant-array-copy",
+      "size": 1000,
+      "before": 5218.75,
+      "after": 4963.5,
+      "spread": 1.0058974139880879
+    },
+    {
+      "tier": "node:maglev",
+      "id": "foreach-to-for",
+      "size": 10,
+      "before": 23.9052734375,
+      "after": 13.875,
+      "spread": 1.1236521558605668
+    },
+    {
+      "tier": "node:maglev",
+      "id": "foreach-to-for",
+      "size": 1000,
+      "before": 1395.875,
+      "after": 640.625,
+      "spread": 1.003671532193069
+    },
+    {
+      "tier": "node:maglev",
+      "id": "foreach-to-for:objects",
+      "size": 10,
+      "before": 30.1923828125,
+      "after": 23.98681640625,
+      "spread": 1.0622166909827766
+    },
+    {
+      "tier": "node:maglev",
+      "id": "foreach-to-for:objects",
+      "size": 1000,
+      "before": 2614.625,
+      "after": 2145.875,
+      "spread": 1.0258989796203704
+    },
+    {
+      "tier": "node:maglev",
+      "id": "foreach-to-for:closures",
+      "size": 10,
+      "before": 30.9853515625,
+      "after": 26.30615234375,
+      "spread": 1.0925809196633993
+    },
+    {
+      "tier": "node:maglev",
+      "id": "foreach-to-for:closures",
+      "size": 1000,
+      "before": 2140.625,
+      "after": 1911.375,
+      "spread": 1.011819361988669
+    },
+    {
+      "tier": "node:maglev",
+      "id": "foreach-to-for:proxy",
+      "size": 10,
+      "before": 645.875,
+      "after": 812.4999999850988,
+      "spread": 1.03232049544244
+    },
+    {
+      "tier": "node:maglev",
+      "id": "foreach-to-for:proxy",
+      "size": 1000,
+      "before": 59171.875,
+      "after": 77057.25,
+      "spread": 1.013803491217436
+    },
+    {
+      "tier": "node:maglev",
+      "id": "for-of-to-indexed",
+      "size": 10,
+      "before": 30.375,
+      "after": 13.89599609375,
+      "spread": 1.3143252377623849
+    },
+    {
+      "tier": "node:maglev",
+      "id": "for-of-to-indexed",
+      "size": 1000,
+      "before": 2015.625,
+      "after": 640.625,
+      "spread": 1
+    },
+    {
+      "tier": "node:maglev",
+      "id": "for-in-array",
+      "size": 10,
+      "before": 156.22998046875,
+      "after": 13.7939453125,
+      "spread": 1.0351212587608363
+    },
+    {
+      "tier": "node:maglev",
+      "id": "for-in-array",
+      "size": 1000,
+      "before": 11755.25,
+      "after": 640.625,
+      "spread": 1.039429191212437
+    },
+    {
+      "tier": "node:maglev",
+      "id": "cache-array-length",
+      "size": 10,
+      "before": 9.37939453125,
+      "after": 13.77392578125,
+      "spread": 1.4814498469176702
+    },
+    {
+      "tier": "node:maglev",
+      "id": "cache-array-length",
+      "size": 1000,
+      "before": 640.625,
+      "after": 640.625,
+      "spread": 1
+    },
+    {
+      "tier": "node:maglev",
+      "id": "date-now",
+      "size": 10,
+      "before": 394.04296875,
+      "after": 266.2353515625,
+      "spread": 1.006031229492968
+    },
+    {
+      "tier": "node:maglev",
+      "id": "date-now",
+      "size": 1000,
+      "before": 38171.875,
+      "after": 25916.75,
+      "spread": 1.0360060780503126
+    },
+    {
+      "tier": "node:maglev",
+      "id": "math-pow-to-mul",
+      "size": 10,
+      "before": 44.5146484375,
+      "after": 32.4296875,
+      "spread": 1.2380914367188578
+    },
+    {
+      "tier": "node:maglev",
+      "id": "math-pow-to-mul",
+      "size": 1000,
+      "before": 3260.375,
+      "after": 2255.25,
+      "spread": 1.0070757594444004
+    },
+    {
+      "tier": "node:maglev",
+      "id": "bitwise-trunc",
+      "size": 10,
+      "before": 37.04833984375,
+      "after": 32.2265625,
+      "spread": 1.0076836902800659
+    },
+    {
+      "tier": "node:maglev",
+      "id": "bitwise-trunc",
+      "size": 1000,
+      "before": 2541.625,
+      "after": 2119.875,
+      "spread": 1.0027638740419422
+    },
+    {
+      "tier": "node:maglev",
+      "id": "object-assign-to-spread",
+      "size": 10,
+      "before": 223.388671875,
+      "after": 210.103515625,
+      "spread": 1.0296107240189116
+    },
+    {
+      "tier": "node:maglev",
+      "id": "object-assign-to-spread",
+      "size": 1000,
+      "before": 19713.5,
+      "after": 18515.625,
+      "spread": 1.0118143459915612
+    },
+    {
+      "tier": "node:maglev",
+      "id": "object-entries-pair",
+      "size": 10,
+      "before": 107.82861328125,
+      "after": 106.26220703125,
+      "spread": 1.0356771716362787
+    },
+    {
+      "tier": "node:maglev",
+      "id": "object-entries-pair",
+      "size": 1000,
+      "before": 9531.25,
+      "after": 54161.375,
+      "spread": 1.0519385985225707
+    },
+    {
+      "tier": "node:maglev",
+      "id": "object-entries-iteration:values",
+      "size": 10,
+      "before": 269.287109375,
+      "after": 94.19775390625,
+      "spread": 1.0184940127507802
+    },
+    {
+      "tier": "node:maglev",
+      "id": "object-entries-iteration:values",
+      "size": 1000,
+      "before": 22359.375,
+      "after": 6599,
+      "spread": 1.011370761703413
+    },
+    {
+      "tier": "node:maglev",
+      "id": "object-entries-iteration:keys",
+      "size": 10,
+      "before": 88.625,
+      "after": 38.6962890625,
+      "spread": 1.035472476962817
+    },
+    {
+      "tier": "node:maglev",
+      "id": "object-entries-iteration:keys",
+      "size": 1000,
+      "before": 7979.125,
+      "after": 2770.875,
+      "spread": 1.0055488677368076
+    },
+    {
+      "tier": "node:maglev",
+      "id": "split-join-to-replaceall",
+      "size": 10,
+      "before": 1625,
+      "after": 921.875,
+      "spread": 1.0161563006463297
+    },
+    {
+      "tier": "node:maglev",
+      "id": "split-join-to-replaceall",
+      "size": 1000,
+      "before": 172677.125,
+      "after": 94265.625,
+      "spread": 1.0468040358323705
+    },
+    {
+      "tier": "node:maglev",
+      "id": "regex-to-string-method",
+      "size": 10,
+      "before": 247.171875,
+      "after": 187.3369140625,
+      "spread": 1.055731361250721
+    },
+    {
+      "tier": "node:maglev",
+      "id": "regex-to-string-method",
+      "size": 1000,
+      "before": 24140.625,
+      "after": 18453.125,
+      "spread": 1.0033544349771946
+    },
+    {
+      "tier": "node:maglev",
+      "id": "match-to-test",
+      "size": 10,
+      "before": 204.38623046875,
+      "after": 190.77587890625,
+      "spread": 1.046925191126646
+    },
+    {
+      "tier": "node:maglev",
+      "id": "match-to-test",
+      "size": 1000,
+      "before": 20083.25,
+      "after": 18651,
+      "spread": 1.042183142680858
+    },
+    {
+      "tier": "node:maglev",
+      "id": "indexof-to-startswith",
+      "size": 10,
+      "before": 139.99462890625,
+      "after": 87.11767578125,
+      "spread": 1.0529816256983773
+    },
+    {
+      "tier": "node:maglev",
+      "id": "indexof-to-startswith",
+      "size": 1000,
+      "before": 13260.5,
+      "after": 8046.875,
+      "spread": 1.0193448819863875
+    },
+    {
+      "tier": "node:maglev",
+      "id": "regexp-constructor-literal",
+      "size": 10,
+      "before": 594.3603515625,
+      "after": 149.80078125,
+      "spread": 1.0062094569177682
+    },
+    {
+      "tier": "node:maglev",
+      "id": "regexp-constructor-literal",
+      "size": 1000,
+      "before": 58562.5,
+      "after": 14448,
+      "spread": 1.0362967530634277
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "spread-in-accumulator:array",
+      "size": 10,
+      "before": 278.951171875,
+      "after": 180.48095703125,
+      "spread": 1.0185689632384634
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "spread-in-accumulator:array",
+      "size": 100,
+      "before": 5041.625,
+      "after": 1526,
+      "spread": 1.0165373267547666
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "spread-in-accumulator:object",
+      "size": 10,
+      "before": 1166.625,
+      "after": 184.7939453125,
+      "spread": 1.0219845827914766
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "spread-in-accumulator:object",
+      "size": 100,
+      "before": 76932.375,
+      "after": 3546.875,
+      "spread": 1.0311730545793276
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "accumulate-by-copy-in-loop",
+      "size": 10,
+      "before": 323.52734375,
+      "after": 222.8798828125,
+      "spread": 1.0758873773283475
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "accumulate-by-copy-in-loop",
+      "size": 100,
+      "before": 5416.625,
+      "after": 1791.75,
+      "spread": 1.0714253135688383
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "typed-array-round-trip",
+      "size": 10,
+      "before": 252.5634765625,
+      "after": 48.15673828125,
+      "spread": 1.0203907740120204
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "typed-array-round-trip",
+      "size": 1000,
+      "before": 10468.75,
+      "after": 140.70654296875,
+      "spread": 1.1826028372229587
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "typed-array-subarray",
+      "size": 10,
+      "before": 73.8115234375,
+      "after": 63.70019531255821,
+      "spread": 1.0684678896873319
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "typed-array-subarray",
+      "size": 1000,
+      "before": 155.19189453125,
+      "after": 74.52392578125,
+      "spread": 1.0430878665349146
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "array-literal-lookup",
+      "size": 10,
+      "before": 276.91650390625,
+      "after": 230.5908203125,
+      "spread": 1.0536044197792207
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "array-literal-lookup",
+      "size": 1000,
+      "before": 23953.125,
+      "after": 17609.375,
+      "spread": 1.086561167597678
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "filter-first",
+      "size": 10,
+      "before": 153.8896484375,
+      "after": 135.07080078125,
+      "spread": 1.0685877257932612
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "filter-first",
+      "size": 1000,
+      "before": 10573,
+      "after": 8599,
+      "spread": 1.037699486430938
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "filter-length-to-some",
+      "size": 10,
+      "before": 113.3017578125,
+      "after": 98.93798828130821,
+      "spread": 1.0259868901708085
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "filter-length-to-some",
+      "size": 1000,
+      "before": 7109.375,
+      "after": 6390.625,
+      "spread": 1.0184947736156265
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "map-flat-to-flatmap",
+      "size": 10,
+      "before": 315.5517578125,
+      "after": 283.85400390625,
+      "spread": 1.051584233001951
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "map-flat-to-flatmap",
+      "size": 1000,
+      "before": 23489.625,
+      "after": 21677,
+      "spread": 1.0240335587301486
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "unused-map",
+      "size": 10,
+      "before": 204.447265625,
+      "after": 191.1826171875,
+      "spread": 1.0115283732575397
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "unused-map",
+      "size": 1000,
+      "before": 17036.5,
+      "after": 15932.25,
+      "spread": 1.0244291177701959
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "array-from-map",
+      "size": 10,
+      "before": 122.76171875,
+      "after": 226.05419921875,
+      "spread": 1.008911710659025
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "array-from-map",
+      "size": 1000,
+      "before": 7213.625,
+      "after": 13062.5,
+      "spread": 1.0062933721001286
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "redundant-array-copy",
+      "size": 10,
+      "before": 118.9169921875,
+      "after": 108.58154296875,
+      "spread": 1.0131591576944698
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "redundant-array-copy",
+      "size": 1000,
+      "before": 7291.625,
+      "after": 6895.875,
+      "spread": 1.0052930193775262
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "foreach-to-for",
+      "size": 10,
+      "before": 121.3173828125,
+      "after": 92.61083984375,
+      "spread": 1.0469463480466894
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "foreach-to-for",
+      "size": 1000,
+      "before": 7765.625,
+      "after": 6031.25,
+      "spread": 1.0890408315196631
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "foreach-to-for:objects",
+      "size": 10,
+      "before": 187.21533203125,
+      "after": 140.95068359375,
+      "spread": 1.090703196606611
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "foreach-to-for:objects",
+      "size": 1000,
+      "before": 14458.375,
+      "after": 10661.5,
+      "spread": 1.110436490817266
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "foreach-to-for:closures",
+      "size": 10,
+      "before": 174.37744140625,
+      "after": 142.68017578125,
+      "spread": 1.081060395740237
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "foreach-to-for:closures",
+      "size": 1000,
+      "before": 13130.125,
+      "after": 11354.125,
+      "spread": 1.0397660323170919
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "foreach-to-for:proxy",
+      "size": 10,
+      "before": 895.75,
+      "after": 906.25,
+      "spread": 1.0344827586206897
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "foreach-to-for:proxy",
+      "size": 1000,
+      "before": 76979.25,
+      "after": 82286.5,
+      "spread": 1.01142223304935
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "for-of-to-indexed",
+      "size": 10,
+      "before": 149.759765625,
+      "after": 104.16650390625,
+      "spread": 1.043696079923419
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "for-of-to-indexed",
+      "size": 1000,
+      "before": 9760.375,
+      "after": 6869.75,
+      "spread": 1.110394538991749
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "for-in-array",
+      "size": 10,
+      "before": 204.7119140625,
+      "after": 106.9130859375,
+      "spread": 1.038474197827878
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "for-in-array",
+      "size": 1000,
+      "before": 14036.5,
+      "after": 6593.750000059605,
+      "spread": 1.1170972581031857
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "cache-array-length",
+      "size": 10,
+      "before": 105.67236328125,
+      "after": 88.64355468738358,
+      "spread": 1.039782797007458
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "cache-array-length",
+      "size": 1000,
+      "before": 6994.875,
+      "after": 5739.625,
+      "spread": 1.0862177523997767
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "date-now",
+      "size": 10,
+      "before": 541.6259765625,
+      "after": 347.83935546875,
+      "spread": 1.0080992179068826
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "date-now",
+      "size": 1000,
+      "before": 48734.375,
+      "after": 30213.5,
+      "spread": 1.0068812861263239
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "math-pow-to-mul",
+      "size": 10,
+      "before": 215.35205078125,
+      "after": 152.0185546875,
+      "spread": 1.0770158159788668
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "math-pow-to-mul",
+      "size": 1000,
+      "before": 16177,
+      "after": 10994.75,
+      "spread": 1.0533522019020742
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "bitwise-trunc",
+      "size": 10,
+      "before": 232.0556640625,
+      "after": 181.35595703125,
+      "spread": 1.0923997289270142
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "bitwise-trunc",
+      "size": 1000,
+      "before": 16359.375,
+      "after": 12791.625,
+      "spread": 1.0334865617614781
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "object-assign-to-spread",
+      "size": 10,
+      "before": 391.11328125,
+      "after": 332.94677734375,
+      "spread": 1.0177601385196549
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "object-assign-to-spread",
+      "size": 1000,
+      "before": 34697.875,
+      "after": 28708.375,
+      "spread": 1.0153081381358309
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "object-entries-pair",
+      "size": 10,
+      "before": 530.314453125,
+      "after": 232.2998046875291,
+      "spread": 1.0417919027789682
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "object-entries-pair",
+      "size": 1000,
+      "before": 47479.125,
+      "after": 75864.6249999404,
+      "spread": 1.022854223385458
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "object-entries-iteration:values",
+      "size": 10,
+      "before": 666.75,
+      "after": 212.9716796874418,
+      "spread": 1.0101205250181553
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "object-entries-iteration:values",
+      "size": 1000,
+      "before": 57927.125,
+      "after": 13906.25,
+      "spread": 1.0353194988094423
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "object-entries-iteration:keys",
+      "size": 10,
+      "before": 441.36572265625,
+      "after": 173.685546875,
+      "spread": 1.0094743109470785
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "object-entries-iteration:keys",
+      "size": 1000,
+      "before": 38598.875,
+      "after": 11697.875,
+      "spread": 1.0218910589231422
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "split-join-to-replaceall",
+      "size": 10,
+      "before": 1838.5,
+      "after": 1078.1249999850988,
+      "spread": 1.0608788922036156
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "split-join-to-replaceall",
+      "size": 1000,
+      "before": 193135.5,
+      "after": 109411.4999999404,
+      "spread": 1.0531364124343687
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "regex-to-string-method",
+      "size": 10,
+      "before": 386.49462890625,
+      "after": 325.23583984375,
+      "spread": 1.0137927949829826
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "regex-to-string-method",
+      "size": 1000,
+      "before": 36067.625,
+      "after": 29677.125,
+      "spread": 1.0196149309393328
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "match-to-test",
+      "size": 10,
+      "before": 328.20654296875,
+      "after": 310.14013671875,
+      "spread": 1.0604875013046973
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "match-to-test",
+      "size": 1000,
+      "before": 28880.125,
+      "after": 27380.25,
+      "spread": 1.0402864060028123
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "indexof-to-startswith",
+      "size": 10,
+      "before": 276.67236328125,
+      "after": 227.3759765625582,
+      "spread": 1.0669606845692374
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "indexof-to-startswith",
+      "size": 1000,
+      "before": 23734.375,
+      "after": 19203.125,
+      "spread": 1.0395641939844154
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "regexp-constructor-literal",
+      "size": 10,
+      "before": 807.375,
+      "after": 274.4951171875,
+      "spread": 1.0192288513563839
+    },
+    {
+      "tier": "node:sparkplug",
+      "id": "regexp-constructor-literal",
+      "size": 1000,
+      "before": 74625,
+      "after": 24104.125,
+      "spread": 1.029652549598547
+    },
+    {
+      "tier": "node:ignition",
+      "id": "spread-in-accumulator:array",
+      "size": 10,
+      "before": 359.4970703125,
+      "after": 257.466796875,
+      "spread": 1.0231839651724046
+    },
+    {
+      "tier": "node:ignition",
+      "id": "spread-in-accumulator:array",
+      "size": 100,
+      "before": 5677.125,
+      "after": 2005.125,
+      "spread": 1.0171695206351905
+    },
+    {
+      "tier": "node:ignition",
+      "id": "spread-in-accumulator:object",
+      "size": 10,
+      "before": 1338.5,
+      "after": 260.68115234375,
+      "spread": 1.0251785520229602
+    },
+    {
+      "tier": "node:ignition",
+      "id": "spread-in-accumulator:object",
+      "size": 100,
+      "before": 77234.375,
+      "after": 4182.375,
+      "spread": 1.0334873960531934
+    },
+    {
+      "tier": "node:ignition",
+      "id": "accumulate-by-copy-in-loop",
+      "size": 10,
+      "before": 466.552734375,
+      "after": 357.5234375,
+      "spread": 1.0369595080748382
+    },
+    {
+      "tier": "node:ignition",
+      "id": "accumulate-by-copy-in-loop",
+      "size": 100,
+      "before": 6682.25,
+      "after": 2864.625,
+      "spread": 1.0083340454810326
+    },
+    {
+      "tier": "node:ignition",
+      "id": "typed-array-round-trip",
+      "size": 10,
+      "before": 271.40283203125,
+      "after": 74.177734375,
+      "spread": 1.0681020429848924
+    },
+    {
+      "tier": "node:ignition",
+      "id": "typed-array-round-trip",
+      "size": 1000,
+      "before": 10562.5,
+      "after": 164.0419921875,
+      "spread": 1.056839433966337
+    },
+    {
+      "tier": "node:ignition",
+      "id": "typed-array-subarray",
+      "size": 10,
+      "before": 103.515625,
+      "after": 97.73779296875,
+      "spread": 1.0047905447568126
+    },
+    {
+      "tier": "node:ignition",
+      "id": "typed-array-subarray",
+      "size": 1000,
+      "before": 186.97119140625,
+      "after": 105.123046875,
+      "spread": 1.1663610701873692
+    },
+    {
+      "tier": "node:ignition",
+      "id": "array-literal-lookup",
+      "size": 10,
+      "before": 416.70751953125,
+      "after": 344.29931640625,
+      "spread": 1.026393176526043
+    },
+    {
+      "tier": "node:ignition",
+      "id": "array-literal-lookup",
+      "size": 1000,
+      "before": 32739.5,
+      "after": 23338.625,
+      "spread": 1.0326355775934943
+    },
+    {
+      "tier": "node:ignition",
+      "id": "filter-first",
+      "size": 10,
+      "before": 233.43896484375,
+      "after": 215.37255859375,
+      "spread": 1.0100014832159914
+    },
+    {
+      "tier": "node:ignition",
+      "id": "filter-first",
+      "size": 1000,
+      "before": 14192.625,
+      "after": 12000,
+      "spread": 1.0019974367952833
+    },
+    {
+      "tier": "node:ignition",
+      "id": "filter-length-to-some",
+      "size": 10,
+      "before": 197.5302734375,
+      "after": 185.87255859375,
+      "spread": 1.0135909940912122
+    },
+    {
+      "tier": "node:ignition",
+      "id": "filter-length-to-some",
+      "size": 1000,
+      "before": 10307.25,
+      "after": 10224,
+      "spread": 1.0151817903889213
+    },
+    {
+      "tier": "node:ignition",
+      "id": "map-flat-to-flatmap",
+      "size": 10,
+      "before": 405.59912109375,
+      "after": 356.8525390625,
+      "spread": 1.0440951916557821
+    },
+    {
+      "tier": "node:ignition",
+      "id": "map-flat-to-flatmap",
+      "size": 1000,
+      "before": 26968.75,
+      "after": 24286.375,
+      "spread": 1.0374858922687393
+    },
+    {
+      "tier": "node:ignition",
+      "id": "unused-map",
+      "size": 10,
+      "before": 272.7861328125,
+      "after": 261.8408203125,
+      "spread": 1.0017042415345816
+    },
+    {
+      "tier": "node:ignition",
+      "id": "unused-map",
+      "size": 1000,
+      "before": 20692.625,
+      "after": 19723.875,
+      "spread": 1.0063826354793712
+    },
+    {
+      "tier": "node:ignition",
+      "id": "array-from-map",
+      "size": 10,
+      "before": 180.82666015625,
+      "after": 284.322265625,
+      "spread": 1.0165698612351304
+    },
+    {
+      "tier": "node:ignition",
+      "id": "array-from-map",
+      "size": 1000,
+      "before": 9156.25,
+      "after": 14890.625,
+      "spread": 1.0396305505171024
+    },
+    {
+      "tier": "node:ignition",
+      "id": "redundant-array-copy",
+      "size": 10,
+      "before": 195.39404296875,
+      "after": 185.994140625,
+      "spread": 1.0047539776618901
+    },
+    {
+      "tier": "node:ignition",
+      "id": "redundant-array-copy",
+      "size": 1000,
+      "before": 10817.75,
+      "after": 10364.625,
+      "spread": 1.027497204506657
+    },
+    {
+      "tier": "node:ignition",
+      "id": "foreach-to-for",
+      "size": 10,
+      "before": 192.8916015625,
+      "after": 173.54296875,
+      "spread": 1.0047988434705022
+    },
+    {
+      "tier": "node:ignition",
+      "id": "foreach-to-for",
+      "size": 1000,
+      "before": 10916.75,
+      "after": 11395.875,
+      "spread": 1.037676403110855
+    },
+    {
+      "tier": "node:ignition",
+      "id": "foreach-to-for:objects",
+      "size": 10,
+      "before": 247.0703125,
+      "after": 217.1220703125,
+      "spread": 1.0135754585676773
+    },
+    {
+      "tier": "node:ignition",
+      "id": "foreach-to-for:objects",
+      "size": 1000,
+      "before": 16255.25,
+      "after": 15177,
+      "spread": 1.0313235395001443
+    },
+    {
+      "tier": "node:ignition",
+      "id": "foreach-to-for:closures",
+      "size": 10,
+      "before": 344.8486328125,
+      "after": 321.81787109375,
+      "spread": 1.0050875414632696
+    },
+    {
+      "tier": "node:ignition",
+      "id": "foreach-to-for:closures",
+      "size": 1000,
+      "before": 26177.125,
+      "after": 25479.25,
+      "spread": 1.0068659719674553
+    },
+    {
+      "tier": "node:ignition",
+      "id": "foreach-to-for:proxy",
+      "size": 10,
+      "before": 1078.125,
+      "after": 1093.75,
+      "spread": 1.0144927536231882
+    },
+    {
+      "tier": "node:ignition",
+      "id": "foreach-to-for:proxy",
+      "size": 1000,
+      "before": 88974,
+      "after": 94677.125,
+      "spread": 1.016913901580189
+    },
+    {
+      "tier": "node:ignition",
+      "id": "for-of-to-indexed",
+      "size": 10,
+      "before": 274.43408203125,
+      "after": 179.0771484375,
+      "spread": 1.0111035563255126
+    },
+    {
+      "tier": "node:ignition",
+      "id": "for-of-to-indexed",
+      "size": 1000,
+      "before": 17140.625,
+      "after": 11734.375,
+      "spread": 1.004507082899252
+    },
+    {
+      "tier": "node:ignition",
+      "id": "for-in-array",
+      "size": 10,
+      "before": 296.2441406250073,
+      "after": 177.7548828125,
+      "spread": 1.015689353597544
+    },
+    {
+      "tier": "node:ignition",
+      "id": "for-in-array",
+      "size": 1000,
+      "before": 19286.375,
+      "after": 11588.625,
+      "spread": 1.0089182129871477
+    },
+    {
+      "tier": "node:ignition",
+      "id": "cache-array-length",
+      "size": 10,
+      "before": 179.7080078125,
+      "after": 171.6513671875,
+      "spread": 1.0137750484416879
+    },
+    {
+      "tier": "node:ignition",
+      "id": "cache-array-length",
+      "size": 1000,
+      "before": 11552.125,
+      "after": 10854.125,
+      "spread": 1.0023675245835044
+    },
+    {
+      "tier": "node:ignition",
+      "id": "date-now",
+      "size": 10,
+      "before": 739.625,
+      "after": 477.0917968749418,
+      "spread": 1.0165448217325193
+    },
+    {
+      "tier": "node:ignition",
+      "id": "date-now",
+      "size": 1000,
+      "before": 60718.75,
+      "after": 38244.75,
+      "spread": 1.0063635512497742
+    },
+    {
+      "tier": "node:ignition",
+      "id": "math-pow-to-mul",
+      "size": 10,
+      "before": 393.61572265625,
+      "after": 323.201171875,
+      "spread": 1.0084774908703718
+    },
+    {
+      "tier": "node:ignition",
+      "id": "math-pow-to-mul",
+      "size": 1000,
+      "before": 30588.5,
+      "after": 21468.75,
+      "spread": 1.0417184228833885
+    },
+    {
+      "tier": "node:ignition",
+      "id": "bitwise-trunc",
+      "size": 10,
+      "before": 437.6220703125,
+      "after": 321.8383789063082,
+      "spread": 1.069287491338372
+    },
+    {
+      "tier": "node:ignition",
+      "id": "bitwise-trunc",
+      "size": 1000,
+      "before": 34182.375,
+      "after": 21875,
+      "spread": 1.0164957768858534
+    },
+    {
+      "tier": "node:ignition",
+      "id": "object-assign-to-spread",
+      "size": 10,
+      "before": 508.82958984375,
+      "after": 433.87841796875,
+      "spread": 1.0259983959200996
+    },
+    {
+      "tier": "node:ignition",
+      "id": "object-assign-to-spread",
+      "size": 1000,
+      "before": 42630.25,
+      "after": 34755.125,
+      "spread": 1.0099556366960918
+    },
+    {
+      "tier": "node:ignition",
+      "id": "object-entries-pair",
+      "size": 10,
+      "before": 895.875,
+      "after": 420.51171875,
+      "spread": 1.019040268293898
+    },
+    {
+      "tier": "node:ignition",
+      "id": "object-entries-pair",
+      "size": 1000,
+      "before": 72989.5,
+      "after": 90724,
+      "spread": 1.0158408129009509
+    },
+    {
+      "tier": "node:ignition",
+      "id": "object-entries-iteration:values",
+      "size": 10,
+      "before": 958.375,
+      "after": 357.6049804686336,
+      "spread": 1.0082083471384666
+    },
+    {
+      "tier": "node:ignition",
+      "id": "object-entries-iteration:values",
+      "size": 1000,
+      "before": 76182.375,
+      "after": 21052.125,
+      "spread": 1.0068756990673184
+    },
+    {
+      "tier": "node:ignition",
+      "id": "object-entries-iteration:keys",
+      "size": 10,
+      "before": 703.125,
+      "after": 318.80712890625,
+      "spread": 1.0084459527525447
+    },
+    {
+      "tier": "node:ignition",
+      "id": "object-entries-iteration:keys",
+      "size": 1000,
+      "before": 55041.75,
+      "after": 20494.75,
+      "spread": 1.0620704436253998
+    },
+    {
+      "tier": "node:ignition",
+      "id": "split-join-to-replaceall",
+      "size": 10,
+      "before": 2187.5,
+      "after": 1349,
+      "spread": 1.0106923331703548
+    },
+    {
+      "tier": "node:ignition",
+      "id": "split-join-to-replaceall",
+      "size": 1000,
+      "before": 219338.5,
+      "after": 128635.5,
+      "spread": 1.0250308636435217
+    },
+    {
+      "tier": "node:ignition",
+      "id": "regex-to-string-method",
+      "size": 10,
+      "before": 545.0234375,
+      "after": 472.6762695313082,
+      "spread": 1.0231433085474269
+    },
+    {
+      "tier": "node:ignition",
+      "id": "regex-to-string-method",
+      "size": 1000,
+      "before": 45161.5,
+      "after": 39005.25,
+      "spread": 1.0144082681891888
+    },
+    {
+      "tier": "node:ignition",
+      "id": "match-to-test",
+      "size": 10,
+      "before": 477.23388671875,
+      "after": 450.23583984375,
+      "spread": 1.0232851981079365
+    },
+    {
+      "tier": "node:ignition",
+      "id": "match-to-test",
+      "size": 1000,
+      "before": 40708.375,
+      "after": 38187.5,
+      "spread": 1.0019707558558266
+    },
+    {
+      "tier": "node:ignition",
+      "id": "indexof-to-startswith",
+      "size": 10,
+      "before": 417.54150390625,
+      "after": 366.943359375,
+      "spread": 1.0341218440685997
+    },
+    {
+      "tier": "node:ignition",
+      "id": "indexof-to-startswith",
+      "size": 1000,
+      "before": 32833.25,
+      "after": 29213.5,
+      "spread": 1.0118208111194267
+    },
+    {
+      "tier": "node:ignition",
+      "id": "regexp-constructor-literal",
+      "size": 10,
+      "before": 989.625,
+      "after": 430.25732421875,
+      "spread": 1.0045930217846417
+    },
+    {
+      "tier": "node:ignition",
+      "id": "regexp-constructor-literal",
+      "size": 1000,
+      "before": 89244.875,
+      "after": 36114.5,
+      "spread": 1.0210740793849487
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "spread-in-accumulator:array",
+      "size": 10,
+      "before": 125,
+      "after": 20.6298828125,
+      "spread": 1.4784802433224575
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "spread-in-accumulator:array",
+      "size": 100,
+      "before": 5619.875,
+      "after": 219.970703125,
+      "spread": 1.44068827563368
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "spread-in-accumulator:object",
+      "size": 10,
+      "before": 234.375,
+      "after": 37.88232421875,
+      "spread": 1.1201184735487586
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "spread-in-accumulator:object",
+      "size": 100,
+      "before": 4625,
+      "after": 703.125,
+      "spread": 1.1051229379430054
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "accumulate-by-copy-in-loop",
+      "size": 10,
+      "before": 125,
+      "after": 14.5263671875,
+      "spread": 1.2006281695454177
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "accumulate-by-copy-in-loop",
+      "size": 100,
+      "before": 4354.125,
+      "after": 182.759765625,
+      "spread": 1.020728277604628
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "typed-array-round-trip",
+      "size": 10,
+      "before": 99,
+      "after": 12.16650390625,
+      "spread": 1.1043179257951996
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "typed-array-round-trip",
+      "size": 1000,
+      "before": 6786.5,
+      "after": 36.60107421875,
+      "spread": 1.2487793776686233
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "typed-array-subarray",
+      "size": 10,
+      "before": 23.70166015625,
+      "after": 19.85693359375,
+      "spread": 1.1217283183119808
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "typed-array-subarray",
+      "size": 1000,
+      "before": 36.31591796875,
+      "after": 23.92578125,
+      "spread": 1.1236513805522208
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "array-literal-lookup",
+      "size": 10,
+      "before": 30.72119140625,
+      "after": 12.2275390625,
+      "spread": 1.241212649151616
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "array-literal-lookup",
+      "size": 1000,
+      "before": 2541.75,
+      "after": 1093.75,
+      "spread": 1.0348185305399822
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "filter-first",
+      "size": 10,
+      "before": 15.625,
+      "after": 11.04736328125,
+      "spread": 1.2190979425006532
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "filter-first",
+      "size": 1000,
+      "before": 1750,
+      "after": 963.5,
+      "spread": 1.0076230901012397
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "filter-length-to-some",
+      "size": 10,
+      "before": 11.2099609375,
+      "after": 10.5791015625,
+      "spread": 1.1058913789787082
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "filter-length-to-some",
+      "size": 1000,
+      "before": 807.375,
+      "after": 802.125,
+      "spread": 1.0194374875625338
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "map-flat-to-flatmap",
+      "size": 10,
+      "before": 93.56689453125,
+      "after": 44.9423828125,
+      "spread": 1.0490658891385822
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "map-flat-to-flatmap",
+      "size": 1000,
+      "before": 7744.75,
+      "after": 5526.125,
+      "spread": 1.0009151542949377
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "unused-map",
+      "size": 10,
+      "before": 26,
+      "after": 20.30419921875,
+      "spread": 1.1061746987951806
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "unused-map",
+      "size": 1000,
+      "before": 2703.125,
+      "after": 2171.875,
+      "spread": 1.0080951163936143
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "array-from-map",
+      "size": 10,
+      "before": 41.75,
+      "after": 48.6650390625,
+      "spread": 1.1430910282165037
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "array-from-map",
+      "size": 1000,
+      "before": 3260.5,
+      "after": 3375,
+      "spread": 1.052700778680843
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "redundant-array-copy",
+      "size": 10,
+      "before": 20.79248046875,
+      "after": 13.8955078125,
+      "spread": 1.405885768910114
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "redundant-array-copy",
+      "size": 1000,
+      "before": 1744.75,
+      "after": 1229.125,
+      "spread": 1.028946404578955
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "foreach-to-for",
+      "size": 10,
+      "before": 10.375,
+      "after": 4.5166015625,
+      "spread": 1.4129082246218503
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "foreach-to-for",
+      "size": 1000,
+      "before": 682.375,
+      "after": 513.7939453125,
+      "spread": 1.0998551547201845
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "foreach-to-for:objects",
+      "size": 10,
+      "before": 15.625,
+      "after": 11.86083984375,
+      "spread": 1.1514370445886726
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "foreach-to-for:objects",
+      "size": 1000,
+      "before": 1265.625,
+      "after": 1145.75,
+      "spread": 1.0165059492542219
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "foreach-to-for:closures",
+      "size": 10,
+      "before": 17.39501953125,
+      "after": 14.404296875,
+      "spread": 1.1228805111498419
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "foreach-to-for:closures",
+      "size": 1000,
+      "before": 1505.25,
+      "after": 1369.875,
+      "spread": 1.0258114752108634
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "foreach-to-for:proxy",
+      "size": 10,
+      "before": 256.65283203125,
+      "after": 132.2021484375,
+      "spread": 1.1239342554705445
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "foreach-to-for:proxy",
+      "size": 1000,
+      "before": 26927.125,
+      "after": 13854.125,
+      "spread": 1.0052813026352052
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "for-of-to-indexed",
+      "size": 10,
+      "before": 6.6123046875,
+      "after": 4.84228515625,
+      "spread": 1.448262615959136
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "for-of-to-indexed",
+      "size": 1000,
+      "before": 760.375,
+      "after": 519.18505859375,
+      "spread": 1.0262644004053723
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "for-in-array",
+      "size": 10,
+      "before": 140.625,
+      "after": 4.69970703125,
+      "spread": 1.3888474002351825
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "for-in-array",
+      "size": 1000,
+      "before": 7099,
+      "after": 514.46533203125,
+      "spread": 1.018196444035076
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "cache-array-length",
+      "size": 10,
+      "before": 4.69970703125,
+      "after": 4.84228515625,
+      "spread": 1.2718327521042925
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "cache-array-length",
+      "size": 1000,
+      "before": 505.25,
+      "after": 500,
+      "spread": 1.101860766637803
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "date-now",
+      "size": 10,
+      "before": 239.7666015625,
+      "after": 182.45458984375,
+      "spread": 1.0426687928453382
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "date-now",
+      "size": 1000,
+      "before": 23796.875,
+      "after": 18348.875,
+      "spread": 1.027028441643935
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "math-pow-to-mul",
+      "size": 10,
+      "before": 6.57177734375,
+      "after": 7.32421875,
+      "spread": 1.4831761
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "math-pow-to-mul",
+      "size": 1000,
+      "before": 671.875,
+      "after": 901.125,
+      "spread": 1.0135457293370367
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "bitwise-trunc",
+      "size": 10,
+      "before": 10.5,
+      "after": 6.77490234375,
+      "spread": 2.100815100815101
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "bitwise-trunc",
+      "size": 1000,
+      "before": 1041.625,
+      "after": 760.375,
+      "spread": 1.015000600024001
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "object-assign-to-spread",
+      "size": 10,
+      "before": 429.0771484375,
+      "after": 256.3271484375,
+      "spread": 1.0127006819761188
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "object-assign-to-spread",
+      "size": 1000,
+      "before": 41994.75,
+      "after": 24296.875,
+      "spread": 1.0386499845827073
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "object-entries-pair",
+      "size": 10,
+      "before": 187.5,
+      "after": 25.91943359375,
+      "spread": 1.2318224918209848
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "object-entries-pair",
+      "size": 1000,
+      "before": 19963.5,
+      "after": 23796.875,
+      "spread": 1.012181974848682
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "object-entries-iteration:values",
+      "size": 10,
+      "before": 182.25,
+      "after": 32.91796875,
+      "spread": 1.060536432922616
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "object-entries-iteration:values",
+      "size": 1000,
+      "before": 19192.625,
+      "after": 2015.625,
+      "spread": 1.0459275368972114
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "object-entries-iteration:keys",
+      "size": 10,
+      "before": 182.375,
+      "after": 13.2041015625,
+      "spread": 1.096652380129729
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "object-entries-iteration:keys",
+      "size": 1000,
+      "before": 19416.625,
+      "after": 7083.375,
+      "spread": 1.0106500422696054
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "split-join-to-replaceall",
+      "size": 10,
+      "before": 713.625,
+      "after": 687.5,
+      "spread": 1.0143632860395866
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "split-join-to-replaceall",
+      "size": 1000,
+      "before": 76817.75,
+      "after": 72911.5,
+      "spread": 1.00683474611133
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "regex-to-string-method",
+      "size": 10,
+      "before": 130.25,
+      "after": 109.375,
+      "spread": 1.0610403648745015
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "regex-to-string-method",
+      "size": 1000,
+      "before": 13468.75,
+      "after": 11192.75,
+      "spread": 1.1395793292196261
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "match-to-test",
+      "size": 10,
+      "before": 83.375,
+      "after": 88.3583984375,
+      "spread": 1.0123946177916887
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "match-to-test",
+      "size": 1000,
+      "before": 8880.25,
+      "after": 9015.625,
+      "spread": 1.1174671823332218
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "indexof-to-startswith",
+      "size": 10,
+      "before": 81.9091796875,
+      "after": 13.22412109375,
+      "spread": 1.212224841304478
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "indexof-to-startswith",
+      "size": 1000,
+      "before": 9312.5,
+      "after": 1234.375,
+      "spread": 1.0054207148638277
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "regexp-constructor-literal",
+      "size": 10,
+      "before": 212.4833984375,
+      "after": 26.125,
+      "spread": 1.0806164559498133
+    },
+    {
+      "tier": "bun:ftl",
+      "id": "regexp-constructor-literal",
+      "size": 1000,
+      "before": 20895.875,
+      "after": 2421.875,
+      "spread": 1.0018123692279217
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "spread-in-accumulator:array",
+      "size": 10,
+      "before": 156.25,
+      "after": 54.50439453125,
+      "spread": 1.052070946080627
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "spread-in-accumulator:array",
+      "size": 100,
+      "before": 6729.25,
+      "after": 553.14111328125,
+      "spread": 1.0085291252577968
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "spread-in-accumulator:object",
+      "size": 10,
+      "before": 276,
+      "after": 75.52099609375,
+      "spread": 1.034793129184807
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "spread-in-accumulator:object",
+      "size": 100,
+      "before": 4750,
+      "after": 1203.125,
+      "spread": 1.0285879449972435
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "accumulate-by-copy-in-loop",
+      "size": 10,
+      "before": 140.625,
+      "after": 27.64892578125,
+      "spread": 1.041150240679421
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "accumulate-by-copy-in-loop",
+      "size": 100,
+      "before": 6604.25,
+      "after": 276.87548828125,
+      "spread": 1.0843301129948202
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "typed-array-round-trip",
+      "size": 10,
+      "before": 197.75390625,
+      "after": 13.83447265625,
+      "spread": 1.108016002895129
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "typed-array-round-trip",
+      "size": 1000,
+      "before": 14770.75,
+      "after": 40.1201171875,
+      "spread": 1.231305428771817
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "typed-array-subarray",
+      "size": 10,
+      "before": 25.8583984375,
+      "after": 21.830078125,
+      "spread": 1.1287801735707257
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "typed-array-subarray",
+      "size": 1000,
+      "before": 39.63232421875,
+      "after": 27.77099609375,
+      "spread": 1.1094055619491627
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "array-literal-lookup",
+      "size": 10,
+      "before": 41.75,
+      "after": 31.25,
+      "spread": 1.0445572560902612
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "array-literal-lookup",
+      "size": 1000,
+      "before": 3573,
+      "after": 2250,
+      "spread": 1.1832556335867452
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "filter-first",
+      "size": 10,
+      "before": 30.53759765625,
+      "after": 26.14306640625,
+      "spread": 1.0810383705185451
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "filter-first",
+      "size": 1000,
+      "before": 2432.25,
+      "after": 1776.125,
+      "spread": 1.0138664486448257
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "filter-length-to-some",
+      "size": 10,
+      "before": 23.681640625,
+      "after": 23.29541015625,
+      "spread": 1.1011674383381167
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "filter-length-to-some",
+      "size": 1000,
+      "before": 1666.75,
+      "after": 1781.25,
+      "spread": 1.011726840092508
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "map-flat-to-flatmap",
+      "size": 10,
+      "before": 109.375,
+      "after": 107.70703125,
+      "spread": 1.053077285750553
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "map-flat-to-flatmap",
+      "size": 1000,
+      "before": 9166.625,
+      "after": 11395.875,
+      "spread": 1.01150906571833
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "unused-map",
+      "size": 10,
+      "before": 46.875,
+      "after": 39.22509765625,
+      "spread": 1.0740717762314365
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "unused-map",
+      "size": 1000,
+      "before": 4192.75,
+      "after": 3500,
+      "spread": 1.0046805200068676
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "array-from-map",
+      "size": 10,
+      "before": 62.5,
+      "after": 87.56494140625,
+      "spread": 1.0575083042092086
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "array-from-map",
+      "size": 1000,
+      "before": 4197.875,
+      "after": 6317.625,
+      "spread": 1.005391060972312
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "redundant-array-copy",
+      "size": 10,
+      "before": 58.20703125,
+      "after": 50.740234375,
+      "spread": 1.0898858090359205
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "redundant-array-copy",
+      "size": 1000,
+      "before": 5453.125,
+      "after": 4583.375,
+      "spread": 1.0086527130084937
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "foreach-to-for",
+      "size": 10,
+      "before": 25.87890625,
+      "after": 10.498046875,
+      "spread": 1.2297289233144613
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "foreach-to-for",
+      "size": 1000,
+      "before": 1750,
+      "after": 1177.125,
+      "spread": 1.0353615801210576
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "foreach-to-for:objects",
+      "size": 10,
+      "before": 36.07177734375,
+      "after": 18.27001953125,
+      "spread": 1.0392038883900874
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "foreach-to-for:objects",
+      "size": 1000,
+      "before": 2687.5,
+      "after": 1588.625,
+      "spread": 1.0065308049413801
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "foreach-to-for:closures",
+      "size": 10,
+      "before": 32.14501953125,
+      "after": 20.89453125,
+      "spread": 1.1701224364730975
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "foreach-to-for:closures",
+      "size": 1000,
+      "before": 2552,
+      "after": 2015.625,
+      "spread": 1.0409475164637556
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "foreach-to-for:proxy",
+      "size": 10,
+      "before": 337.849609375,
+      "after": 185.3232421875,
+      "spread": 1.0220174431399793
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "foreach-to-for:proxy",
+      "size": 1000,
+      "before": 33479.125,
+      "after": 18296.875,
+      "spread": 1.0029570665302632
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "for-of-to-indexed",
+      "size": 10,
+      "before": 21.03662109375,
+      "after": 10.53857421875,
+      "spread": 1.2625176462404382
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "for-of-to-indexed",
+      "size": 1000,
+      "before": 1505.25,
+      "after": 1328.125,
+      "spread": 1
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "for-in-array",
+      "size": 10,
+      "before": 151,
+      "after": 10.55908203125,
+      "spread": 1.2380183274854961
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "for-in-array",
+      "size": 1000,
+      "before": 8250,
+      "after": 1244.75,
+      "spread": 1.0055808359729437
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "cache-array-length",
+      "size": 10,
+      "before": 10.43701171875,
+      "after": 10.599609375,
+      "spread": 1.258334286924612
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "cache-array-length",
+      "size": 1000,
+      "before": 1244.875,
+      "after": 1250,
+      "spread": 1.0123816254338145
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "date-now",
+      "size": 10,
+      "before": 253.072265625,
+      "after": 206.52294921875,
+      "spread": 1.025291691813549
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "date-now",
+      "size": 1000,
+      "before": 24619.875,
+      "after": 20411.5,
+      "spread": 1.0164061702940037
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "math-pow-to-mul",
+      "size": 10,
+      "before": 20.875,
+      "after": 21.42333984375,
+      "spread": 1.0393168513541349
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "math-pow-to-mul",
+      "size": 1000,
+      "before": 1505.25,
+      "after": 1505.25,
+      "spread": 1.1626937927796452
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "bitwise-trunc",
+      "size": 10,
+      "before": 24.37353515625,
+      "after": 20.875,
+      "spread": 1.1056214348851565
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "bitwise-trunc",
+      "size": 1000,
+      "before": 2005.25,
+      "after": 1510.375,
+      "spread": 1.0128387626608268
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "object-assign-to-spread",
+      "size": 10,
+      "before": 468.26171875,
+      "after": 300.984375,
+      "spread": 1.0119113363399057
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "object-assign-to-spread",
+      "size": 1000,
+      "before": 44729.25,
+      "after": 28359.375,
+      "spread": 1.0194595987478254
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "object-entries-pair",
+      "size": 10,
+      "before": 224,
+      "after": 37.556640625,
+      "spread": 1.1235223473148814
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "object-entries-pair",
+      "size": 1000,
+      "before": 22823,
+      "after": 24260.375,
+      "spread": 1.02304185428067
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "object-entries-iteration:values",
+      "size": 10,
+      "before": 218.75,
+      "after": 44.73876953125,
+      "spread": 1.06637948119275
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "object-entries-iteration:values",
+      "size": 1000,
+      "before": 22234.375,
+      "after": 2781.25,
+      "spread": 1.0277138243734687
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "object-entries-iteration:keys",
+      "size": 10,
+      "before": 213.5,
+      "after": 23.4580078125,
+      "spread": 1.0215814459729657
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "object-entries-iteration:keys",
+      "size": 1000,
+      "before": 21442.625,
+      "after": 7817.75,
+      "spread": 1.0086215783923436
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "split-join-to-replaceall",
+      "size": 10,
+      "before": 750,
+      "after": 713.5,
+      "spread": 1.0276666666666667
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "split-join-to-replaceall",
+      "size": 1000,
+      "before": 79250,
+      "after": 74166.625,
+      "spread": 1.0211076886163069
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "regex-to-string-method",
+      "size": 10,
+      "before": 150.57373046875,
+      "after": 125,
+      "spread": 1.0397243615727605
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "regex-to-string-method",
+      "size": 1000,
+      "before": 14500,
+      "after": 12270.875,
+      "spread": 1.0438871226493136
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "match-to-test",
+      "size": 10,
+      "before": 109.375,
+      "after": 104.30908203125,
+      "spread": 1.0072062934789676
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "match-to-test",
+      "size": 1000,
+      "before": 10895.75,
+      "after": 10505.25,
+      "spread": 1.0478583758392699
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "indexof-to-startswith",
+      "size": 10,
+      "before": 99,
+      "after": 28.62548828125,
+      "spread": 1.103115375503435
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "indexof-to-startswith",
+      "size": 1000,
+      "before": 9906.25,
+      "after": 2317.75,
+      "spread": 1.085690851735016
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "regexp-constructor-literal",
+      "size": 10,
+      "before": 226.48095703125,
+      "after": 38.1669921875,
+      "spread": 1.031119997985122
+    },
+    {
+      "tier": "bun:dfg",
+      "id": "regexp-constructor-literal",
+      "size": 1000,
+      "before": 22052.125,
+      "after": 3224,
+      "spread": 1.023889874320236
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "spread-in-accumulator:array",
+      "size": 10,
+      "before": 468.75,
+      "after": 171.44775390625,
+      "spread": 1.0206355186874934
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "spread-in-accumulator:array",
+      "size": 100,
+      "before": 20786.5,
+      "after": 1369.75,
+      "spread": 1.008156942989659
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "spread-in-accumulator:object",
+      "size": 10,
+      "before": 380.25,
+      "after": 128.27587890625,
+      "spread": 1.0695320951590166
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "spread-in-accumulator:object",
+      "size": 100,
+      "before": 5770.875,
+      "after": 1630.25,
+      "spread": 1.025988398525456
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "accumulate-by-copy-in-loop",
+      "size": 10,
+      "before": 421.9970703125,
+      "after": 107.5849609375,
+      "spread": 1.012079744268767
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "accumulate-by-copy-in-loop",
+      "size": 100,
+      "before": 20192.75,
+      "after": 770.875,
+      "spread": 1.038632368179429
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "typed-array-round-trip",
+      "size": 10,
+      "before": 607.767578125,
+      "after": 26.40771484375,
+      "spread": 1.0064286655940613
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "typed-array-round-trip",
+      "size": 1000,
+      "before": 39864.5,
+      "after": 51.92041015625,
+      "spread": 1.1904603157170874
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "typed-array-subarray",
+      "size": 10,
+      "before": 38.126953125,
+      "after": 35.013671875,
+      "spread": 1.014984823620299
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "typed-array-subarray",
+      "size": 1000,
+      "before": 52.42919921875,
+      "after": 35.44140625,
+      "spread": 1.077389789435062
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "array-literal-lookup",
+      "size": 10,
+      "before": 230.12255859375,
+      "after": 56.7216796875,
+      "spread": 1.0068817646114399
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "array-literal-lookup",
+      "size": 1000,
+      "before": 19885.375,
+      "after": 3802.125,
+      "spread": 1.0077289790884498
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "filter-first",
+      "size": 10,
+      "before": 122.212890625,
+      "after": 97.208984375,
+      "spread": 1.0302925522646214
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "filter-first",
+      "size": 1000,
+      "before": 7223.875,
+      "after": 5843.75,
+      "spread": 1.0055712466376858
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "filter-length-to-some",
+      "size": 10,
+      "before": 99.87353515625,
+      "after": 81.3798828125,
+      "spread": 1.0402090655601444
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "filter-length-to-some",
+      "size": 1000,
+      "before": 5718.75,
+      "after": 5401,
+      "spread": 1.0300070877265375
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "map-flat-to-flatmap",
+      "size": 10,
+      "before": 199.462890625,
+      "after": 385.5,
+      "spread": 1.0358010723168114
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "map-flat-to-flatmap",
+      "size": 1000,
+      "before": 13520.75,
+      "after": 26328.125,
+      "spread": 1.0062716428219722
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "unused-map",
+      "size": 10,
+      "before": 202.63671875,
+      "after": 171.40673828125,
+      "spread": 1.0017070734860865
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "unused-map",
+      "size": 1000,
+      "before": 13151.125,
+      "after": 11312.5,
+      "spread": 1.0118814054852976
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "array-from-map",
+      "size": 10,
+      "before": 170.7353515625,
+      "after": 302.6533203125,
+      "spread": 1.0225012169036178
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "array-from-map",
+      "size": 1000,
+      "before": 9849,
+      "after": 16145.875,
+      "spread": 1.0058171807119023
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "redundant-array-copy",
+      "size": 10,
+      "before": 141.43896484375,
+      "after": 114.19677734375,
+      "spread": 1.0128126911323858
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "redundant-array-copy",
+      "size": 1000,
+      "before": 7901.125,
+      "after": 7270.875,
+      "spread": 1.0363281262389115
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "foreach-to-for",
+      "size": 10,
+      "before": 90.3525390625,
+      "after": 32.75537109375,
+      "spread": 1.0312075696928866
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "foreach-to-for",
+      "size": 1000,
+      "before": 5515.625,
+      "after": 2265.625,
+      "spread": 1.0009291784702548
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "foreach-to-for:objects",
+      "size": 10,
+      "before": 123.08740234375,
+      "after": 46.5087890625,
+      "spread": 1.0199845126625429
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "foreach-to-for:objects",
+      "size": 1000,
+      "before": 7906.25,
+      "after": 3567.625,
+      "spread": 1.2548967432502909
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "foreach-to-for:closures",
+      "size": 10,
+      "before": 149.658203125,
+      "after": 77.59619140625,
+      "spread": 1.0167759756542538
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "foreach-to-for:closures",
+      "size": 1000,
+      "before": 10473.875,
+      "after": 6380.125,
+      "spread": 1.047209807259621
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "foreach-to-for:proxy",
+      "size": 10,
+      "before": 1015.625,
+      "after": 494.83203125,
+      "spread": 1.0104438848409736
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "foreach-to-for:proxy",
+      "size": 1000,
+      "before": 91145.75,
+      "after": 45151,
+      "spread": 1.004541555095305
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "for-of-to-indexed",
+      "size": 10,
+      "before": 35.09521484375,
+      "after": 34.66796875,
+      "spread": 1.0097987525972285
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "for-of-to-indexed",
+      "size": 1000,
+      "before": 1786.5,
+      "after": 2515.625,
+      "spread": 1.0115744410971936
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "for-in-array",
+      "size": 10,
+      "before": 270.85400390625,
+      "after": 34.953125,
+      "spread": 1.0133273908805622
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "for-in-array",
+      "size": 1000,
+      "before": 17770.75,
+      "after": 2531.25,
+      "spread": 1.0099610460593538
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "cache-array-length",
+      "size": 10,
+      "before": 34.60693359375,
+      "after": 31.79931640625,
+      "spread": 1.0194241872941399
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "cache-array-length",
+      "size": 1000,
+      "before": 2526.125,
+      "after": 2250,
+      "spread": 1.0025770836762689
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "date-now",
+      "size": 10,
+      "before": 324.1171875,
+      "after": 299.25537109375,
+      "spread": 1.0027497204686369
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "date-now",
+      "size": 1000,
+      "before": 29546.875,
+      "after": 28562.5,
+      "spread": 1.001578018010776
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "math-pow-to-mul",
+      "size": 10,
+      "before": 97.0458984375,
+      "after": 42.8876953125,
+      "spread": 1.0661411644782313
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "math-pow-to-mul",
+      "size": 1000,
+      "before": 6786.375,
+      "after": 2364.625,
+      "spread": 1.0085177109289276
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "bitwise-trunc",
+      "size": 10,
+      "before": 74.03564453125,
+      "after": 96.69970703125,
+      "spread": 1.0388829262949664
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "bitwise-trunc",
+      "size": 1000,
+      "before": 5229.125,
+      "after": 6843.75,
+      "spread": 1.0049721511725194
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "object-assign-to-spread",
+      "size": 10,
+      "before": 599,
+      "after": 403.13720703125,
+      "spread": 1.0119152347022984
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "object-assign-to-spread",
+      "size": 1000,
+      "before": 53692.625,
+      "after": 33869.75,
+      "spread": 1.0073537018081542
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "object-entries-pair",
+      "size": 10,
+      "before": 324.99169921875,
+      "after": 82.376953125,
+      "spread": 1.0751289633144672
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "object-entries-pair",
+      "size": 1000,
+      "before": 29713.5,
+      "after": 29026,
+      "spread": 1.0147575095269867
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "object-entries-iteration:values",
+      "size": 10,
+      "before": 311.60498046875,
+      "after": 64.73779296875,
+      "spread": 1.0306670944900542
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "object-entries-iteration:values",
+      "size": 1000,
+      "before": 28796.875,
+      "after": 3093.75,
+      "spread": 1.008781532603522
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "object-entries-iteration:keys",
+      "size": 10,
+      "before": 306.68115234375,
+      "after": 57.77978515625,
+      "spread": 1.0066868031405394
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "object-entries-iteration:keys",
+      "size": 1000,
+      "before": 27859.375,
+      "after": 8895.875,
+      "spread": 1.029059078394443
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "split-join-to-replaceall",
+      "size": 10,
+      "before": 848.875,
+      "after": 770.75,
+      "spread": 1.0594727103706596
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "split-join-to-replaceall",
+      "size": 1000,
+      "before": 85182.25,
+      "after": 80156.25,
+      "spread": 1.0123871062216292
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "regex-to-string-method",
+      "size": 10,
+      "before": 200.41943359375,
+      "after": 182.43408203125,
+      "spread": 1.0396075867925987
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "regex-to-string-method",
+      "size": 1000,
+      "before": 18494.875,
+      "after": 16682.375,
+      "spread": 1.0311214175790002
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "match-to-test",
+      "size": 10,
+      "before": 182.0068359375,
+      "after": 153.82861328125,
+      "spread": 1.0532589077219643
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "match-to-test",
+      "size": 1000,
+      "before": 16682.25,
+      "after": 13984.375,
+      "spread": 1.0352514644617339
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "indexof-to-startswith",
+      "size": 10,
+      "before": 145.77197265625,
+      "after": 124.22705078125,
+      "spread": 1.0663654413926509
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "indexof-to-startswith",
+      "size": 1000,
+      "before": 13161.5,
+      "after": 10447.875,
+      "spread": 1.0475649526299258
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "regexp-constructor-literal",
+      "size": 10,
+      "before": 301.22900390625,
+      "after": 142.29296875,
+      "spread": 1.029731166438893
+    },
+    {
+      "tier": "bun:baseline",
+      "id": "regexp-constructor-literal",
+      "size": 1000,
+      "before": 27760.375,
+      "after": 12244.75,
+      "spread": 1.0182473838742214
+    },
+    {
+      "tier": "bun:llint",
+      "id": "spread-in-accumulator:array",
+      "size": 10,
+      "before": 687.5,
+      "after": 473.2666015625,
+      "spread": 1.0372177587016171
+    },
+    {
+      "tier": "bun:llint",
+      "id": "spread-in-accumulator:array",
+      "size": 100,
+      "before": 23307.25,
+      "after": 3557.25,
+      "spread": 1.0207034761994542
+    },
+    {
+      "tier": "bun:llint",
+      "id": "spread-in-accumulator:object",
+      "size": 10,
+      "before": 656.25,
+      "after": 500.79345703125,
+      "spread": 1.011767131261426
+    },
+    {
+      "tier": "bun:llint",
+      "id": "spread-in-accumulator:object",
+      "size": 100,
+      "before": 14958.375,
+      "after": 4135.375,
+      "spread": 1.0116121613289228
+    },
+    {
+      "tier": "bun:llint",
+      "id": "accumulate-by-copy-in-loop",
+      "size": 10,
+      "before": 489.5,
+      "after": 253.11279296875,
+      "spread": 1.2681849138605767
+    },
+    {
+      "tier": "bun:llint",
+      "id": "accumulate-by-copy-in-loop",
+      "size": 100,
+      "before": 21218.75,
+      "after": 1838.625,
+      "spread": 1.029037395571753
+    },
+    {
+      "tier": "bun:llint",
+      "id": "typed-array-round-trip",
+      "size": 10,
+      "before": 1317.625,
+      "after": 55.94873046875,
+      "spread": 1.0019190460049268
+    },
+    {
+      "tier": "bun:llint",
+      "id": "typed-array-round-trip",
+      "size": 1000,
+      "before": 100041.625,
+      "after": 187.92724609375,
+      "spread": 1.0147108626378538
+    },
+    {
+      "tier": "bun:llint",
+      "id": "typed-array-subarray",
+      "size": 10,
+      "before": 93.68896484375,
+      "after": 94.50244140625,
+      "spread": 1.010846610485271
+    },
+    {
+      "tier": "bun:llint",
+      "id": "typed-array-subarray",
+      "size": 1000,
+      "before": 188.06982421875,
+      "after": 93.91259765625,
+      "spread": 1.0070479495296714
+    },
+    {
+      "tier": "bun:llint",
+      "id": "array-literal-lookup",
+      "size": 10,
+      "before": 354.16650390625,
+      "after": 301.31005859375,
+      "spread": 1.0129030029100854
+    },
+    {
+      "tier": "bun:llint",
+      "id": "array-literal-lookup",
+      "size": 1000,
+      "before": 28599,
+      "after": 23317.75,
+      "spread": 1.0136462286497554
+    },
+    {
+      "tier": "bun:llint",
+      "id": "filter-first",
+      "size": 10,
+      "before": 431.5185546875,
+      "after": 347.10693359375,
+      "spread": 1.0125368913791075
+    },
+    {
+      "tier": "bun:llint",
+      "id": "filter-first",
+      "size": 1000,
+      "before": 31062.5,
+      "after": 23093.75,
+      "spread": 1.0009685098504841
+    },
+    {
+      "tier": "bun:llint",
+      "id": "filter-length-to-some",
+      "size": 10,
+      "before": 435.5263671875,
+      "after": 408.8544921875,
+      "spread": 1.0258393063693496
+    },
+    {
+      "tier": "bun:llint",
+      "id": "filter-length-to-some",
+      "size": 1000,
+      "before": 33567.75,
+      "after": 31583.25,
+      "spread": 1.040293431181827
+    },
+    {
+      "tier": "bun:llint",
+      "id": "map-flat-to-flatmap",
+      "size": 10,
+      "before": 455.85107421875,
+      "after": 1229.125,
+      "spread": 1.010653626556012
+    },
+    {
+      "tier": "bun:llint",
+      "id": "map-flat-to-flatmap",
+      "size": 1000,
+      "before": 32250,
+      "after": 102151,
+      "spread": 1.0150710939460115
+    },
+    {
+      "tier": "bun:llint",
+      "id": "unused-map",
+      "size": 10,
+      "before": 562.541015625,
+      "after": 466.28857421875,
+      "spread": 1.0226432455760872
+    },
+    {
+      "tier": "bun:llint",
+      "id": "unused-map",
+      "size": 1000,
+      "before": 34156.25,
+      "after": 31802.125,
+      "spread": 1.006213441002073
+    },
+    {
+      "tier": "bun:llint",
+      "id": "array-from-map",
+      "size": 10,
+      "before": 456.01416015625,
+      "after": 653.25927734375,
+      "spread": 1.0073616089236739
+    },
+    {
+      "tier": "bun:llint",
+      "id": "array-from-map",
+      "size": 1000,
+      "before": 28031.25,
+      "after": 33979.25,
+      "spread": 1.050714102101905
+    },
+    {
+      "tier": "bun:llint",
+      "id": "redundant-array-copy",
+      "size": 10,
+      "before": 372.98583984375,
+      "after": 351.37939453125,
+      "spread": 1.0225609613954703
+    },
+    {
+      "tier": "bun:llint",
+      "id": "redundant-array-copy",
+      "size": 1000,
+      "before": 25583.25,
+      "after": 24916.75,
+      "spread": 1.003011725066202
+    },
+    {
+      "tier": "bun:llint",
+      "id": "foreach-to-for",
+      "size": 10,
+      "before": 348.81591796875,
+      "after": 113.76953125,
+      "spread": 1.0026537554608999
+    },
+    {
+      "tier": "bun:llint",
+      "id": "foreach-to-for",
+      "size": 1000,
+      "before": 24359.375,
+      "after": 6552.125,
+      "spread": 1.0165165973076982
+    },
+    {
+      "tier": "bun:llint",
+      "id": "foreach-to-for:objects",
+      "size": 10,
+      "before": 443.74560546875,
+      "after": 164.65283203125,
+      "spread": 1.0347346994203026
+    },
+    {
+      "tier": "bun:llint",
+      "id": "foreach-to-for:objects",
+      "size": 1000,
+      "before": 32937.5,
+      "after": 10848.875,
+      "spread": 1.0314311403931455
+    },
+    {
+      "tier": "bun:llint",
+      "id": "foreach-to-for:closures",
+      "size": 10,
+      "before": 504.109375,
+      "after": 263.61083984375,
+      "spread": 1.007969339877153
+    },
+    {
+      "tier": "bun:llint",
+      "id": "foreach-to-for:closures",
+      "size": 1000,
+      "before": 38562.5,
+      "after": 21463.5,
+      "spread": 1.0149011040963318
+    },
+    {
+      "tier": "bun:llint",
+      "id": "foreach-to-for:proxy",
+      "size": 10,
+      "before": 1546.875,
+      "after": 744.75,
+      "spread": 1.0032255564539505
+    },
+    {
+      "tier": "bun:llint",
+      "id": "foreach-to-for:proxy",
+      "size": 1000,
+      "before": 134078.125,
+      "after": 65640.625,
+      "spread": 1.0101888709080065
+    },
+    {
+      "tier": "bun:llint",
+      "id": "for-of-to-indexed",
+      "size": 10,
+      "before": 110.697265625,
+      "after": 111.2060546875,
+      "spread": 1.0274559597807185
+    },
+    {
+      "tier": "bun:llint",
+      "id": "for-of-to-indexed",
+      "size": 1000,
+      "before": 5906.25,
+      "after": 6697.875,
+      "spread": 1.0033083334987298
+    },
+    {
+      "tier": "bun:llint",
+      "id": "for-in-array",
+      "size": 10,
+      "before": 396.6064453125,
+      "after": 115.17333984375,
+      "spread": 1.0192839447079474
+    },
+    {
+      "tier": "bun:llint",
+      "id": "for-in-array",
+      "size": 1000,
+      "before": 25833.375,
+      "after": 6958.375,
+      "spread": 1.0069410811122486
+    },
+    {
+      "tier": "bun:llint",
+      "id": "cache-array-length",
+      "size": 10,
+      "before": 113.46435546875,
+      "after": 98.3681640625,
+      "spread": 1.0092074270097608
+    },
+    {
+      "tier": "bun:llint",
+      "id": "cache-array-length",
+      "size": 1000,
+      "before": 6942.75,
+      "after": 5859.375,
+      "spread": 1.0047827242327128
+    },
+    {
+      "tier": "bun:llint",
+      "id": "date-now",
+      "size": 10,
+      "before": 470.64208984375,
+      "after": 352.09130859375,
+      "spread": 1.0291009495216779
+    },
+    {
+      "tier": "bun:llint",
+      "id": "date-now",
+      "size": 1000,
+      "before": 36072.875,
+      "after": 30640.625,
+      "spread": 1.0008314618024279
+    },
+    {
+      "tier": "bun:llint",
+      "id": "math-pow-to-mul",
+      "size": 10,
+      "before": 254.39453125,
+      "after": 141.2353515625,
+      "spread": 1.0037629920550408
+    },
+    {
+      "tier": "bun:llint",
+      "id": "math-pow-to-mul",
+      "size": 1000,
+      "before": 18421.875,
+      "after": 8005.125,
+      "spread": 1.0023561573540862
+    },
+    {
+      "tier": "bun:llint",
+      "id": "bitwise-trunc",
+      "size": 10,
+      "before": 297.220703125,
+      "after": 241.5771484375,
+      "spread": 1.014010389778416
+    },
+    {
+      "tier": "bun:llint",
+      "id": "bitwise-trunc",
+      "size": 1000,
+      "before": 22526,
+      "after": 17406.25,
+      "spread": 1.0246484952274812
+    },
+    {
+      "tier": "bun:llint",
+      "id": "object-assign-to-spread",
+      "size": 10,
+      "before": 1020.875,
+      "after": 713.625,
+      "spread": 1.0073043478260868
+    },
+    {
+      "tier": "bun:llint",
+      "id": "object-assign-to-spread",
+      "size": 1000,
+      "before": 93552,
+      "after": 62161.5,
+      "spread": 1.0185888745417153
+    },
+    {
+      "tier": "bun:llint",
+      "id": "object-entries-pair",
+      "size": 10,
+      "before": 572.875,
+      "after": 331.84814453125,
+      "spread": 1.1395586558210862
+    },
+    {
+      "tier": "bun:llint",
+      "id": "object-entries-pair",
+      "size": 1000,
+      "before": 49458.375,
+      "after": 33734.375,
+      "spread": 1.0121603829761951
+    },
+    {
+      "tier": "bun:llint",
+      "id": "object-entries-iteration:values",
+      "size": 10,
+      "before": 540.79150390625,
+      "after": 144.4501953125,
+      "spread": 1.0139805921867358
+    },
+    {
+      "tier": "bun:llint",
+      "id": "object-entries-iteration:values",
+      "size": 1000,
+      "before": 39515.625,
+      "after": 7104.125,
+      "spread": 1.007031751082353
+    },
+    {
+      "tier": "bun:llint",
+      "id": "object-entries-iteration:keys",
+      "size": 10,
+      "before": 526,
+      "after": 226.1962890625,
+      "spread": 1.145305610304762
+    },
+    {
+      "tier": "bun:llint",
+      "id": "object-entries-iteration:keys",
+      "size": 1000,
+      "before": 44760.5,
+      "after": 20505.25,
+      "spread": 1.0087973595019772
+    },
+    {
+      "tier": "bun:llint",
+      "id": "split-join-to-replaceall",
+      "size": 10,
+      "before": 1083.375,
+      "after": 989.5,
+      "spread": 1.0048575113107847
+    },
+    {
+      "tier": "bun:llint",
+      "id": "split-join-to-replaceall",
+      "size": 1000,
+      "before": 137531.25,
+      "after": 95416.625,
+      "spread": 1.0082038598914287
+    },
+    {
+      "tier": "bun:llint",
+      "id": "regex-to-string-method",
+      "size": 10,
+      "before": 325.9482421875,
+      "after": 306.74267578125,
+      "spread": 1.0329066363466095
+    },
+    {
+      "tier": "bun:llint",
+      "id": "regex-to-string-method",
+      "size": 1000,
+      "before": 27875,
+      "after": 26203.125,
+      "spread": 1.0265400292907008
+    },
+    {
+      "tier": "bun:llint",
+      "id": "match-to-test",
+      "size": 10,
+      "before": 1729.125,
+      "after": 1692.75,
+      "spread": 1.0242004699751854
+    },
+    {
+      "tier": "bun:llint",
+      "id": "match-to-test",
+      "size": 1000,
+      "before": 185927.125,
+      "after": 179781.25,
+      "spread": 1.080396578533339
+    },
+    {
+      "tier": "bun:llint",
+      "id": "indexof-to-startswith",
+      "size": 10,
+      "before": 257.42578125,
+      "after": 244.4052734375,
+      "spread": 1.0074731711129814
+    },
+    {
+      "tier": "bun:llint",
+      "id": "indexof-to-startswith",
+      "size": 1000,
+      "before": 21255.25,
+      "after": 19416.625,
+      "spread": 1.0133513881064142
+    },
+    {
+      "tier": "bun:llint",
+      "id": "regexp-constructor-literal",
+      "size": 10,
+      "before": 569.64111328125,
+      "after": 375.38671875,
+      "spread": 1.0041672547374545
+    },
+    {
+      "tier": "bun:llint",
+      "id": "regexp-constructor-literal",
+      "size": 1000,
+      "before": 51427.125,
+      "after": 32526,
+      "spread": 1.0093614174928403
+    }
+  ]
+}

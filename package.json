@@ -10,7 +10,7 @@
   "license": "MIT",
   "scripts": {
     "bench": "bun bench/run.ts",
-    "bench:speedups": "bun bench/speedups.ts",
+    "bench:speedups": "bun bench/speedups.ts && bun bench/chart.ts",
     "bundle": "bun scripts/bundle.ts",
     "lint:self": "bun src/cli.ts src",
     "schema": "bun src/cli.ts --print-schema config > schema.json && bun src/cli.ts --print-schema output > output.schema.json",

@@ -6,6 +6,8 @@ A linter for JavaScript and TypeScript that only cares about speed. It finds slo
 - **Honest fixes:** every fix says what it guarantees, and `--fix` only applies the safe ones by default.
 - **Measured:** every fix is benchmarked on V8 and JavaScriptCore at each compiler tier. Fixes that measured slower don't run.
 
+![How much faster each fix runs on V8 and JavaScriptCore, worst to best case (data: src/speedups.ts)](docs/speedups.svg)
+
 ## Installation
 
 optilint is not on npm yet. To run it from a checkout, see [CONTRIBUTING.md](CONTRIBUTING.md).

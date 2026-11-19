@@ -4,6 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import { PRELUDE } from "../bench/case.ts";
 import { loadCases } from "../bench/gen.ts";
+import { CHART, chart } from "../bench/chart.ts";
 import { newestResults, OUT, render } from "../bench/speedups.ts";
 import { allRules, retiredRules } from "../src/rules/index.ts";
 import { layer, run, UsageError } from "../src/runner.ts";
@@ -24,6 +25,10 @@ const cases = (await loadCases()).flatMap(({ cases }) => cases).filter((c) => ac
 describe("maxSlowdown", () => {
   test("src/speedups.ts is generated from the newest bench results", () => {
     expect(fs.readFileSync(OUT, "utf8")).toBe(render(newestResults()).text);
+  });
+
+  test("docs/speedups.svg is drawn from src/speedups.ts", () => {
+    expect(fs.readFileSync(CHART, "utf8")).toBe(chart());
   });
 
   test("every measured rule exists", () => {

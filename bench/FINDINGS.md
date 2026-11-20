@@ -4,6 +4,13 @@ What `bench/` measured, per rule, and what to do about it. Newest run first; whe
 
 Ratios are before time ÷ after time: above 1.00x the fix is faster. "Every tier" means all eight: V8 TurboFan, Maglev, Sparkplug, Ignition and JSC FTL, DFG, Baseline, LLInt. Causes marked *unverified* are guesses that still need a look at the engine source (`proposals/README.md`, Sources). Ranges leave out unsteady cells (`?`, spread over 1.2), as `src/speedups.ts` does.
 
+## 2026-11-20: `delete-property` (`bench/emit`)
+
+Apple M4, Node v26.13.1, Bun 1.4.4; every tier, 150 ms, 5 rounds, sizes 10 and 1000 (`bun run bench:emit delete-first,delete-last,delete-dictionary,delete-dict-1024`, output in `results/delete-2026-11-20.txt`). The rule is report-only, so each case is a hand-written pair: what it finds, then what it advises. Two runs agreed within a few percent.
+
+- **`delete o.a` → `o.a = undefined`: V8 only.** On V8, `delete` is 1.6–18.6x slower (TurboFan 18x, Maglev 7.5–8.3x, Sparkplug 2x, Ignition 1.6–1.9x), for the first and the last property alike: the rollback of the last transition did not help here. On JSC there is no real difference (0.88–1.11x; the advice is up to 12% slower on DFG at 1000), as `removePropertyTransition` keeps the object cacheable (`proposals/jsc.md`).
+- **Object as a dictionary → `Map`: only with many keys.** At 64 keys the `Map` is slower on V8 (0.75–0.98x) and mixed on JSC (0.54–1.85x); at 1024 keys it wins on every tier of both engines (V8 1.08–1.34x, JSC 1.95–2.21x). The rule cannot see the key count.
+
 ## 2026-11-20: TypeScript emit (`bench/emit`)
 
 Apple M4, Node v26.13.1, Bun 1.4.4, TypeScript 6.0.3; every tier, 150 ms, 5 rounds, sizes 10 and 1000 (`bun run bench:emit`, output in `results/emit-2026-11-20.txt`). Each case is one TS source emitted at two or more settings; the ratio is the faster form's time ÷ the other's, so here under 1.00x means the emitted form is slower.

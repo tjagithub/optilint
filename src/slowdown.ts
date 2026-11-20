@@ -1,9 +1,11 @@
+import type { Engine, Rule } from "./core/types.ts";
 import { SPEEDUPS } from "./speedups.ts";
 
+export type { Engine };
+
 /** The engine each `targets` entry runs on: it decides which bench results count. */
-export const TARGETS = { node: "v8", deno: "v8", chrome: "v8", edge: "v8", bun: "jsc", safari: "jsc" } as const;
+export const TARGETS = { node: "v8", deno: "v8", chrome: "v8", edge: "v8", bun: "jsc", safari: "jsc" } as const satisfies Record<string, Engine>;
 export type Target = keyof typeof TARGETS;
-export type Engine = (typeof TARGETS)[Target];
 export const ENGINES: readonly Engine[] = ["v8", "jsc"];
 
 /** The engines `targets` run on; every engine when unset or empty. */
@@ -35,3 +37,7 @@ export const offByDefault = (rule: string) => !allowed(rule, parseSlowdown(DEFAU
 
 /** `"34%"`, rounded up so that a maxSlowdown of that value lets the rule run. */
 export const percent = (x: number) => `${Math.ceil(x * 100 - 1e-9)}%`;
+
+/** Whether a rule with `engines` has one of them among the targets' engines. */
+// optilint-disable-next-line lookup-in-loop -- both lists hold at most two engines
+export const runsOn = (rule: Rule, engines: readonly Engine[]) => !rule.engines || engines.some((e) => rule.engines!.includes(e));

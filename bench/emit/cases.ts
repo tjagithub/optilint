@@ -78,4 +78,22 @@ export const CASES: EmitCase[] = [
       { label: "es2020 assign", code: fields, options: at(T.ES2020) },
     ],
   },
+  // delete-property is report-only: hand-written forms of what it finds and what it advises, same emit.
+  // V8 rolls back the last-added property's transition on delete, so the first and last property are timed apart.
+  {
+    id: "delete-first", inputs: "numbers", sizes: [10, 1000],
+    variants: [{ label: "delete o.a", code: "export function run(xs: number[]) {\n  const os: { a?: number; b: number; c: number; d?: number }[] = xs.map((x) => ({ a: x, b: x + 1, c: x + 2, d: x + 3 }));\n  for (const o of os) delete o.a;\n  let n = 0;\n  for (let k = 0; k < 4; k++) for (const o of os) n += o.b + o.c + (o.d ?? 0);\n  return n;\n}", options: at(T.ES2022) }, { label: "o.a = undefined", code: "export function run(xs: number[]) {\n  const os: { a?: number; b: number; c: number; d?: number }[] = xs.map((x) => ({ a: x, b: x + 1, c: x + 2, d: x + 3 }));\n  for (const o of os) o.a = undefined;\n  let n = 0;\n  for (let k = 0; k < 4; k++) for (const o of os) n += o.b + o.c + (o.d ?? 0);\n  return n;\n}", options: at(T.ES2022) }],
+  },
+  {
+    id: "delete-last", inputs: "numbers", sizes: [10, 1000],
+    variants: [{ label: "delete o.d", code: "export function run(xs: number[]) {\n  const os: { a?: number; b: number; c: number; d?: number }[] = xs.map((x) => ({ a: x, b: x + 1, c: x + 2, d: x + 3 }));\n  for (const o of os) delete o.d;\n  let n = 0;\n  for (let k = 0; k < 4; k++) for (const o of os) n += o.b + o.c + (o.a ?? 0);\n  return n;\n}", options: at(T.ES2022) }, { label: "o.d = undefined", code: "export function run(xs: number[]) {\n  const os: { a?: number; b: number; c: number; d?: number }[] = xs.map((x) => ({ a: x, b: x + 1, c: x + 2, d: x + 3 }));\n  for (const o of os) o.d = undefined;\n  let n = 0;\n  for (let k = 0; k < 4; k++) for (const o of os) n += o.b + o.c + (o.a ?? 0);\n  return n;\n}", options: at(T.ES2022) }],
+  },
+  {
+    id: "delete-dictionary", inputs: "numbers", sizes: [10, 1000],
+    variants: [{ label: "object + delete", code: "export function run(xs: number[]) {\n  const d: Record<string, number> = {};\n  for (const x of xs) { d[\"k\" + (x % 64)] = x; if (x % 3 === 0) delete d[\"k\" + ((x + 7) % 64)]; }\n  let n = 0;\n  for (const k in d) n += d[k]!;\n  return n;\n}", options: at(T.ES2022) }, { label: "Map", code: "export function run(xs: number[]) {\n  const d = new Map<string, number>();\n  for (const x of xs) { d.set(\"k\" + (x % 64), x); if (x % 3 === 0) d.delete(\"k\" + ((x + 7) % 64)); }\n  let n = 0;\n  for (const v of d.values()) n += v;\n  return n;\n}", options: at(T.ES2022) }],
+  },
+  {
+    id: "delete-dict-1024", inputs: "numbers", sizes: [1000],
+    variants: [{ label: "object + delete", code: "export function run(xs: number[]) {\n  const d: Record<string, number> = {};\n  for (const x of xs) { d[\"k\" + (x % 1024)] = x; if (x % 3 === 0) delete d[\"k\" + ((x + 7) % 1024)]; }\n  let n = 0;\n  for (const k in d) n += d[k]!;\n  return n;\n}", options: at(T.ES2022) }, { label: "Map", code: "export function run(xs: number[]) {\n  const d = new Map<string, number>();\n  for (const x of xs) { d.set(\"k\" + (x % 1024), x); if (x % 3 === 0) d.delete(\"k\" + ((x + 7) % 1024)); }\n  let n = 0;\n  for (const v of d.values()) n += v;\n  return n;\n}", options: at(T.ES2022) }],
+  },
 ];

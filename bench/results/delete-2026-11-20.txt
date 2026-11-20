@@ -1,0 +1,35 @@
+# bun bench/emit/run.ts --tiers all delete-first,delete-last,delete-dictionary,delete-dict-1024 (second of two runs; the first agreed within a few percent)
+................................
+tier           case               ratio (under 1: the right side is slower)            @10   @1000
+node:turbofan  delete-first       delete o.a ÷ o.a = undefined                      18.53x  18.40x
+node:turbofan  delete-last        delete o.d ÷ o.d = undefined                      18.60x  18.05x
+node:turbofan  delete-dictionary  object + delete ÷ Map                              0.81x   0.98x
+node:turbofan  delete-dict-1024   object + delete ÷ Map                              1.34x
+node:maglev    delete-first       delete o.a ÷ o.a = undefined                       7.54x   8.33x
+node:maglev    delete-last        delete o.d ÷ o.d = undefined                       7.41x   8.31x
+node:maglev    delete-dictionary  object + delete ÷ Map                              0.76x   0.94x
+node:maglev    delete-dict-1024   object + delete ÷ Map                              1.27x
+node:sparkplug delete-first       delete o.a ÷ o.a = undefined                       1.97x   2.21x
+node:sparkplug delete-last        delete o.d ÷ o.d = undefined                       1.96x   2.10x
+node:sparkplug delete-dictionary  object + delete ÷ Map                              0.75x   0.85x
+node:sparkplug delete-dict-1024   object + delete ÷ Map                              1.13x
+node:ignition  delete-first       delete o.a ÷ o.a = undefined                       1.65x   1.86x
+node:ignition  delete-last        delete o.d ÷ o.d = undefined                       1.62x   1.83x
+node:ignition  delete-dictionary  object + delete ÷ Map                              0.78x   0.84x
+node:ignition  delete-dict-1024   object + delete ÷ Map                              1.08x
+bun:ftl        delete-first       delete o.a ÷ o.a = undefined                       1.02x   0.93x
+bun:ftl        delete-last        delete o.d ÷ o.d = undefined                       1.05x   0.93x
+bun:ftl        delete-dictionary  object + delete ÷ Map                              0.54x   1.24x
+bun:ftl        delete-dict-1024   object + delete ÷ Map                              2.15x
+bun:dfg        delete-first       delete o.a ÷ o.a = undefined                       1.02x   0.88x
+bun:dfg        delete-last        delete o.d ÷ o.d = undefined                       1.01x   0.88x
+bun:dfg        delete-dictionary  object + delete ÷ Map                              0.66x   1.30x
+bun:dfg        delete-dict-1024   object + delete ÷ Map                              2.05x
+bun:baseline   delete-first       delete o.a ÷ o.a = undefined                       1.01x   0.91x
+bun:baseline   delete-last        delete o.d ÷ o.d = undefined                       1.00x   0.92x
+bun:baseline   delete-dictionary  object + delete ÷ Map                              1.43x   1.85x
+bun:baseline   delete-dict-1024   object + delete ÷ Map                              2.21x
+bun:llint      delete-first       delete o.a ÷ o.a = undefined                       1.08x   1.10x
+bun:llint      delete-last        delete o.d ÷ o.d = undefined                       1.08x   1.11x
+bun:llint      delete-dictionary  object + delete ÷ Map                              1.23x   1.50x
+bun:llint      delete-dict-1024   object + delete ÷ Map                              1.95x

@@ -56,7 +56,7 @@ function speed(name: string) {
 
 function ruleSection(r: Rule) {
   const fixes = r.tiers.length ? `Fixes: ${r.tiers.map((t) => `\`${t}\``).join(", ")}${r.obscure ? " (obscure)" : ""}.` : "Report only.";
-  const preset = r.recommended === false ? " Not in the recommended preset." : "";
+  const preset = (r.recommended === false ? " Not in the recommended preset." : "") + (r.engines ? ` Runs only when a target is on ${r.engines.map((e) => (e === "v8" ? "V8" : "JavaScriptCore")).join(" or ")}.` : "");
   const retired = r.retired ? `\n\n::: warning Retired\n${r.retired}\n:::` : "";
   return [`### ${r.name}`, r.description, r.why, `**${r.impact}** impact. ${fixes}${preset} ${speed(r.name)}`.trimEnd() + retired].join("\n\n");
 }

@@ -450,7 +450,7 @@
                 },
                 "delete-property": {
                   "$ref": "#/$defs/RuleValue",
-                  "markdownDescription": "`delete obj.prop`\n\nDeleting a property usually drops the object from fast hidden-class mode into slow dictionary mode for good. Set it to undefined, or use a Map for dynamic keys. On arrays, delete leaves a hole.\n\nmedium impact. Report only."
+                  "markdownDescription": "`delete obj.prop`\n\nOn V8, deleting a property drops the object from fast hidden-class mode into slow dictionary mode for good: reads measured 1.6–18x slower than after assigning undefined. JavaScriptCore keeps such objects fast. For a dictionary with many keys (hundreds or more), a Map is faster; with a few dozen, the object is. On arrays, delete leaves a hole.\n\nmedium impact. Report only."
                 },
                 "object-keys-emptiness": {
                   "$ref": "#/$defs/RuleValue",
@@ -713,7 +713,7 @@
         },
         "delete-property": {
           "$ref": "#/$defs/RuleValue",
-          "markdownDescription": "`delete obj.prop`\n\nDeleting a property usually drops the object from fast hidden-class mode into slow dictionary mode for good. Set it to undefined, or use a Map for dynamic keys. On arrays, delete leaves a hole.\n\nmedium impact. Report only."
+          "markdownDescription": "`delete obj.prop`\n\nOn V8, deleting a property drops the object from fast hidden-class mode into slow dictionary mode for good: reads measured 1.6–18x slower than after assigning undefined. JavaScriptCore keeps such objects fast. For a dictionary with many keys (hundreds or more), a Map is faster; with a few dozen, the object is. On arrays, delete leaves a hole.\n\nmedium impact. Report only."
         },
         "object-keys-emptiness": {
           "$ref": "#/$defs/RuleValue",

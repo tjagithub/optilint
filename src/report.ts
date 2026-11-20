@@ -122,6 +122,7 @@ const TIER_TEXT: [Tier, string][] = [
 export function formatExplain(r: Rule) {
   const fix = r.tiers.length ? `Fixes: ${TIER_TEXT.filter(([t]) => r.tiers.includes(t)).map(([, s]) => s).join("; ")}.` : "No fix; report only.";
   if (r.retired) return `${c.bold(r.name)}  ${c.dim("retired")} · group ${r.group}\n\n${r.description}\n\n${r.why}\n\n${c.dim(`Retired, so it never runs: ${r.retired}`)}`;
-  const notes = [r.obscure ? "Its fixes are obscure: --fix applies them only with --obscure." : "", r.recommended === false ? "Not in the recommended preset." : ""];
+  const engines = r.engines && `Measured a win on ${r.engines.map((e) => ENGINE_NAME[e]).join(" and ")} only, so it does not run when every target (config \`targets\`) is on another engine.`;
+  const notes = [engines ?? "", r.obscure ? "Its fixes are obscure: --fix applies them only with --obscure." : "", r.recommended === false ? "Not in the recommended preset." : ""];
   return `${c.bold(r.name)}  ${IMPACT_COLOR[r.impact](r.impact)} impact · group ${r.group}\n\n${r.description}\n\n${r.why}\n\n${c.dim([fix, ...notes, measured(r)].filter(Boolean).join(" "))}`;
 }

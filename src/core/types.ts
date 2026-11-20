@@ -48,6 +48,9 @@ export interface Finding {
   cpu?: number;
 }
 
+/** A JavaScript engine the bench measures: V8 (Node, Deno, Chrome, Edge) or JavaScriptCore (Bun, Safari). */
+export type Engine = "v8" | "jsc";
+
 export interface Rule {
   name: string;
   impact: Impact;
@@ -62,6 +65,8 @@ export interface Rule {
   /** Why it never runs, usually a measured loss (`bench/FINDINGS.md`). Its code, tests and bench case stay, so a
    * later bench run can bring it back. */
   retired?: string;
+  /** Engines where its advice measured a win (`bench/FINDINGS.md`): it does not run when every target is on another. */
+  engines?: readonly Engine[];
   group: string;
   description: string;
   why: string;

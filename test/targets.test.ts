@@ -8,9 +8,9 @@ const CLI = path.join(import.meta.dir, "..", "src", "cli.ts");
 // math-pow-to-mul measured faster on V8 but up to a third slower on JavaScriptCore (src/speedups.ts).
 const CODE = "export const f = (x: number) => x ** 2;\n";
 
-function rules(config: object | undefined) {
+function rules(config: object | undefined, code = CODE) {
   const d = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "optilint-targets-")));
-  fs.writeFileSync(path.join(d, "a.ts"), CODE);
+  fs.writeFileSync(path.join(d, "a.ts"), code);
   if (config) fs.writeFileSync(path.join(d, "optilint.json"), JSON.stringify(config));
   const r = Bun.spawnSync(["bun", CLI, "--format", "json", "a.ts"], { cwd: d });
   if (r.exitCode === 2) throw new Error(r.stderr.toString());
@@ -24,6 +24,13 @@ test("only the targets' engines count against maxSlowdown", () => {
   expect(rules({ targets: ["node", "bun"] })).toEqual([]);
   expect(rules({ targets: ["safari"] })).toEqual([]);
   expect(rules({ targets: [] })).toEqual([]);
+});
+
+test("an engine-only rule runs when some target is on its engine", () => {
+  const code = "export function f(o: { a?: number }) { delete o.a; }\n";
+  expect(rules(undefined, code)).toEqual(["delete-property"]);
+  expect(rules({ targets: ["node", "bun"] }, code)).toEqual(["delete-property"]);
+  expect(rules({ targets: ["bun", "safari"] }, code)).toEqual([]);
 });
 
 test("unknown targets are errors with a suggestion", () => {

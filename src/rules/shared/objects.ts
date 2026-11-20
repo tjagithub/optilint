@@ -117,7 +117,8 @@ export const deleteProperty: RuleDef = {
   impact: "medium",
   tiers: [],
   description: "`delete obj.prop`",
-  why: "Deleting a property usually drops the object from fast hidden-class mode into slow dictionary mode for good. Set it to undefined, or use a Map for dynamic keys. On arrays, delete leaves a hole.",
+  why: "On V8, deleting a property drops the object from fast hidden-class mode into slow dictionary mode for good: reads measured 1.6–18x slower than after assigning undefined. JavaScriptCore keeps such objects fast. For a dictionary with many keys (hundreds or more), a Map is faster; with a few dozen, the object is. On arrays, delete leaves a hole.",
+  engines: ["v8"],
   kinds: [K.DeleteExpression],
   check(node, ctx) {
     const target = unwrap((node as ts.DeleteExpression).expression);
@@ -126,7 +127,7 @@ export const deleteProperty: RuleDef = {
     if (ctx.isArray(target.expression) === "yes") {
       ctx.report(node, "`delete` on an array element leaves a hole and makes the array holey (slower element access); use splice or reassign.");
     } else if (isDictionary(target, ctx)) {
-      ctx.report(node, "This object is used as a dictionary (keys added and deleted at run time); a `Map` is faster for that.", undefined, "low");
+      ctx.report(node, "This object is used as a dictionary (keys added and deleted at run time); with many keys (hundreds or more), a `Map` is faster.", undefined, "low");
     } else {
       ctx.report(node, "`delete` switches the object to slow dictionary mode; assign `undefined` or use a Map for dynamic keys.");
     }

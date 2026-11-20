@@ -21,6 +21,7 @@ npm install @optilint/cli
 optilint                         # report on the current folder
 optilint src --diff              # preview fixes
 optilint src --fix               # apply exact and typed fixes
+optilint --ui                    # review by tier and pick fixes in the browser
 optilint --explain lookup-in-loop
 ```
 

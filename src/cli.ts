@@ -3,6 +3,7 @@ import fs from "node:fs";
 import { parseArgs } from "node:util";
 import { isMainThread } from "node:worker_threads";
 import { serve } from "./mcp.ts";
+import { startUi } from "./ui.ts";
 import { defaultCacheLocation } from "./cache.ts";
 import { formatExplain, formatJson, formatPretty, formatRules, ruleMeta, TOOL } from "./report.ts";
 import { allRules, retiredByName, ruleByName } from "./rules/index.ts";
@@ -44,6 +45,8 @@ Output:
   --explain RULE     explain a rule
   --print-schema K   print the JSON Schema of the config or the json output
   --mcp              run as an MCP server on stdio (tools: lint, fix, rules)
+  --ui               open a page in the browser to review findings by tier and
+                     apply the fixes you pick (served on 127.0.0.1)
   --version          print the version
   -h, --help         show this help
 
@@ -93,12 +96,17 @@ function parseOptions() {
       rule: { type: "string", multiple: true }, disable: { type: "string", multiple: true }, "min-impact": { type: "string" }, "max-slowdown": { type: "string" },
       format: { type: "string" }, project: { type: "string" }, config: { type: "string" },
       "list-rules": { type: "boolean" }, explain: { type: "string" }, "print-schema": { type: "string" },
-      help: { type: "boolean", short: "h" }, mcp: { type: "boolean" }, version: { type: "boolean" },
+      help: { type: "boolean", short: "h" }, mcp: { type: "boolean" }, ui: { type: "boolean" }, version: { type: "boolean" },
       "stdin-filename": { type: "string" }, workers: { type: "string" }, cache: { type: "boolean" }, "cache-location": { type: "string" }, ignore: { type: "string", multiple: true },
       profile: { type: "string", multiple: true },
     },
   });
 }
+
+const cliLayer = (values: ReturnType<typeof parseOptions>["values"]) => layer({
+  only: list(values.rule), disable: list(values.disable), ignore: values.ignore,
+  tier: values["fix-unsafe"] ? "assumed" : values.tier, obscure: values.obscure, minImpact: values["min-impact"], maxSlowdown: values["max-slowdown"],
+});
 
 async function main() {
   const { values, positionals } = guard(parse);
@@ -128,14 +136,16 @@ async function main() {
   const fix = !!(values.fix || values["fix-unsafe"] || values.diff);
   const workers = values.workers === undefined ? defaultWorkers() : Number(values.workers);
   if (!Number.isInteger(workers) || workers < 0) fail(`invalid --workers: ${values.workers}`);
+  if (values.ui) {
+    if (fix || stdinName || values.cache) fail("--ui takes no --fix, --diff, --stdin-filename or --cache");
+    const ui = await startUi({ request: guard(() => ({ cwd, paths: positionals, config: values.config, project: values.project, profiles: values.profile, layer: cliLayer(values) })), workers, open: true });
+    return console.log(`optilint UI: ${ui.url}\nPress Ctrl-C to stop.`);
+  }
   const { results, rules, config, errors, excluded } = await runParallel(guard(() => ({
     cwd, paths: positionals, buffer: stdinName ? { file: stdinName, text: text! } : undefined, fix,
     config: values.config, project: values.project, profiles: values.profile,
     cache: values.cache || values["cache-location"] ? (values["cache-location"] ?? defaultCacheLocation(cwd)) : undefined,
-    layer: layer({
-      only: list(values.rule), disable: list(values.disable), ignore: values.ignore,
-      tier: values["fix-unsafe"] ? "assumed" : values.tier, obscure: values.obscure, minImpact: values["min-impact"], maxSlowdown: values["max-slowdown"],
-    }),
+    layer: cliLayer(values),
   })), workers).catch((e: unknown) => {
     if (e instanceof UsageError) fail(e.message);
     throw e;

@@ -100,6 +100,17 @@ describe("cli", () => {
     });
     expect(result.fixes[0].artifactChanges[0].replacements[0].insertedContent.text).toBe("Array.from(xs).find((x) => x > 1)");
   });
+
+  test("github output is one workflow command per finding", () => {
+    const dir = project({ "src/a.ts": CODE });
+    const r = cli(["--format", "github"], undefined, dir);
+    expect(r.code).toBe(1);
+    const line = r.out.split("\n").find((l) => l.includes("filter-first"))!;
+    expect(line).toStartWith("::warning file=src/a.ts,line=2,col=11,");
+    expect(line).toContain("title=optilint filter-first::");
+    expect(line).toContain("[fix: ");
+    expect(r.out.trimEnd().split("\n").every((l) => l.startsWith("::"))).toBe(true);
+  });
 });
 
 describe("config", () => {

@@ -8,6 +8,7 @@ import { defaultCacheLocation } from "./cache.ts";
 import { formatExplain, formatJson, formatPretty, formatRules, ruleMeta, TOOL } from "./report.ts";
 import { allRules, retiredByName, ruleByName } from "./rules/index.ts";
 import { defaultWorkers, layer, runParallel, unifiedDiff, UsageError } from "./runner.ts";
+import { formatGithub } from "./github.ts";
 import { formatSarif } from "./sarif.ts";
 import { configSchema, outputSchema } from "./schema.ts";
 
@@ -39,7 +40,8 @@ Selecting:
                      code it never saw run drops to low impact (repeatable)
 
 Output:
-  --format FMT       pretty | json | sarif (default: pretty)
+  --format FMT       pretty | json | sarif | github (default: pretty; github: annotations
+                     for GitHub Actions)
   --stdin-filename F lint stdin as file F; with --fix, print the fixed text
   --list-rules       list all rules (with --format json: their metadata)
   --explain RULE     explain a rule
@@ -111,7 +113,7 @@ const cliLayer = (values: ReturnType<typeof parseOptions>["values"]) => layer({
 async function main() {
   const { values, positionals } = guard(parse);
   const format = values.format ?? "pretty";
-  if (!["pretty", "json", "sarif"].includes(format)) fail(`invalid --format: ${format}`);
+  if (!["pretty", "json", "sarif", "github"].includes(format)) fail(`invalid --format: ${format}`);
   if (values.help) return console.log(HELP);
   if (values.version) return console.log(`${TOOL.name} ${TOOL.version}`);
   if (values.mcp) return serve(process.cwd());
@@ -173,6 +175,7 @@ async function main() {
   const remaining = values.diff ? results.map((r) => ({ ...r, findings: [] })) : results;
   if (format === "json") console.log(formatJson(remaining, describe));
   else if (format === "sarif") console.log(formatSarif(remaining, rules, cwd));
+  else if (format === "github") { const out = formatGithub(remaining, cwd); if (out) console.log(out); }
   else if (!values.diff) console.log(formatPretty(remaining, cwd, fix, (f) => config.settingsFor(f)));
   // Findings set to "info" are advice; they do not fail a run.
   process.exit(remaining.some((r) => r.findings.some((f) => f.severity !== "info")) ? 1 : 0);

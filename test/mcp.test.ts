@@ -130,6 +130,7 @@ describe("tools", () => {
     const out = await tool("lint", { paths: ["../"] });
     expect(out.isError).toBe(true);
     expect(out.text).toContain("outside");
+    expect(out.text).toContain("run the optilint CLI from it");
     expect((await tool("fix", { code: "x", filename: "/etc/x.ts" })).isError).toBe(true);
     expect((await tool("fix", { paths: ["a.ts"], tier: "typd" })).text).toContain("invalid --tier");
     expect((await tool("lint", { paths: ["missing.ts"] })).text).toContain("no such file");

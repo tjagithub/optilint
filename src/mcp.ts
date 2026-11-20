@@ -91,7 +91,7 @@ class RpcError extends Error {
 function inside(root: string, p: string): string {
   const abs = path.resolve(root, p);
   const rel = path.relative(root, abs);
-  if (rel === ".." || rel.startsWith(`..${path.sep}`) || path.isAbsolute(rel)) throw new UsageError(`${p} is outside ${root}`);
+  if (rel === ".." || rel.startsWith(`..${path.sep}`) || path.isAbsolute(rel)) throw new UsageError(`${p} is outside ${root}, the only folder this server reads; for another project, start a server there or run the optilint CLI from it`);
   return abs;
 }
 

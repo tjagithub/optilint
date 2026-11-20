@@ -17,7 +17,7 @@ A fix marked `obscure` is correct but hard to read (`x | 0` for `Math.trunc`). A
 
 ## Running it
 
-Use the optilint MCP tools if you have them: `lint`, `fix` (returns a diff, writes only with `write: true`), and `rules`. Otherwise use the CLI:
+Use the optilint MCP tools if you have them: `lint`, `fix` (returns a diff, writes only with `write: true`), and `rules`. They read only inside the server's working directory; for another project, use the CLI from that project's folder:
 
 ```sh
 optilint src --format json          # findings, each with fix.tier and fix.assumes

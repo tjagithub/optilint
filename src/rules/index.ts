@@ -13,6 +13,7 @@ import { postMessageTransfer, typedArrayRoundTrip, typedArraySubarray } from "./
 import { objectKeysInLoop, regexpInLoop, stringFlattenInLoop } from "./shared/invariant.ts";
 import { shapeRules } from "./shared/shapes.ts";
 import { emitRules } from "./shared/emit.ts";
+import { reactRules } from "./shared/react.ts";
 import { passiveListener, scrollLayoutRead } from "./browser/events.ts";
 import { gpuSyncInFrame, perFrameAllocation } from "./browser/frames.ts";
 
@@ -26,6 +27,7 @@ const GROUPS: Record<string, readonly RuleDef[]> = {
   strings: [...stringRules, stringFlattenInLoop, regexpInLoop],
   objects: [...objectRules, objectKeysInLoop, ...shapeRules],
   typescript: emitRules,
+  react: reactRules,
   misc: [
     dateNow, powToMul, bitwiseTrunc, dynamicCode, domInLoop, argumentsObject, postMessageTransfer,
     passiveListener, scrollLayoutRead, gpuSyncInFrame, perFrameAllocation,

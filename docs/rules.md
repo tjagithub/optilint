@@ -10,6 +10,7 @@
 | Objects and shapes | `object-keys-in-loop`, `late-property`, `prototype-mutation` |
 | Browser and workers | `dom-in-loop`, `passive-listener`, `scroll-layout-read`, `gpu-sync-in-frame`, `per-frame-allocation`, `postmessage-transfer` |
 | TypeScript emit (tsconfig) | `downlevel-async`, `define-class-fields`, `downlevel-private-fields` |
+| React | `inline-prop-to-memo`, `inline-context-value`, `unstable-key` |
 | Engine | `object-assign-to-spread`, `delete-property`, `large-object-literal` (JSON.parse trick), `math-pow-to-mul`, `bitwise-trunc`, `math-minmax-spread`, `arguments-object`, `dynamic-code` |
 
 `optilint --list-rules` shows each rule's impact and fix tiers. `optilint --explain <rule>` says why it is faster, and what it measured.
@@ -41,6 +42,10 @@ Some well-known "tricks" no longer pay off in modern engines, so there are no ru
 ## TypeScript emit
 
 The `typescript` rules report a cost of what tsc emits, not of the code itself, so they fire only when the project's tsc writes its JavaScript (no `noEmit`, no `emitDeclarationOnly`) with a low `target`. They report once per file, at the first case, and the fix is in tsconfig. A bundler build (esbuild, Vite, SWC) uses its own target, so these rules stay quiet under `noEmit`.
+
+## React
+
+The `react` rules only report. `inline-prop-to-memo` and `inline-context-value` find values made during render that defeat `memo`, `PureComponent` or a context provider. They use React's types when present, and otherwise a `memo(...)` or `createContext(...)` declaration in view, which also covers Preact. React Compiler memoizes these values itself, so the two rules skip code under a `"use memo"` directive. `unstable-key` flags keys from `Math.random()`, `Date.now()`, `crypto.randomUUID()` or id generators, which remount the element on every render.
 
 ## Limitations
 

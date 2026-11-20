@@ -429,6 +429,32 @@
             }
           ]
         },
+        "react": {
+          "description": "The react group: inline-prop-to-memo, inline-context-value, unstable-key. A level for all of them, or settings per rule.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Level"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "inline-prop-to-memo": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "A `memo` or `PureComponent` component given an object, array, function or element made during render\n\n`memo` and `PureComponent` skip a render only when every prop is the same as last time (`Object.is`). An inline `{}`, `[]`, arrow or JSX element is a new value on every render, so the component re-renders every time and also pays for the comparison. Hoist constants out of the component, and wrap the rest in `useMemo` or `useCallback`. With React Compiler, this is done for you.\n\nmedium impact. Report only."
+                },
+                "inline-context-value": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "A context provider whose `value` is an object, array or function made during render\n\nEvery component that reads a context re-renders when its `value` changes (`Object.is`), however deep it is and even inside `memo`. A `value={{ user, setUser }}` built in render is new each time, so every consumer re-renders whenever the provider does. Wrap the value in `useMemo` (and its functions in `useCallback`), or hoist it. With React Compiler, this is done for you.\n\nmedium impact. Report only."
+                },
+                "unstable-key": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "A JSX `key` from `Math.random()`, `crypto.randomUUID()`, `Date.now()` or a fresh id\n\nReact matches elements across renders by `key`. A key that changes on every render makes React unmount the old element and mount a new one each time: its whole subtree is rebuilt, its DOM replaced, and its state and effects reset. Key by a stable id from the data, or generate ids once, when the data is created.\n\nhigh impact. Report only."
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
         "misc": {
           "description": "The misc group: date-now, math-pow-to-mul, bitwise-trunc, dynamic-code, dom-in-loop, arguments-object, postmessage-transfer, passive-listener, scroll-layout-read, gpu-sync-in-frame, per-frame-allocation. A level for all of them, or settings per rule.",
           "anyOf": [
@@ -646,6 +672,18 @@
         "downlevel-private-fields": {
           "$ref": "#/$defs/RuleValue",
           "markdownDescription": "`#private` members compiled to WeakMaps by a `target` below ES2022\n\nBelow ES2022, TypeScript emulates `#private` fields and methods with a WeakMap or WeakSet per member and a checking helper on every access. Construction and access measured 5x to over 200x slower than native private fields, on V8 and JSC. Raise `target` to ES2022, or use TypeScript's `private` keyword, which emits a plain property.\n\nhigh impact. Report only."
+        },
+        "inline-prop-to-memo": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "A `memo` or `PureComponent` component given an object, array, function or element made during render\n\n`memo` and `PureComponent` skip a render only when every prop is the same as last time (`Object.is`). An inline `{}`, `[]`, arrow or JSX element is a new value on every render, so the component re-renders every time and also pays for the comparison. Hoist constants out of the component, and wrap the rest in `useMemo` or `useCallback`. With React Compiler, this is done for you.\n\nmedium impact. Report only."
+        },
+        "inline-context-value": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "A context provider whose `value` is an object, array or function made during render\n\nEvery component that reads a context re-renders when its `value` changes (`Object.is`), however deep it is and even inside `memo`. A `value={{ user, setUser }}` built in render is new each time, so every consumer re-renders whenever the provider does. Wrap the value in `useMemo` (and its functions in `useCallback`), or hoist it. With React Compiler, this is done for you.\n\nmedium impact. Report only."
+        },
+        "unstable-key": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "A JSX `key` from `Math.random()`, `crypto.randomUUID()`, `Date.now()` or a fresh id\n\nReact matches elements across renders by `key`. A key that changes on every render makes React unmount the old element and mount a new one each time: its whole subtree is rebuilt, its DOM replaced, and its state and effects reset. Key by a stable id from the data, or generate ids once, when the data is created.\n\nhigh impact. Report only."
         },
         "date-now": {
           "$ref": "#/$defs/RuleValue",

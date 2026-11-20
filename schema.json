@@ -66,6 +66,29 @@
       "pattern": "^(\\d+(\\.\\d+)?%|any)$",
       "description": "Skip rules whose fix measured more than this much slower than the original code on some engine, compiler tier or input size the bench covers. Default \"10%\", to allow for measurement noise; \"0%\" drops every fix that was slower anywhere; \"any\" runs them all. Rules without a measured fix always run."
     },
+    "domains": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Groups for one library or tool. They join the presets only where a package.json, in the file's folder or above, depends on one of their packages.",
+      "properties": {
+        "typescript": {
+          "description": "auto (default): in the presets when a package.json lists typescript; on: always; off: never. Explicit rule and group settings still apply.",
+          "enum": [
+            "auto",
+            "on",
+            "off"
+          ]
+        },
+        "react": {
+          "description": "auto (default): in the presets when a package.json lists react or preact; on: always; off: never. Explicit rule and group settings still apply.",
+          "enum": [
+            "auto",
+            "on",
+            "off"
+          ]
+        }
+      }
+    },
     "rules": {
       "$ref": "#/$defs/Rules"
     },

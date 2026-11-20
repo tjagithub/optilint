@@ -54,6 +54,8 @@ export interface Rule {
   tiers: readonly Tier[];
   /** Off unless enabled, under the "recommended" preset. */
   recommended?: false;
+  /** Packages that do its job (React Compiler memoizes): with one in the dependencies, presets leave it out. */
+  redundantWith?: readonly string[];
   /** Its fixes are obscure (see Fix). */
   obscure?: true;
   /** Why it never runs, usually a measured loss (`bench/FINDINGS.md`). Its code, tests and bench case stay, so a

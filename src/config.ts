@@ -3,13 +3,14 @@ import path from "node:path";
 import ts from "typescript";
 import type { FileSettings, RuleSetting } from "./core/engine.ts";
 import { globMatch } from "./core/glob.ts";
-import { allRules, groups } from "./rules/index.ts";
-import type { Impact, Severity, Tier } from "./core/types.ts";
+import { allRules, DOMAINS, groups } from "./rules/index.ts";
+import type { Impact, Rule, Severity, Tier } from "./core/types.ts";
 import { DEFAULT_MAX_SLOWDOWN, parseSlowdown } from "./slowdown.ts";
 import { validate } from "./validate.ts";
 
 export type Level = "off" | "on" | Severity;
 export type Preset = "recommended" | "all" | "none";
+export type DomainLevel = "auto" | "on" | "off";
 export type RuleValue = Level | { level: Level; tier?: Tier | "none" };
 /** `preset`, then group names (a level, or an object of their rules), then rule names. */
 export type RulesConfig = { [key: string]: Preset | RuleValue | Record<string, RuleValue> | undefined };
@@ -31,6 +32,7 @@ export interface RawConfig {
   obscure?: boolean;
   minImpact?: Impact;
   maxSlowdown?: string;
+  domains?: Record<string, DomainLevel>;
   rules?: RulesConfig;
   overrides?: Override[];
 }
@@ -123,15 +125,36 @@ function set(state: Map<string, RuleSetting>, name: string, value: RuleValue) {
   state.set(name, { ...prev, ...(level !== "on" ? { severity: level } : {}), ...(tier ? { floor: tier } : {}) });
 }
 
-function preset(state: Map<string, RuleSetting>, p: Preset) {
+/** `keep` drops rules from the preset (domains not in use, rules made redundant), not from explicit settings. */
+type Keep = (r: Rule) => boolean;
+
+function preset(state: Map<string, RuleSetting>, p: Preset, keep: Keep) {
   state.clear();
-  for (const r of allRules) if (p === "all" || (p === "recommended" && r.recommended !== false)) state.set(r.name, {});
+  for (const r of allRules) if ((p === "all" || (p === "recommended" && r.recommended !== false)) && keep(r)) state.set(r.name, {});
+}
+
+/** Package names that any package.json from `dir` upward depends on (all four kinds of dependencies). */
+function dependencies(dir: string, cache: Map<string, ReadonlySet<string>>): ReadonlySet<string> {
+  const hit = cache.get(dir);
+  if (hit) return hit;
+  const parent = path.dirname(dir);
+  const out = new Set(parent === dir ? [] : dependencies(parent, cache));
+  // A broken package.json is not ours to report.
+  try {
+    const pkg = JSON.parse(fs.readFileSync(path.join(dir, "package.json"), "utf8")) as Record<string, unknown>;
+    for (const key of ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"]) {
+      const deps = pkg[key];
+      if (deps && typeof deps === "object") for (const name of Object.keys(deps)) out.add(name);
+    }
+  } catch {}
+  cache.set(dir, out);
+  return out;
 }
 
 /** Apply one `rules` object: preset first, then groups, then single rules, so the most specific wins. */
-export function applyRules(state: Map<string, RuleSetting>, rules?: RulesConfig) {
+export function applyRules(state: Map<string, RuleSetting>, rules?: RulesConfig, keep: Keep = () => true) {
   if (!rules) return;
-  if (rules.preset) preset(state, rules.preset as Preset);
+  if (rules.preset) preset(state, rules.preset as Preset, keep);
   for (const [key, value] of Object.entries(rules)) {
     if (!groups.includes(key) || value === undefined) continue;
     if (typeof value === "string") {
@@ -166,6 +189,8 @@ export function loadConfig(file: string | undefined, cli: CliLayer = {}, cwd = p
   ];
   const overrides = layers.flatMap((l) => (l.raw.overrides ?? []).map((o) => ({ base: l.base, o })));
   const cache = new Map<string, FileSettings>();
+  const depCache = new Map<string, ReadonlySet<string>>();
+  const domainLevels: Record<string, DomainLevel> = Object.assign({}, ...layers.map((l) => l.raw.domains));
 
   return {
     file: file && path.resolve(cwd, file),
@@ -179,13 +204,20 @@ export function loadConfig(file: string | undefined, cli: CliLayer = {}, cwd = p
       const hit = cache.get(f);
       if (hit) return hit;
       const state = new Map<string, RuleSetting>();
-      preset(state, "recommended");
+      const deps = dependencies(path.dirname(f), depCache);
+      const keep: Keep = (r) => {
+        const packages = DOMAINS[r.group];
+        const level = domainLevels[r.group] ?? "auto";
+        if (packages && (level === "off" || (level === "auto" && !packages.some((p) => deps.has(p))))) return false;
+        return !r.redundantWith?.some((p) => deps.has(p));
+      };
+      preset(state, "recommended", keep);
       let tier: Tier = last("tier") ?? "typed";
       let obscure = last("obscure") ?? false;
-      for (const l of layers) applyRules(state, l.raw.rules);
+      for (const l of layers) applyRules(state, l.raw.rules, keep);
       for (const { base, o } of overrides) {
         if (!matches(o.include, base, f)) continue;
-        applyRules(state, o.rules);
+        applyRules(state, o.rules, keep);
         tier = o.tier ?? tier;
         obscure = o.obscure ?? obscure;
       }

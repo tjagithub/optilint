@@ -34,6 +34,12 @@ const GROUPS: Record<string, readonly RuleDef[]> = {
   ],
 };
 
+/** Groups for one library or tool, with the packages that turn them on (config `domains`, default "auto"). */
+export const DOMAINS: Readonly<Record<string, readonly string[]>> = {
+  typescript: ["typescript"],
+  react: ["react", "preact"],
+};
+
 const registered: readonly Rule[] = Object.entries(GROUPS).flatMap(([group, rules]) => rules.map((r) => ({ ...r, group })));
 /** The rules that can run. Retired rules are left out of presets, config, schema and output. */
 export const allRules: readonly Rule[] = registered.filter((r) => !r.retired);

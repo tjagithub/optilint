@@ -1,7 +1,7 @@
 import { TIERS } from "./core/fix.ts";
-import { allRules, groups } from "./rules/index.ts";
+import { allRules, DOMAINS, groups } from "./rules/index.ts";
 import type { Rule } from "./core/types.ts";
-import { FLOORS, IMPACTS, LEVELS, PRESETS } from "./validate.ts";
+import { DOMAIN_LEVELS, FLOORS, IMPACTS, LEVELS, PRESETS } from "./validate.ts";
 
 const ref = (name: string) => ({ $ref: `#/$defs/${name}` });
 const strings = { type: "array", items: { type: "string" } };
@@ -49,6 +49,12 @@ export function configSchema() {
       maxSlowdown: {
         type: "string", pattern: "^(\\d+(\\.\\d+)?%|any)$",
         description: "Skip rules whose fix measured more than this much slower than the original code on some engine, compiler tier or input size the bench covers. Default \"10%\", to allow for measurement noise; \"0%\" drops every fix that was slower anywhere; \"any\" runs them all. Rules without a measured fix always run.",
+      },
+      domains: {
+        type: "object", additionalProperties: false,
+        description: "Groups for one library or tool. They join the presets only where a package.json, in the file's folder or above, depends on one of their packages.",
+        properties: Object.fromEntries(Object.entries(DOMAINS).map(([d, pkgs]) => [d, enumOf(DOMAIN_LEVELS,
+          `auto (default): in the presets when a package.json lists ${pkgs.join(" or ")}; on: always; off: never. Explicit rule and group settings still apply.`)])),
       },
       rules: ref("Rules"),
       overrides: {

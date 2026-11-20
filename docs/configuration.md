@@ -11,6 +11,7 @@ optilint uses the nearest `optilint.json` or `optilint.jsonc` (or an `"optilint"
   "obscure": false,
   "minImpact": "low",
   "maxSlowdown": "10%",
+  "domains": { "react": "auto" },
   "rules": {
     "preset": "recommended",
     "async": "warn",
@@ -28,6 +29,7 @@ optilint uses the nearest `optilint.json` or `optilint.jsonc` (or an `"optilint"
 - `obscure: true` lets `--fix` apply fixes that are correct but hard to read, such as `Math.trunc(x)` → `x | 0`.
 - `minImpact` hides findings below `high`, `medium` or `low` impact.
 - `maxSlowdown` (default `"10%"`) drops rules whose fix was measured more than that much slower than the original code on some engine, compiler tier or input size. The 10% allows for measurement noise. `"0%"` drops every fix that was slower anywhere, and `"any"` runs them all. Rules without a measured fix (report-only ones) always run. `optilint --explain <rule>` shows its measured range.
+- `domains` are groups for one library or tool: `typescript` (package `typescript`) and `react` (`react` or `preact`). With `"auto"` (the default), a domain joins the presets only for files where a `package.json` in the file's folder or above depends on one of its packages, so monorepo packages get their own. `"on"` and `"off"` ignore the dependencies. The presets also leave out rules that a dependency makes redundant: `inline-prop-to-memo` and `inline-context-value` with React Compiler (`babel-plugin-react-compiler`). Naming a group or rule under `rules` turns it on anyway.
 - Globs are relative to the file that declares them; a folder name also covers what is inside it. `extends` paths are relative too, and later files win.
 - Unknown keys, rules and groups are errors with a suggestion. `schema.json` (also printed by `optilint --print-schema config`) gives editors completion and hover docs.
 

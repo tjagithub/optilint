@@ -45,7 +45,7 @@ The `typescript` rules report a cost of what tsc emits, not of the code itself, 
 
 ## React
 
-The `react` rules only report. `inline-prop-to-memo` and `inline-context-value` find values made during render that defeat `memo`, `PureComponent` or a context provider. They use React's types when present, and otherwise a `memo(...)` or `createContext(...)` declaration in view, which also covers Preact. React Compiler memoizes these values itself, so the two rules skip code under a `"use memo"` directive. `unstable-key` flags keys from `Math.random()`, `Date.now()`, `crypto.randomUUID()` or id generators, which remount the element on every render.
+The `react` rules only report. `inline-prop-to-memo` and `inline-context-value` find values made during render that defeat `memo`, `PureComponent` or a context provider. They use React's types when present, and otherwise a `memo(...)` or `createContext(...)` declaration in view, which also covers Preact. React Compiler memoizes these values itself, so the presets leave the two rules out when `babel-plugin-react-compiler` is a dependency, and they skip code under a `"use memo"` directive. The `react` and `typescript` groups are [domains](configuration.md): they run where a `package.json` lists `react` or `preact`, or `typescript`. `unstable-key` flags keys from `Math.random()`, `Date.now()`, `crypto.randomUUID()` or id generators, which remount the element on every render.
 
 ## Limitations
 

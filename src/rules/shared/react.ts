@@ -106,11 +106,13 @@ const valueOf = (a: ts.JsxAttribute) => a.initializer && ts.isJsxExpression(a.in
 const nameOf = (a: ts.JsxAttribute) => a.name.getText();
 const list = (names: string[]) => names.length === 1 ? names[0]! : `${names.slice(0, -1).join(", ")} and ${names.at(-1)}`;
 const SKIPPED_PROPS = new Set(["key", "ref"]);
+const COMPILER = ["babel-plugin-react-compiler", "react-compiler-runtime"];
 
 export const inlinePropToMemo: RuleDef = {
   name: "inline-prop-to-memo",
   impact: "medium",
   tiers: [],
+  redundantWith: COMPILER,
   description: "A `memo` or `PureComponent` component given an object, array, function or element made during render",
   why: "`memo` and `PureComponent` skip a render only when every prop is the same as last time (`Object.is`). An inline `{}`, `[]`, arrow or JSX element is a new value on every render, so the component re-renders every time and also pays for the comparison. Hoist constants out of the component, and wrap the rest in `useMemo` or `useCallback`. With React Compiler, this is done for you.",
   kinds: [K.JsxOpeningElement, K.JsxSelfClosingElement],
@@ -130,6 +132,7 @@ export const inlineContextValue: RuleDef = {
   name: "inline-context-value",
   impact: "medium",
   tiers: [],
+  redundantWith: COMPILER,
   description: "A context provider whose `value` is an object, array or function made during render",
   why: "Every component that reads a context re-renders when its `value` changes (`Object.is`), however deep it is and even inside `memo`. A `value={{ user, setUser }}` built in render is new each time, so every consumer re-renders whenever the provider does. Wrap the value in `useMemo` (and its functions in `useCallback`), or hoist it. With React Compiler, this is done for you.",
   kinds: [K.JsxOpeningElement, K.JsxSelfClosingElement],

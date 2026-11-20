@@ -1,11 +1,12 @@
 import { TIERS } from "./core/fix.ts";
-import { allRules, groups, retiredByName, ruleByName } from "./rules/index.ts";
+import { allRules, DOMAINS, groups, retiredByName, ruleByName } from "./rules/index.ts";
 import { parseSlowdown } from "./slowdown.ts";
 
 export const LEVELS = ["off", "on", "info", "warn", "error"];
 export const PRESETS = ["recommended", "all", "none"];
 export const IMPACTS = ["low", "medium", "high"];
 export const FLOORS = ["none", ...TIERS];
+export const DOMAIN_LEVELS = ["auto", "on", "off"];
 
 type Obj = Record<string, unknown>;
 const isObj = (v: unknown): v is Obj => typeof v === "object" && v !== null && !Array.isArray(v);
@@ -111,6 +112,7 @@ const strings: Check = (e, at, v) => void e.strings(at, v);
 const tier: Check = (e, at, v) => void e.oneOf(at, v, TIERS);
 const obscure: Check = (e, at, v) => typeof v === "boolean" || e.add(at, "expected true or false");
 const rules: Check = validateRules;
+const domainLevel: Check = (e, at, v) => void e.oneOf(at, v, DOMAIN_LEVELS);
 const OVERRIDE: Record<string, Check> = { include: strings, tier, obscure, rules };
 
 // One entry per config key: adding a key means adding its check here (and to schema.ts).
@@ -123,6 +125,7 @@ const CONFIG: Record<string, Check> = {
   obscure,
   minImpact: (e, at, v) => void e.oneOf(at, v, IMPACTS),
   maxSlowdown: (e, at, v) => parseSlowdown(v) !== undefined || e.add(at, `expected a percentage such as "10%", or "any", got ${show(v)}`),
+  domains: (e, at, v) => checkObject(e, at, v, Object.fromEntries(Object.keys(DOMAINS).map((d) => [d, domainLevel]))),
   rules,
   overrides: (e, at, v) => {
     if (!Array.isArray(v)) return e.add(at, "expected an array");

@@ -6,7 +6,7 @@ import type { EsTarget } from "./core/es.ts";
 import { globMatch } from "./core/glob.ts";
 import { allRules, DOMAINS, groups } from "./rules/index.ts";
 import type { Impact, Rule, Severity, Tier } from "./core/types.ts";
-import { DEFAULT_MAX_SLOWDOWN, parseSlowdown } from "./slowdown.ts";
+import { DEFAULT_MAX_SLOWDOWN, enginesOf, parseSlowdown, type Engine, type Target } from "./slowdown.ts";
 import { validate } from "./validate.ts";
 
 export type Level = "off" | "on" | Severity;
@@ -35,6 +35,7 @@ export interface RawConfig {
   target?: EsTarget;
   minImpact?: Impact;
   maxSlowdown?: string;
+  targets?: Target[];
   domains?: Record<string, DomainLevel>;
   rules?: RulesConfig;
   overrides?: Override[];
@@ -54,6 +55,8 @@ export interface Config {
   minImpact: Impact;
   /** Rules whose fix measured more than this much slower anywhere do not run (0.1 = 10%; `src/slowdown.ts`). */
   maxSlowdown: number;
+  /** The engines `targets` run on: only their bench results count against maxSlowdown. */
+  engines: readonly Engine[];
   /** Whether files.include / files.ignore select `file` (an absolute path). */
   selects(file: string): boolean;
   settingsFor(file: string): FileSettings;
@@ -199,6 +202,7 @@ export function loadConfig(file: string | undefined, cli: CliLayer = {}, cwd = p
     file: file && path.resolve(cwd, file),
     minImpact: cli.minImpact ?? last("minImpact") ?? "low",
     maxSlowdown: cli.maxSlowdown ?? parseSlowdown(last("maxSlowdown") ?? DEFAULT_MAX_SLOWDOWN)!,
+    engines: enginesOf(last("targets")),
     selects(f) {
       if (include && !matches(include.raw.files!.include!, include.base, f)) return false;
       return !ignores.some((i) => i.globs.length && matches(i.globs, i.base, f));

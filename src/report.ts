@@ -3,7 +3,17 @@ import type { FileResult } from "./core/engine.ts";
 import pkg from "../package.json" with { type: "json" };
 import { applies, DEFAULT_SETTINGS, type FileSettings } from "./core/engine.ts";
 import type { Finding, Impact, Rule, Tier } from "./core/types.ts";
-import { DEFAULT_MAX_SLOWDOWN, offByDefault, percent, worstSlowdown } from "./slowdown.ts";
+import { allowed, DEFAULT_MAX_SLOWDOWN, ENGINES, offByDefault, parseSlowdown, percent, TARGETS, worstSlowdown } from "./slowdown.ts";
+
+const ENGINE_NAME = { v8: "V8", jsc: "JavaScriptCore" };
+
+/** ` Targets on V8 alone (node, …) run it.` when one engine's results keep it within the default maxSlowdown. */
+function targetsHint(rule: string) {
+  const ok = ENGINES.filter((e) => allowed(rule, parseSlowdown(DEFAULT_MAX_SLOWDOWN)!, [e]));
+  if (ok.length !== 1) return "";
+  const names = Object.entries(TARGETS).filter(([, e]) => e === ok[0]).map(([t]) => t);
+  return ` Targets on ${ENGINE_NAME[ok[0]!]} alone (${names.join(", ")}) run it.`;
+}
 import { MEASURED, SPEEDUPS } from "./speedups.ts";
 
 export const TOOL = { name: "optilint", version: pkg.version };
@@ -89,7 +99,7 @@ function measured(r: Rule) {
   const slow = worstSlowdown(r.name) ?? 0;
   if (!slow) return text;
   const worse = `${text} At worst ${percent(slow)} slower than the original on some tier.`;
-  return offByDefault(r.name) ? `${worse} So it is off by default (maxSlowdown ${DEFAULT_MAX_SLOWDOWN}); set maxSlowdown to ${percent(slow)} or more to run it.` : worse;
+  return offByDefault(r.name) ? `${worse} So it is off by default (maxSlowdown ${DEFAULT_MAX_SLOWDOWN}); set maxSlowdown to ${percent(slow)} or more to run it.${targetsHint(r.name)}` : worse;
 }
 const tiersText = (r: Rule) => (r.tiers.length ? `fix: ${r.tiers.join("/")}${r.obscure ? ", obscure" : ""}` : "");
 
@@ -97,7 +107,7 @@ export function formatRules(rules: readonly Rule[]) {
   const pad = rules.reduce((n, r) => Math.max(n, r.name.length), 0);
   return rules.map((r) => {
     const fix = r.tiers.length ? c.green(` [${tiersText(r)}]`) : "";
-    const off = offByDefault(r.name) ? c.dim(` (up to ${percent(worstSlowdown(r.name)!)} slower on some tier: off unless maxSlowdown allows it)`)
+    const off = offByDefault(r.name) ? c.dim(` (up to ${percent(worstSlowdown(r.name)!)} slower on some tier: off unless maxSlowdown or targets allow it)`)
       : r.recommended === false ? c.dim(" (not recommended)") : "";
     return `${c.cyan(r.name.padEnd(pad))}  ${IMPACT_COLOR[r.impact](r.impact.padEnd(6))}  ${r.description}${fix}${off}`;
   }).join("\n");

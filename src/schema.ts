@@ -3,6 +3,7 @@ import { TIERS } from "./core/fix.ts";
 import { allRules, DOMAINS, groups } from "./rules/index.ts";
 import type { Rule } from "./core/types.ts";
 import { DOMAIN_LEVELS, FLOORS, IMPACTS, LEVELS, PRESETS } from "./validate.ts";
+import { TARGETS } from "./slowdown.ts";
 
 const ref = (name: string) => ({ $ref: `#/$defs/${name}` });
 const strings = { type: "array", items: { type: "string" } };
@@ -52,6 +53,10 @@ export function configSchema() {
       maxSlowdown: {
         type: "string", pattern: "^(\\d+(\\.\\d+)?%|any)$",
         description: "Skip rules whose fix measured more than this much slower than the original code on some engine, compiler tier or input size the bench covers. Default \"10%\", to allow for measurement noise; \"0%\" drops every fix that was slower anywhere; \"any\" runs them all. Rules without a measured fix always run.",
+      },
+      targets: {
+        type: "array", uniqueItems: true, items: { enum: Object.keys(TARGETS) },
+        description: "Where the code runs. Only the engines of these targets (V8: node, deno, chrome, edge; JavaScriptCore: bun, safari) count against maxSlowdown, so a fix that is slower only on the other engine can run. Unset: every engine.",
       },
       domains: {
         type: "object", additionalProperties: false,

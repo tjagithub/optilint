@@ -56,7 +56,7 @@ Every fix has a tier:
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, tests and benchmarks, and how to add a rule.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, tests and benchmarks, and how to add a rule, and [ROADMAP.md](ROADMAP.md) for what's planned.
 
 ## License
 

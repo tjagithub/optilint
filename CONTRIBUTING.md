@@ -31,6 +31,18 @@ optilint --version   # same as `bun src/cli.ts --version`
 
 `src/` must not use Bun-only APIs: `test/node.test.ts` runs the Node bundle, and `src/` projects only get Node's types.
 
+## What makes a rule
+
+A rule must be:
+
+- **Measured:** a win in `bench/` on every engine it runs on. Shared rules run on V8 and JavaScriptCore and may be at most 10% slower on any compiler tier (`maxSlowdown`). Check performance folklore against current engine source before benchmarking it; [ROADMAP.md](ROADMAP.md#wont-do) lists myths already ruled out.
+- **Type-aware** where syntax is ambiguous: `ctx.isArray(...)` and `byType`, not variable names.
+- **Specific:** concrete AST `kinds`.
+- **Low on false positives:** run it on real projects, and account for aliasing, control flow and loop invariance.
+- **Actionable:** a fix at an honest tier, or a report that names the change.
+
+Messages say a pattern "can" be slow, never that it "deopts": optilint cannot see deoptimizations, inline-cache state or OSR exits.
+
 ## Adding a rule
 
 - Declare `kinds` and `tiers`, and report with `ctx.report(node, message, fix(tier, edits, assumes))` from `src/core/fix.ts`.

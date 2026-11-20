@@ -34,13 +34,17 @@ export class ProjectResolver {
   forFile(file: string): Project {
     const start = this.explicit ?? this.find(path.dirname(file));
     if (!start) return NO_PROJECT;
-    const configPath = this.owner(start, path.resolve(file), new Set()) ?? start;
-    let project = this.projects.get(configPath);
+    const owner = this.owner(start, path.resolve(file), new Set());
+    const configPath = owner ?? start;
+    const key = owner ? configPath : `${configPath}\0unlisted`;
+    let project = this.projects.get(key);
     if (!project) {
       const parsed = this.parse(configPath);
       const ambient = parsed.fileNames.filter((f) => /\.d\.[cm]?ts$/.test(f));
-      project = { configPath, options: { ...DEFAULT_OPTIONS, ...parsed.options }, ambient };
-      this.projects.set(configPath, project);
+      // A file the config does not list (a fixture beside `src/`) takes its options, but tsc never emits it.
+      const options = { ...DEFAULT_OPTIONS, ...parsed.options, ...(owner ? {} : { noEmit: true }) };
+      project = { configPath, options, ambient };
+      this.projects.set(key, project);
     }
     return project;
   }

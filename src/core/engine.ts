@@ -43,10 +43,10 @@ export interface FileResult {
   fixesApplied: number;
 }
 
-/** The options every lint program uses: the project's, with JS allowed and nothing emitted. */
 /** The project's own tsc writes its JavaScript; programOptions hides this, since optilint never emits. */
 export const emits = (project?: ts.CompilerOptions) => !!project && !project.noEmit && !project.emitDeclarationOnly;
 
+/** The options every lint program uses: the project's, with JS allowed and nothing emitted. */
 export const programOptions = (project?: ts.CompilerOptions): ts.CompilerOptions => ({
   ...DEFAULT_OPTIONS, ...project, noEmit: true, allowJs: true, checkJs: false,
 });

@@ -42,3 +42,13 @@ test("the tsconfig is looked up from each linted file, not from the cwd", () => 
   pkg(path.join(ws, "two"), { include: ["*.ts"] });
   expect(tierOf(ws, ["one/a.ts", "two/a.ts"])).toEqual(["typed", "typed"]);
 });
+
+test("the emit rules skip files the tsconfig does not list, which tsc never emits", () => {
+  const lib = path.join(root, "lib");
+  fs.mkdirSync(path.join(lib, "src"), { recursive: true });
+  fs.mkdirSync(path.join(lib, "tests", "fixture"), { recursive: true });
+  fs.writeFileSync(path.join(lib, "tsconfig.json"), JSON.stringify({ compilerOptions: { target: "es2015" }, include: ["src"] }));
+  for (const f of ["src/a.ts", "tests/fixture/a.ts"]) fs.writeFileSync(path.join(lib, f), "export const f = async () => 1;\n");
+  const { results } = run({ cwd: lib, paths: ["src", "tests"], fix: false, layer: { only: ["downlevel-async"] } });
+  expect(results.filter((r) => r.findings.length).map((r) => path.relative(lib, r.file))).toEqual(["src/a.ts"]);
+});

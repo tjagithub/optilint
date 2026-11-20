@@ -9,6 +9,19 @@
 - `--stdin-filename path/to/file.ts` lints stdin as that file; with `--fix` it prints the fixed text. Editors use this for unsaved buffers.
 - The exit code is 1 when findings remain (findings set to `info` do not count) and 2 on usage errors.
 
+## GitHub Actions
+
+[optilint-action](https://github.com/tjagithub/optilint-action) runs optilint on a pull request and shows its findings as annotations on the diff:
+
+```yaml
+- uses: actions/checkout@v7
+  with:
+    persist-credentials: false
+- uses: tjagithub/optilint-action@v0
+```
+
+Inputs: `paths`, `version`, `working-directory`, `min-impact`, `fail-on` (`findings`, `error` or `never`), `sarif` (also upload to code scanning; needs `security-events: write`) and `args`. It only reports; apply fixes where you can review them.
+
 ## VS Code
 
 The optilint extension shows findings as diagnostics with quick fixes, adds a fix-all command and a sidebar grouped by tier, and gives `optilint.json` completion. It ships its own copy of optilint.

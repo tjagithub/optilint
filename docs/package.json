@@ -6,10 +6,12 @@
     "gen": "bun ../scripts/site.ts",
     "dev": "bun run gen && vitepress dev",
     "build": "bun run gen && vitepress build",
-    "preview": "vitepress preview"
+    "preview": "vitepress preview",
+    "deploy": "bun run build && wrangler pages deploy .vitepress/dist --project-name optilint --branch main"
   },
   "devDependencies": {
     "vitepress": "^1.6.4",
-    "vue": "^3.5.13"
+    "vue": "^3.5.13",
+    "wrangler": "^4.166.0"
   }
 }

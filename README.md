@@ -45,7 +45,7 @@ Every fix has a tier:
 
 - [Configuration](docs/configuration.md): `optilint.json`, presets, overrides, disable comments.
 - [Rules](docs/rules.md): what each rule does, how fixes are measured, and what is left out on purpose.
-- [Editors, CI and agents](docs/integrations.md): JSON and SARIF output, the VS Code extension, the MCP server and the agent skill.
+- [Editors, CI and agents](docs/integrations.md): JSON, SARIF and GitHub output, the [GitHub Action](https://github.com/tjagithub/optilint-action), the VS Code extension, the MCP server and the agent skill.
 
 ## Contributing
 

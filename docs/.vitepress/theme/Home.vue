@@ -42,7 +42,8 @@ const tiers = [
 ];
 
 const integrations = [
-  { title: "CLI and CI", text: "Pretty, JSON or SARIF output, a cache for unchanged files, and exit codes CI understands.", link: "/integrations#output-for-other-tools" },
+  { title: "GitHub Action", text: "Findings as annotations on the pull request diff, with an optional SARIF upload to code scanning.", link: "/integrations#github-actions" },
+  { title: "CLI and CI", text: "Pretty, JSON, SARIF or GitHub output, a cache for unchanged files, and exit codes CI understands.", link: "/integrations#output-for-other-tools" },
   { title: "VS Code", text: "Diagnostics with quick fixes, fix-all, a sidebar grouped by tier and optilint.json completion.", link: "/integrations#vs-code" },
   { title: "Coding agents", text: "An MCP server (lint, fix, rules) and an agent skill that teaches the tiers.", link: "/integrations#coding-agents" },
   { title: "Review in the browser", text: "optilint --ui lists findings by tier and applies only the fixes you tick.", link: "/usage" },
@@ -118,7 +119,9 @@ const integrations = [
 .home { max-width: 1152px; margin: 0 auto; padding: 0 24px 96px; }
 section { margin-top: 64px; }
 h2 { font-size: 28px; font-weight: 700; line-height: 1.25; margin-bottom: 12px; }
-h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
+h3 { font-size: 17px; font-weight: 600; margin: 0 0 8px; }
+.home a { text-decoration: none; }
+.home :deep(code) { white-space: nowrap; }
 .lede { color: var(--vp-c-text-2); max-width: 720px; margin-bottom: 24px; }
 .install { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
 .install code { font-size: 15px; padding: 10px 16px; border-radius: 8px; background: var(--vp-c-bg-soft); }
@@ -150,12 +153,13 @@ pre :deep(.hunk) { color: #8b5cf6; }
 .stats span { color: var(--vp-c-text-2); font-size: 14px; }
 .cards { display: grid; gap: 16px; }
 .three { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-.four { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.four { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
 .card { padding: 20px 24px; border-radius: 12px; border: 1px solid var(--vp-c-divider); background: var(--vp-c-bg-soft); color: inherit; }
 a.card:hover { border-color: var(--vp-c-brand-1); }
 .card p { color: var(--vp-c-text-2); font-size: 14px; margin-bottom: 12px; }
 .card code { font-size: 13px; }
 .chart { width: 100%; border-radius: 12px; background: #fff; padding: 16px; margin-bottom: 12px; }
+.closing h2 { border-top: 0; padding-top: 0; margin-top: 0; }
 .closing { text-align: center; padding: 48px 24px; border-radius: 16px; background: var(--vp-c-bg-soft); }
 .closing p { color: var(--vp-c-text-2); margin-bottom: 20px; }
 .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }

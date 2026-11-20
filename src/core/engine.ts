@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import ts from "typescript";
 import { FileContext } from "./context.ts";
+import type { EsTarget } from "./es.ts";
 import { maxTier, tierRank } from "./fix.ts";
 import { DEFAULT_OPTIONS } from "./project.ts";
 import type { Edit, Finding, Rule, Severity, Tier } from "./types.ts";
@@ -20,6 +21,8 @@ export interface FileSettings {
   tier: Tier;
   /** Whether --fix applies obscure fixes. */
   obscure: boolean;
+  /** The config's `target`: the newest ES version fixes may write. */
+  target?: EsTarget;
 }
 
 export const DEFAULT_SETTINGS: FileSettings = { tier: "typed", obscure: false };
@@ -122,7 +125,7 @@ function runRules(
   sf: ts.SourceFile, checker: ts.TypeChecker, options: ts.CompilerOptions, emitting: boolean, table: Table, s: FileSettings,
   onError?: LintOptions["onRuleError"],
 ): Finding[] {
-  const ctx = new FileContext(sf, checker, options, emitting);
+  const ctx = new FileContext(sf, checker, options, emitting, s.target);
   const visit = (node: ts.Node): void => {
     const rules = table.get(node.kind);
     if (rules) {

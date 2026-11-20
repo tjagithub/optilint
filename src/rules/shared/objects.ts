@@ -1,5 +1,6 @@
 import ts from "typescript";
 import { isBooleanContext, isNumber, isSimpleRef, isStringLit, staticCall, unwrap } from "../../core/ast.ts";
+import { needs } from "../../core/es.ts";
 import { fix } from "../../core/fix.ts";
 import type { RuleContext, RuleDef } from "../../core/types.ts";
 
@@ -25,7 +26,9 @@ export const objectAssignToSpread: RuleDef = {
     const literal = `{ ${parts.join(", ")} }`;
     const p = node.parent;
     const wrap = ts.isExpressionStatement(p) || (ts.isArrowFunction(p) && p.body === node);
-    ctx.report(node, "`Object.assign({}, ...)` is slower than object spread.", fix("typed", [ctx.replace(node, wrap ? `(${literal})` : literal)]));
+    const message = "`Object.assign({}, ...)` is slower than object spread.";
+    if (!ctx.supports("object-spread")) return ctx.report(node, `${message} ${needs(2018)}`);
+    ctx.report(node, message, fix("typed", [ctx.replace(node, wrap ? `(${literal})` : literal)]));
   },
 };
 

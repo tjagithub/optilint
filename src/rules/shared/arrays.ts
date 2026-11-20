@@ -1,5 +1,6 @@
 import ts from "typescript";
 import { asMemberTarget, isBooleanContext, isDense, isFunction, isNumber, methodCall, repeatingAncestor, staticCall, unwrap } from "../../core/ast.ts";
+import { needs } from "../../core/es.ts";
 import { byType, fix } from "../../core/fix.ts";
 import { fewIterations, knownSmall } from "../../core/size.ts";
 import type { RuleContext, RuleDef } from "../../core/types.ts";
@@ -30,7 +31,9 @@ export const filterFirst: RuleDef = {
     if (!type) return;
     // filter skips holes but find does not, so `typed` needs an array that provably has none.
     const tier = type === "typed" && isDense(m.object) ? "typed" : "assumed";
-    ctx.report(n, "`.filter(...)[0]` scans the whole array; use `.find(...)`.",
+    const message = "`.filter(...)[0]` scans the whole array; use `.find(...)`.";
+    if (!ctx.hasMember(m.object, "find")) return ctx.report(n, `${message} ${needs(2015)}`);
+    ctx.report(n, message,
       fix(tier, [rewriteMethod(ctx, n, m.object, "find", m.args)], `${ARRAY} without holes`));
   },
 };

@@ -4,6 +4,7 @@ import {
   repeatingAncestor, unwrap,
 } from "../../core/ast.ts";
 import { hasNestedQuantifier, plainPattern, splitLiteral, toLiteralBody } from "../../core/regex.ts";
+import { needs, REGEX_FLAGS } from "../../core/es.ts";
 import { byType, fix } from "../../core/fix.ts";
 import type { RuleContext, RuleDef } from "../../core/types.ts";
 
@@ -33,7 +34,7 @@ export const splitJoin: RuleDef = {
     const rep = join.args[0];
     const message = "`.split(x).join(y)` builds a temporary array; use `.replaceAll(x, y)`.";
     if (rep && !(isStringLit(rep) && !rep.text.includes("$"))) return ctx.report(node, message);
-    if (!ctx.hasMember(split.object, "replaceAll")) return ctx.report(node, `${message} (Needs lib ES2021.)`);
+    if (!ctx.hasMember(split.object, "replaceAll")) return ctx.report(node, `${message} ${needs(2021)}`);
     const repText = rep ? ctx.text(rep) : ctx.quote(",");
     ctx.report(node, message, fix(tier, [ctx.replace(node, `${member(ctx, split.object)}.replaceAll(${ctx.text(sep)}, ${repText})`)], STRING));
   },
@@ -56,10 +57,15 @@ export const regexToStringMethod: RuleDef = {
     const tier = ctx.isString(m.args[0]!) === "yes" ? "typed" : "assumed";
     const s = member(ctx, m.args[0]!);
     const lit = ctx.quote(p.value);
+    const message = "This regex matches plain text; a string method is faster.";
     let text: string;
     if (p.start && p.end) text = needsParens(node, 9) ? `(${ctx.text(m.args[0]!)} === ${lit})` : `${ctx.text(m.args[0]!)} === ${lit}`;
-    else text = `${s}.${p.start ? "startsWith" : p.end ? "endsWith" : "includes"}(${lit})`;
-    ctx.report(node, "This regex matches plain text; a string method is faster.", fix(tier, [ctx.replace(node, text)], "the argument is a string"));
+    else {
+      const method = p.start ? "startsWith" : p.end ? "endsWith" : "includes";
+      if (!ctx.hasMember(m.args[0]!, method)) return ctx.report(node, `${message} ${needs(2015)}`);
+      text = `${s}.${method}(${lit})`;
+    }
+    ctx.report(node, message, fix(tier, [ctx.replace(node, text)], "the argument is a string"));
   },
 };
 
@@ -132,7 +138,9 @@ export const indexOfToStartsWith: RuleDef = {
     if (ctx.isString(m.object) !== "yes") return;
     const tier = ctx.isString(m.args[0]!) === "yes" ? "typed" : "assumed";
     const text = `${NE.has(op) ? "!" : ""}${member(ctx, m.object)}.startsWith(${ctx.text(m.args[0]!)})`;
-    ctx.report(n, "`.indexOf(x) === 0` scans the whole string on a miss; use `.startsWith(x)`.",
+    const message = "`.indexOf(x) === 0` scans the whole string on a miss; use `.startsWith(x)`.";
+    if (!ctx.hasMember(m.object, "startsWith")) return ctx.report(n, `${message} ${needs(2015)}`);
+    ctx.report(n, message,
       fix(tier, [ctx.replace(n, text)], "the argument is a string (`startsWith` throws on a RegExp)"));
   },
 };
@@ -160,7 +168,12 @@ export const regexpConstructor: RuleDef = {
     const body = toLiteralBody(src!.text);
     if (body === undefined || new RegExp(body, flags).source !== new RegExp(src!.text, flags).source) return;
     const literal = `/${body}/${flags}`;
-    ctx.report(n, "Constant `RegExp(...)` call; use a regex literal.", fix("exact", [ctx.replace(n, literal)]));
+    const message = "Constant `RegExp(...)` call; use a regex literal.";
+    if (!ctx.supportsFlags(flags)) {
+      const year = [...flags].reduce((y, f) => Math.max(y, REGEX_FLAGS[f] ?? 0), 0);
+      return ctx.report(n, `${message} ${needs(year)}`);
+    }
+    ctx.report(n, message, fix("exact", [ctx.replace(n, literal)]));
   },
 };
 

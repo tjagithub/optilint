@@ -1,4 +1,5 @@
 import type ts from "typescript";
+import type { EsFeature } from "./es.ts";
 
 export type Impact = "high" | "medium" | "low";
 /** Type knowledge: "maybe" means the type is any/unknown; a union with any non-matching member is "no". */
@@ -85,8 +86,12 @@ export interface RuleContext {
   isArray(expr: ts.Expression): Tri;
   isString(expr: ts.Expression): Tri;
   isType(expr: ts.Expression, name: string): Tri;
-  /** Whether the project's lib declares `name` on `expr`'s type (e.g. replaceAll needs ES2021). */
+  /** Whether the project's lib declares `name` on `expr`'s type (e.g. replaceAll needs ES2021) and the target allows it. */
   hasMember(expr: ts.Expression, name: string): boolean;
+  /** Whether a fix may write this syntax or global (`src/core/es.ts`). */
+  supports(feature: EsFeature): boolean;
+  /** Whether a fix may write a regex literal with these flags. */
+  supportsFlags(flags: string): boolean;
   /** A fresh identifier; pass `at` (where the name is declared) to only avoid names in its function. */
   uniqueName(base: string, at?: ts.Node): string;
   quote(value: string): string;

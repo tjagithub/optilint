@@ -34,6 +34,6 @@ describe("validate", () => {
     expect(validate({})).toEqual([]);
     expect(validate({ files: { include: ["src/**"] }, maxSlowdown: "5%", domains: { react: "off", typescript: "auto" }, overrides: [{ include: ["test/**"], rules: { async: "off" } }] })).toEqual([]);
     expect(validate([])).toEqual(["config must be a JSON object"]);
-    expect(TOP_KEYS).toEqual(["$schema", "extends", "files", "ignore", "tier", "obscure", "minImpact", "maxSlowdown", "domains", "rules", "overrides"]);
+    expect(TOP_KEYS).toEqual(["$schema", "extends", "files", "ignore", "tier", "obscure", "target", "minImpact", "maxSlowdown", "domains", "rules", "overrides"]);
   });
 });

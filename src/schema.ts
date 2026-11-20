@@ -1,3 +1,4 @@
+import { ES_TARGETS } from "./core/es.ts";
 import { TIERS } from "./core/fix.ts";
 import { allRules, DOMAINS, groups } from "./rules/index.ts";
 import type { Rule } from "./core/types.ts";
@@ -27,6 +28,7 @@ export function configSchema() {
   }));
   const tier = enumOf(TIERS, "The highest tier --fix applies: exact (same behaviour for every input), typed (for every input the types allow) or assumed (relies on a stated assumption). Default: typed.");
   const obscure = { type: "boolean", description: "Let --fix apply fixes that are correct but hard to read, such as `x | 0`. Default: false." };
+  const target = enumOf(ES_TARGETS, "The newest ES version fixes may write, for code that runs as written (no compiler in between). A fix that needs newer syntax or a newer built-in is reported without a fix. Default: the tsconfig's target when tsc does not emit, and the lib for built-ins.");
   return {
     $schema: "https://json-schema.org/draft/2020-12/schema",
     title: "optilint configuration",
@@ -45,6 +47,7 @@ export function configSchema() {
       ignore: { ...strings, description: "Same as files.ignore." },
       tier,
       obscure,
+      target,
       minImpact: enumOf(IMPACTS, "Only report rules with at least this impact. Default: low."),
       maxSlowdown: {
         type: "string", pattern: "^(\\d+(\\.\\d+)?%|any)$",
@@ -62,7 +65,7 @@ export function configSchema() {
         type: "array",
         items: {
           type: "object", additionalProperties: false, required: ["include"],
-          properties: { include: { ...strings, description: "Globs relative to this file." }, tier, obscure, rules: ref("Rules") },
+          properties: { include: { ...strings, description: "Globs relative to this file." }, tier, obscure, target, rules: ref("Rules") },
         },
       },
     },

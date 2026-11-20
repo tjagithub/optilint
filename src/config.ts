@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import ts from "typescript";
 import type { FileSettings, RuleSetting } from "./core/engine.ts";
+import type { EsTarget } from "./core/es.ts";
 import { globMatch } from "./core/glob.ts";
 import { allRules, DOMAINS, groups } from "./rules/index.ts";
 import type { Impact, Rule, Severity, Tier } from "./core/types.ts";
@@ -19,6 +20,7 @@ export interface Override {
   include: string[];
   tier?: Tier;
   obscure?: boolean;
+  target?: EsTarget;
   rules?: RulesConfig;
 }
 
@@ -30,6 +32,7 @@ export interface RawConfig {
   ignore?: string[];
   tier?: Tier;
   obscure?: boolean;
+  target?: EsTarget;
   minImpact?: Impact;
   maxSlowdown?: string;
   domains?: Record<string, DomainLevel>;
@@ -214,16 +217,18 @@ export function loadConfig(file: string | undefined, cli: CliLayer = {}, cwd = p
       preset(state, "recommended", keep);
       let tier: Tier = last("tier") ?? "typed";
       let obscure = last("obscure") ?? false;
+      let target = last("target");
       for (const l of layers) applyRules(state, l.raw.rules, keep);
       for (const { base, o } of overrides) {
         if (!matches(o.include, base, f)) continue;
         applyRules(state, o.rules, keep);
         tier = o.tier ?? tier;
         obscure = o.obscure ?? obscure;
+        target = o.target ?? target;
       }
       if (cli.only?.length) applyRules(state, { preset: "none", ...Object.fromEntries(cli.only.map((r) => [r, "on"])) });
       if (cli.disable?.length) applyRules(state, Object.fromEntries(cli.disable.map((r) => [r, "off"])));
-      const out = { rules: state, tier: cli.tier ?? tier, obscure: cli.obscure ?? obscure };
+      const out = { rules: state, tier: cli.tier ?? tier, obscure: cli.obscure ?? obscure, ...(target ? { target } : {}) };
       cache.set(f, out);
       return out;
     },

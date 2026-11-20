@@ -1,4 +1,5 @@
 import ts from "typescript";
+import { type EsFeature, type EsTarget, esYear, FEATURES, METHODS, REGEX_FLAGS, scriptTargetYear } from "./es.ts";
 import type { Edit, Finding, Fix, Impact, Rule, RuleContext, Tri } from "./types.ts";
 
 const TYPED_ARRAYS = new Set([
@@ -19,14 +20,25 @@ export class FileContext implements RuleContext {
   private quoteChar?: string;
   private disabledLines = new Map<number, Set<string> | "all">();
   private disabledFile: Set<string> | "all" | undefined;
+  private globals?: Set<string>;
+  // Newest ES version (a year) fixes may write. Without the config's target: syntax follows tsc's unless tsc emits
+  // (and downlevels it), methods and globals follow the lib, regex flags tsc's target (tsc rejects newer ones).
+  private readonly syntaxYear: number;
+  private readonly apiYear: number;
+  private readonly regexYear: number;
 
   constructor(
     readonly sf: ts.SourceFile,
     readonly checker: ts.TypeChecker,
     readonly options: ts.CompilerOptions,
     readonly emits = false,
+    target?: EsTarget,
   ) {
     this.isTS = /\.[cm]?tsx?$/.test(sf.fileName);
+    const tsc = scriptTargetYear(options.target);
+    this.syntaxYear = target ? esYear(target) : emits ? Infinity : tsc;
+    this.apiYear = target ? esYear(target) : Infinity;
+    this.regexYear = target ? esYear(target) : tsc;
     this.parseDirectives();
   }
 
@@ -102,10 +114,21 @@ export class FileContext implements RuleContext {
   }
 
   hasMember(expr: ts.Expression, name: string) {
+    if ((METHODS[name] ?? 0) > this.apiYear) return false;
     const type = this.checker.getApparentType(this.checker.getTypeAtLocation(expr));
     if (type.flags & ts.TypeFlags.Any) return true;
     const parts = type.isUnion() ? type.types : [type];
     return parts.every((t) => this.checker.getPropertyOfType(this.checker.getApparentType(t), name) !== undefined);
+  }
+
+  supports(feature: EsFeature) {
+    if (feature !== "Set") return FEATURES[feature] <= this.syntaxYear;
+    this.globals ??= new Set(this.checker.getSymbolsInScope(this.sf, ts.SymbolFlags.Value).map((s) => s.name));
+    return FEATURES[feature] <= this.apiYear && this.globals.has(feature);
+  }
+
+  supportsFlags(flags: string) {
+    return [...flags].every((f) => (REGEX_FLAGS[f] ?? 0) <= this.regexYear);
   }
 
   // Inside a function, a name only has to be free in that function (and of module-level names handed out),

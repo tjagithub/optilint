@@ -50,6 +50,6 @@ The `react` rules only report. `inline-prop-to-memo` and `inline-context-value` 
 ## Limitations
 
 - Impact labels are rules of thumb. Measure hot paths with a benchmark before and after.
-- `replaceAll` and `flatMap` fixes are skipped when the project's `lib` lacks them.
+- Fixes that call a newer built-in (`find`, `startsWith`, `endsWith`, `includes`, `flatMap`, `replaceAll`) are skipped when the project's `lib` or the config's `target` lacks it. Fixes that write newer syntax (`let`/`const` loops, object spread, a regex literal with a newer flag, a hoisted `Set`) are skipped below the `target` ([configuration](configuration.md)).
 - `sequential-await` and `array-literal-lookup` (Set form) rewrite whole statements, so comments between the rewritten statements are dropped.
 - The type checker sees the files you lint plus the `.d.ts` files from your tsconfig. Unresolved imports become `any`, which turns fixes `assumed`.

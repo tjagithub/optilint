@@ -3,6 +3,7 @@ import {
   enclosingStatement, insideFunction, isFunction, isNumber, isSimpleRef, isStringLit, methodCall, needsParens,
   repeatingAncestor, unwrap,
 } from "../../core/ast.ts";
+import { needs } from "../../core/es.ts";
 import { fix } from "../../core/fix.ts";
 import { fewIterations, knownSmall } from "../../core/size.ts";
 import type { RuleContext, RuleDef } from "../../core/types.ts";
@@ -92,10 +93,12 @@ export const arrayLiteralLookup: RuleDef = {
     }
     const stmt = enclosingStatement(node);
     if (!stmt) return;
+    const message = "Array literal rebuilt on each call and searched linearly; hoist it into a Set.";
+    if (!ctx.supports("let-const") || !ctx.supports("Set")) return ctx.report(node, `${message} ${needs(2015)}`);
     const name = ctx.uniqueName(setName(x));
     const comments = ts.getLeadingCommentRanges(ctx.sf.text, stmt.getFullStart());
     const at = comments?.[0]?.pos ?? stmt.getStart(ctx.sf);
-    ctx.report(node, "Array literal rebuilt on each call and searched linearly; hoist it into a Set.", fix("exact", [
+    ctx.report(node, message, fix("exact", [
       { start: at, end: at, text: `const ${name} = new Set([${items.join(", ")}]);\n\n` },
       ctx.replace(node, `${name}.has(${ctx.text(x)})`),
     ]));

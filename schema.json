@@ -53,6 +53,24 @@
       "type": "boolean",
       "description": "Let --fix apply fixes that are correct but hard to read, such as `x | 0`. Default: false."
     },
+    "target": {
+      "description": "The newest ES version fixes may write, for code that runs as written (no compiler in between). A fix that needs newer syntax or a newer built-in is reported without a fix. Default: the tsconfig's target when tsc does not emit, and the lib for built-ins.",
+      "enum": [
+        "es5",
+        "es2015",
+        "es2016",
+        "es2017",
+        "es2018",
+        "es2019",
+        "es2020",
+        "es2021",
+        "es2022",
+        "es2023",
+        "es2024",
+        "es2025",
+        "esnext"
+      ]
+    },
     "minImpact": {
       "description": "Only report rules with at least this impact. Default: low.",
       "enum": [
@@ -120,6 +138,24 @@
           "obscure": {
             "type": "boolean",
             "description": "Let --fix apply fixes that are correct but hard to read, such as `x | 0`. Default: false."
+          },
+          "target": {
+            "description": "The newest ES version fixes may write, for code that runs as written (no compiler in between). A fix that needs newer syntax or a newer built-in is reported without a fix. Default: the tsconfig's target when tsc does not emit, and the lib for built-ins.",
+            "enum": [
+              "es5",
+              "es2015",
+              "es2016",
+              "es2017",
+              "es2018",
+              "es2019",
+              "es2020",
+              "es2021",
+              "es2022",
+              "es2023",
+              "es2024",
+              "es2025",
+              "esnext"
+            ]
           },
           "rules": {
             "$ref": "#/$defs/Rules"

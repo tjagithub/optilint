@@ -4,6 +4,7 @@ import {
   isDense, methodCall, unwrap, walk,
 } from "../../core/ast.ts";
 import { denseConst } from "../../core/dense.ts";
+import { needs } from "../../core/es.ts";
 import { byType, fix } from "../../core/fix.ts";
 import type { RuleContext, RuleDef } from "../../core/types.ts";
 
@@ -83,6 +84,8 @@ export const forEachToFor: RuleDef = {
     const [elem, idx] = fn.parameters;
     const names = [...(elem ? boundNames(elem.name) : []), ...(idx ? boundNames(idx.name) : [])];
     if (idx && isAssignedIn(fn.body, boundNames(idx.name))) return;
+    const message = "`.forEach()` calls a function per element; an indexed `for` loop avoids the call.";
+    if (!ctx.supports("let-const")) return ctx.report(m.call, `${message} ${needs(2015)}`);
     const indent = ctx.indentOf(stmt);
     const recvIds = identifiersIn(m.object);
     const hoist = !isSimpleRef(m.object) || names.some((n) => recvIds.has(n));
@@ -110,7 +113,7 @@ export const forEachToFor: RuleDef = {
         : `${decl}${read}`;
     }
     const loop = `${pre}for (let ${i} = 0, ${len} = ${arr}.length; ${i} < ${len}; ${i}++) {${decl}${bodyText(fn, plan, ctx, indent)}}`;
-    ctx.report(m.call, "`.forEach()` calls a function per element; an indexed `for` loop avoids the call.",
+    ctx.report(m.call, message,
       fix(tier, [ctx.replace(stmt, hoist ? asStatements(stmt, loop, indent) : loop)], "the receiver is an array"));
   },
 };

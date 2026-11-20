@@ -101,6 +101,27 @@ function compiled(node: ts.Node) {
   return false;
 }
 
+const COMPONENT_NAME = /^(?:[A-Z]|use[A-Z0-9])/;
+
+/** The function's own name, or the variable it initializes (through `memo(...)` / `forwardRef(...)` wrappers). */
+function functionName(fn: ts.SignatureDeclaration) {
+  if ((ts.isFunctionDeclaration(fn) || ts.isFunctionExpression(fn)) && fn.name) return fn.name.text;
+  let p: ts.Node = fn.parent;
+  while (ts.isCallExpression(p) || ts.isParenthesizedExpression(p)) p = p.parent;
+  return ts.isVariableDeclaration(p) && ts.isIdentifier(p.name) ? p.name.text : undefined;
+}
+
+/** Inside a component or hook (or a callback in one), where it runs on every render; not in a test or helper. */
+function inRender(node: ts.Node) {
+  for (let p = node.parent; p; p = p.parent) {
+    if (!ts.isFunctionLike(p)) continue;
+    if (ts.isMethodDeclaration(p) && ts.isClassLike(p.parent) && p.parent.heritageClauses?.length) return true;
+    const name = functionName(p);
+    if (name ? COMPONENT_NAME.test(name) : ts.isFunctionDeclaration(p) && !!ts.getModifiers(p)?.some((m) => m.kind === K.DefaultKeyword)) return true;
+  }
+  return false;
+}
+
 const attributes = (el: Tag) => el.attributes.properties.filter(ts.isJsxAttribute);
 const valueOf = (a: ts.JsxAttribute) => a.initializer && ts.isJsxExpression(a.initializer) ? a.initializer.expression : undefined;
 const nameOf = (a: ts.JsxAttribute) => a.name.getText();
@@ -118,13 +139,14 @@ export const inlinePropToMemo: RuleDef = {
   kinds: [K.JsxOpeningElement, K.JsxSelfClosingElement],
   check(node, ctx) {
     const el = node as Tag;
-    if (!ts.findAncestor(el, ts.isFunctionLike) || compiled(el) || !isMemoized(el.tagName, ctx)) return;
+    if (!inRender(el) || compiled(el) || !isMemoized(el.tagName, ctx)) return;
     const hits = attributes(el).filter((a) => !SKIPPED_PROPS.has(nameOf(a)) && valueOf(a) && fresh(valueOf(a)!, ctx));
     const children = ts.isJsxOpeningElement(el) && el.parent.children.some((c) => !ts.isJsxText(c) || !c.containsOnlyTriviaWhiteSpaces);
     if (!hits.length && !children) return;
     const names = hits.map((a) => `\`${nameOf(a)}\``);
     if (children) names.push("its children");
-    ctx.report(hits[0] ?? el, `\`${ctx.text(el.tagName)}\` is memoized, but ${list(names)} ${names.length > 1 || !hits.length ? "are" : "is"} new on every render, so it re-renders anyway; hoist them, or wrap them in \`useMemo\`/\`useCallback\`.`);
+    const many = names.length > 1 || !hits.length;
+    ctx.report(hits[0] ?? el, `\`${ctx.text(el.tagName)}\` is memoized, but ${list(names)} ${many ? "are" : "is"} new on every render, so it re-renders anyway; hoist ${many ? "them" : "it"}, or wrap ${many ? "them" : "it"} in \`useMemo\`/\`useCallback\`.`);
   },
 };
 
@@ -141,7 +163,7 @@ export const inlineContextValue: RuleDef = {
     const value = attributes(el).find((a) => nameOf(a) === "value");
     const expr = value && valueOf(value);
     const kind = expr && fresh(expr, ctx);
-    if (!kind || !ts.findAncestor(el, ts.isFunctionLike) || compiled(el) || !isContextProvider(el.tagName, ctx)) return;
+    if (!kind || !inRender(el) || compiled(el) || !isContextProvider(el.tagName, ctx)) return;
     ctx.report(value, `This context value is a new ${kind} on every render, so every consumer of \`${ctx.text(el.tagName)}\` re-renders with it; wrap it in \`useMemo\` or hoist it.`);
   },
 };

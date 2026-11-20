@@ -46,7 +46,7 @@ export function List({ id }: { id: string }) {
     expect(hits(code, "inline-prop-to-memo")).toEqual([
       [11, "\`Row\` is memoized, but \`style\` and \`onClick\` are new on every render, so it re-renders anyway; hoist them, or wrap them in \`useMemo\`/\`useCallback\`."],
       [13, "\`Row\` is memoized, but \`style\` and \`onClick\` are new on every render, so it re-renders anyway; hoist them, or wrap them in \`useMemo\`/\`useCallback\`."],
-      [14, "\`Cell\` is memoized, but \`items\` is new on every render, so it re-renders anyway; hoist them, or wrap them in \`useMemo\`/\`useCallback\`."],
+      [14, "\`Cell\` is memoized, but \`items\` is new on every render, so it re-renders anyway; hoist it, or wrap it in \`useMemo\`/\`useCallback\`."],
       [16, "\`Row\` is memoized, but its children are new on every render, so it re-renders anyway; hoist them, or wrap them in \`useMemo\`/\`useCallback\`."],
     ]);
   });
@@ -57,13 +57,24 @@ export const List = () => <Row onClick={() => {}} />;
 `;
     expect(hits(js, "inline-prop-to-memo", "/virtual/test.jsx").map(([l]) => l)).toEqual([3]);
   });
-  test("quiet outside functions and under React Compiler's \`use memo\`", () => {
+  test("quiet outside components and hooks (module level, tests, helpers) and under React Compiler's \`use memo\`", () => {
     const top = `import { memo } from "react";
 const Row = memo((p: { f: () => void }) => null);
 export const el = <Row f={() => {}} />;
 export function A() { "use memo"; return <Row f={() => {}} />; }
+declare function it(name: string, f: () => void): void;
+it("renders", () => void <Row f={() => {}} />);
+export const helper = () => <Row f={() => {}} />;
 `;
     expect(hits(top, "inline-prop-to-memo")).toEqual([]);
+    const inside = `import { memo, Component } from "react";
+const Row = memo((p: { f: () => void }) => null);
+export const useRows = () => [1].map(() => <Row f={() => {}} />);
+export const Wrapped = memo(() => <Row f={() => {}} />);
+export class List extends Component<{}> { renderRow() { return <Row f={() => {}} />; } }
+export default function () { return <Row f={() => {}} />; }
+`;
+    expect(hits(inside, "inline-prop-to-memo").map(([l]) => l)).toEqual([3, 4, 5, 6]);
   });
 });
 

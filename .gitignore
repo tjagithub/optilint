@@ -28,6 +28,12 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 *.tsbuildinfo
 .tsbuild
 
+# Playwright: playwright-cli sessions; the test runner's reports and results when its reporters are on
+.playwright-cli
+playwright-report
+blob-report
+test-results
+
 # IntelliJ based IDEs
 .idea
 

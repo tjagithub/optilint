@@ -14,6 +14,7 @@
   "license": "MIT",
   "scripts": {
     "bench": "bun bench/run.ts",
+    "bench:emit": "bun bench/emit/run.ts",
     "bench:speedups": "bun bench/speedups.ts && bun bench/chart.ts",
     "bundle": "bun scripts/bundle.ts",
     "lint:self": "bun src/cli.ts src",

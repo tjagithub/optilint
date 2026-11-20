@@ -44,6 +44,9 @@ export interface FileResult {
 }
 
 /** The options every lint program uses: the project's, with JS allowed and nothing emitted. */
+/** The project's own tsc writes its JavaScript; programOptions hides this, since optilint never emits. */
+export const emits = (project?: ts.CompilerOptions) => !!project && !project.noEmit && !project.emitDeclarationOnly;
+
 export const programOptions = (project?: ts.CompilerOptions): ts.CompilerOptions => ({
   ...DEFAULT_OPTIONS, ...project, noEmit: true, allowJs: true, checkJs: false,
 });
@@ -74,7 +77,7 @@ export function lint(files: readonly string[], opts: LintOptions, sources = new 
       const result = results.get(file)!;
       if (!sf) continue;
       const s = settings.get(file)!;
-      result.findings = runRules(sf, checker, options, table, s, opts.onRuleError);
+      result.findings = runRules(sf, checker, options, emits(opts.compilerOptions), table, s, opts.onRuleError);
       if (!opts.fix || pass >= maxPasses) continue;
       const fixes = result.findings.filter((f) => f.fix && applies(f.fix, s));
       const { text, applied } = applyFixes(sf.text, fixes);
@@ -116,10 +119,10 @@ function configure(f: Finding, setting: RuleSetting | undefined): Finding {
 }
 
 function runRules(
-  sf: ts.SourceFile, checker: ts.TypeChecker, options: ts.CompilerOptions, table: Table, s: FileSettings,
+  sf: ts.SourceFile, checker: ts.TypeChecker, options: ts.CompilerOptions, emitting: boolean, table: Table, s: FileSettings,
   onError?: LintOptions["onRuleError"],
 ): Finding[] {
-  const ctx = new FileContext(sf, checker, options);
+  const ctx = new FileContext(sf, checker, options, emitting);
   const visit = (node: ts.Node): void => {
     const rules = table.get(node.kind);
     if (rules) {

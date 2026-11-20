@@ -2,6 +2,6 @@
   // Benches of the fixes. child.ts and the cases also run on node, so no Bun types.
   "extends": "../tsconfig.base.json",
   "compilerOptions": { "types": ["node"], "tsBuildInfoFile": "../.tsbuild/bench.tsbuildinfo" },
-  "include": ["*.ts", "cases/*.ts"],
+  "include": ["*.ts", "cases/*.ts", "emit/*.ts"],
   "references": [{ "path": "../src" }]
 }

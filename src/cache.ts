@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import ts from "typescript";
-import { type FileResult, type FileSettings, programOptions } from "./core/engine.ts";
+import { emits, type FileResult, type FileSettings, programOptions } from "./core/engine.ts";
 import type { Finding } from "./core/types.ts";
 import { digest, type GraphNode, importGraph, scanFile } from "./graph.ts";
 import type { Job, JobResult } from "./job.ts";
@@ -103,7 +103,7 @@ export interface CachePlan {
 export function planCached(job: Job, cache: LintCache, cwd: string): CachePlan {
   const options = programOptions(job.compilerOptions);
   const graph = importGraph([...job.files, ...job.extraRoots], options, cache, cwd);
-  const base = digest(cache.version, JSON.stringify(options), job.rules.join(","), graph.globalKey);
+  const base = digest(cache.version, JSON.stringify(options), String(emits(job.compilerOptions)), job.rules.join(","), graph.globalKey);
   const settings = new Map(job.settings);
   const keys = new Map(job.files.map((f) => [f, digest(base, graph.keys.get(f) ?? "", settingsKey(settings.get(f)))]));
   const hits: FileResult[] = [];

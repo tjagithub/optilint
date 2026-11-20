@@ -1,0 +1,90 @@
+
+tier           case               ratio (under 1: the right side is slower)            @10   @1000
+node:turbofan  private-fields     es2022 (#native) ÷ es2021 (WeakMap)                0.00x   0.00x
+node:turbofan  async-await-call   es2022 ÷ es2015 (__awaiter)                        0.09x   0.07x
+node:turbofan  async-await-value  es2022 ÷ es2015 (__awaiter)                        0.33x   0.50x
+node:turbofan  async-cached       es2022 ÷ es2015 (__awaiter)                        0.10x   0.10x
+node:turbofan  enum-numeric       literals ÷ enum                                    0.92x   1.06x
+node:turbofan  enum-numeric       literals ÷ as const                                0.86x   1.03x
+node:turbofan  enum-string        literals ÷ enum                                    0.81x   0.87x
+node:turbofan  namespace          module ÷ namespace                                 0.93x   1.20x
+node:turbofan  class-fields       es2022 define (native) ÷ es2022 assign             0.99x   0.96x
+node:turbofan  class-fields       es2022 define (native) ÷ es2020 define (defineProperty)   0.01x   0.01x
+node:turbofan  class-fields       es2022 define (native) ÷ es2020 assign             0.99x   0.96x
+node:maglev    private-fields     es2022 (#native) ÷ es2021 (WeakMap)                0.04x   0.04x
+node:maglev    async-await-call   es2022 ÷ es2015 (__awaiter)                        0.10x   0.08x
+node:maglev    async-await-value  es2022 ÷ es2015 (__awaiter)                        0.30x   0.38x
+node:maglev    async-cached       es2022 ÷ es2015 (__awaiter)                        0.12x   0.11x
+node:maglev    enum-numeric       literals ÷ enum                                    0.99x   0.97x
+node:maglev    enum-numeric       literals ÷ as const                                1.00x   0.97x
+node:maglev    enum-string        literals ÷ enum                                    0.95x   0.93x
+node:maglev    namespace          module ÷ namespace                                 1.00x   1.00x
+node:maglev    class-fields       es2022 define (native) ÷ es2022 assign             1.00x   0.98x
+node:maglev    class-fields       es2022 define (native) ÷ es2020 define (defineProperty)   0.02x   0.02x
+node:maglev    class-fields       es2022 define (native) ÷ es2020 assign             1.00x   0.98x
+node:sparkplug private-fields     es2022 (#native) ÷ es2021 (WeakMap)                0.19x   0.17x
+node:sparkplug async-await-call   es2022 ÷ es2015 (__awaiter)                        0.14x   0.12x
+node:sparkplug async-await-value  es2022 ÷ es2015 (__awaiter)                        0.30x   0.31x
+node:sparkplug async-cached       es2022 ÷ es2015 (__awaiter)                        0.15x   0.15x
+node:sparkplug enum-numeric       literals ÷ enum                                    0.89x   0.79x
+node:sparkplug enum-numeric       literals ÷ as const                                0.89x   0.78x
+node:sparkplug enum-string        literals ÷ enum                                    0.93x   0.84x
+node:sparkplug namespace          module ÷ namespace                                 0.97x   0.94x
+node:sparkplug class-fields       es2022 define (native) ÷ es2022 assign             1.17x   1.16x
+node:sparkplug class-fields       es2022 define (native) ÷ es2020 define (defineProperty)   0.12x   0.11x
+node:sparkplug class-fields       es2022 define (native) ÷ es2020 assign             1.17x   1.17x
+node:ignition  private-fields     es2022 (#native) ÷ es2021 (WeakMap)                0.21x   0.18x
+node:ignition  async-await-call   es2022 ÷ es2015 (__awaiter)                        0.17x   0.15x
+node:ignition  async-await-value  es2022 ÷ es2015 (__awaiter)                        0.32x   0.34x
+node:ignition  async-cached       es2022 ÷ es2015 (__awaiter)                        0.18x   0.17x
+node:ignition  enum-numeric       literals ÷ enum                                    0.90x   0.82x
+node:ignition  enum-numeric       literals ÷ as const                                0.88x   0.82x
+node:ignition  enum-string        literals ÷ enum                                    0.91x   0.86x
+node:ignition  namespace          module ÷ namespace                                 0.96x   0.88x
+node:ignition  class-fields       es2022 define (native) ÷ es2022 assign             1.20x   1.22x
+node:ignition  class-fields       es2022 define (native) ÷ es2020 define (defineProperty)   0.16x   0.14x
+node:ignition  class-fields       es2022 define (native) ÷ es2020 assign             1.20x   1.23x
+bun:ftl        private-fields     es2022 (#native) ÷ es2021 (WeakMap)                0.02x   0.01x
+bun:ftl        async-await-call   es2022 ÷ es2015 (__awaiter)                        0.13x   0.12x
+bun:ftl        async-await-value  es2022 ÷ es2015 (__awaiter)                        0.35x   0.38x
+bun:ftl        async-cached       es2022 ÷ es2015 (__awaiter)                        0.18x   0.18x
+bun:ftl        enum-numeric       literals ÷ enum                                    0.97x   1.00x
+bun:ftl        enum-numeric       literals ÷ as const                                0.96x   1.00x
+bun:ftl        enum-string        literals ÷ enum                                    1.03x   1.00x
+bun:ftl        namespace          module ÷ namespace                                 1.05x   1.00x
+bun:ftl        class-fields       es2022 define (native) ÷ es2022 assign             1.15x   1.01x
+bun:ftl        class-fields       es2022 define (native) ÷ es2020 define (defineProperty)   0.07x   0.07x
+bun:ftl        class-fields       es2022 define (native) ÷ es2020 assign             1.01x   1.01x
+bun:dfg        private-fields     es2022 (#native) ÷ es2021 (WeakMap)                0.07x   0.06x
+bun:dfg        async-await-call   es2022 ÷ es2015 (__awaiter)                        0.12x   0.11x
+bun:dfg        async-await-value  es2022 ÷ es2015 (__awaiter)                        0.31x   0.31x
+bun:dfg        async-cached       es2022 ÷ es2015 (__awaiter)                        0.17x   0.17x
+bun:dfg        enum-numeric       literals ÷ enum                                    0.94x   0.94x
+bun:dfg        enum-numeric       literals ÷ as const                                0.94x   0.94x
+bun:dfg        enum-string        literals ÷ enum                                    1.00x   1.07x
+bun:dfg        namespace          module ÷ namespace                                 1.01x   1.02x
+bun:dfg        class-fields       es2022 define (native) ÷ es2022 assign             1.00x   1.02x
+bun:dfg        class-fields       es2022 define (native) ÷ es2020 define (defineProperty)   0.06x   0.07x
+bun:dfg        class-fields       es2022 define (native) ÷ es2020 assign             1.00x   1.02x
+bun:baseline   private-fields     es2022 (#native) ÷ es2021 (WeakMap)                0.17x   0.15x
+bun:baseline   async-await-call   es2022 ÷ es2015 (__awaiter)                        0.12x   0.10x
+bun:baseline   async-await-value  es2022 ÷ es2015 (__awaiter)                        0.17x   0.14x
+bun:baseline   async-cached       es2022 ÷ es2015 (__awaiter)                        0.13x   0.12x
+bun:baseline   enum-numeric       literals ÷ enum                                    0.65x   0.59x
+bun:baseline   enum-numeric       literals ÷ as const                                0.66x   0.55x
+bun:baseline   enum-string        literals ÷ enum                                    0.36x   0.28x
+bun:baseline   namespace          module ÷ namespace                                 0.92x   0.94x
+bun:baseline   class-fields       es2022 define (native) ÷ es2022 assign             1.13x   1.16x
+bun:baseline   class-fields       es2022 define (native) ÷ es2020 define (defineProperty)   0.15x   0.11x
+bun:baseline   class-fields       es2022 define (native) ÷ es2020 assign             1.12x   1.16x
+bun:llint      private-fields     es2022 (#native) ÷ es2021 (WeakMap)                0.17x   0.16x
+bun:llint      async-await-call   es2022 ÷ es2015 (__awaiter)                        0.15x   0.11x
+bun:llint      async-await-value  es2022 ÷ es2015 (__awaiter)                        0.21x   0.16x
+bun:llint      async-cached       es2022 ÷ es2015 (__awaiter)                        0.17x   0.14x
+bun:llint      enum-numeric       literals ÷ enum                                    0.81x   0.80x
+bun:llint      enum-numeric       literals ÷ as const                                0.77x   0.75x
+bun:llint      enum-string        literals ÷ enum                                    0.68x   0.66x
+bun:llint      namespace          module ÷ namespace                                 0.94x   0.96x
+bun:llint      class-fields       es2022 define (native) ÷ es2022 assign             1.08x   1.12x
+bun:llint      class-fields       es2022 define (native) ÷ es2020 define (defineProperty)   0.22x   0.18x
+bun:llint      class-fields       es2022 define (native) ÷ es2020 assign             1.09x   1.12x

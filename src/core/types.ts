@@ -75,6 +75,8 @@ export interface RuleContext {
   readonly checker: ts.TypeChecker;
   readonly isTS: boolean;
   readonly options: ts.CompilerOptions;
+  /** The project's tsc writes its JavaScript (`options` always has `noEmit`, since optilint never emits). */
+  readonly emits: boolean;
   report(node: ts.Node, message: string, fix?: Fix, impact?: Impact): void;
   text(node: ts.Node): string;
   replace(node: ts.Node, text: string): Edit;

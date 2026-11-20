@@ -403,6 +403,32 @@
             }
           ]
         },
+        "typescript": {
+          "description": "The typescript group: downlevel-async, define-class-fields, downlevel-private-fields. A level for all of them, or settings per rule.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Level"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "downlevel-async": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`async` compiled to generators by a `target` below ES2017\n\nBelow ES2017, TypeScript turns each async function into a generator driven by its `__awaiter` helper (async generators and `for await` need ES2018). Calls and awaits measured 2–14x slower than native async on V8 and JSC, at every tier. Every engine since 2017 runs native async, so raise `target` unless you ship to older ones.\n\nmedium impact. Report only."
+                },
+                "define-class-fields": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "Class fields emitted as `Object.defineProperty` (`useDefineForClassFields` below ES2022)\n\nWith `useDefineForClassFields: true` and a `target` below ES2022, TypeScript writes every instance field as an `Object.defineProperty` call in the constructor. Constructing such objects measured 4–100x slower than native fields or plain assignment, on V8 and JSC. Set `target` to ES2022 or later (native fields keep the same semantics), or drop the option if nothing relies on define semantics.\n\nhigh impact. Report only."
+                },
+                "downlevel-private-fields": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`#private` members compiled to WeakMaps by a `target` below ES2022\n\nBelow ES2022, TypeScript emulates `#private` fields and methods with a WeakMap or WeakSet per member and a checking helper on every access. Construction and access measured 5x to over 200x slower than native private fields, on V8 and JSC. Raise `target` to ES2022, or use TypeScript's `private` keyword, which emits a plain property.\n\nhigh impact. Report only."
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
         "misc": {
           "description": "The misc group: date-now, math-pow-to-mul, bitwise-trunc, dynamic-code, dom-in-loop, arguments-object, postmessage-transfer, passive-listener, scroll-layout-read, gpu-sync-in-frame, per-frame-allocation. A level for all of them, or settings per rule.",
           "anyOf": [
@@ -608,6 +634,18 @@
         "prototype-mutation": {
           "$ref": "#/$defs/RuleValue",
           "markdownDescription": "`Object.setPrototypeOf`, `Reflect.setPrototypeOf` or `__proto__ =` on an existing object\n\nChanging an object's prototype after it exists invalidates the engine's assumptions about it and about code that has seen it; V8 and JSC both deoptimize, and the object may stay slow. Create it with the right prototype: `Object.create(proto)`, a class, or `{ __proto__: proto, ... }` in a literal.\n\nmedium impact. Report only."
+        },
+        "downlevel-async": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`async` compiled to generators by a `target` below ES2017\n\nBelow ES2017, TypeScript turns each async function into a generator driven by its `__awaiter` helper (async generators and `for await` need ES2018). Calls and awaits measured 2–14x slower than native async on V8 and JSC, at every tier. Every engine since 2017 runs native async, so raise `target` unless you ship to older ones.\n\nmedium impact. Report only."
+        },
+        "define-class-fields": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "Class fields emitted as `Object.defineProperty` (`useDefineForClassFields` below ES2022)\n\nWith `useDefineForClassFields: true` and a `target` below ES2022, TypeScript writes every instance field as an `Object.defineProperty` call in the constructor. Constructing such objects measured 4–100x slower than native fields or plain assignment, on V8 and JSC. Set `target` to ES2022 or later (native fields keep the same semantics), or drop the option if nothing relies on define semantics.\n\nhigh impact. Report only."
+        },
+        "downlevel-private-fields": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`#private` members compiled to WeakMaps by a `target` below ES2022\n\nBelow ES2022, TypeScript emulates `#private` fields and methods with a WeakMap or WeakSet per member and a checking helper on every access. Construction and access measured 5x to over 200x slower than native private fields, on V8 and JSC. Raise `target` to ES2022, or use TypeScript's `private` keyword, which emits a plain property.\n\nhigh impact. Report only."
         },
         "date-now": {
           "$ref": "#/$defs/RuleValue",

@@ -4,6 +4,16 @@ What `bench/` measured, per rule, and what to do about it. Newest run first; whe
 
 Ratios are before time ÷ after time: above 1.00x the fix is faster. "Every tier" means all eight: V8 TurboFan, Maglev, Sparkplug, Ignition and JSC FTL, DFG, Baseline, LLInt. Causes marked *unverified* are guesses that still need a look at the engine source (`proposals/README.md`, Sources). Ranges leave out unsteady cells (`?`, spread over 1.2), as `src/speedups.ts` does.
 
+## 2026-11-20: TypeScript emit (`bench/emit`)
+
+Apple M4, Node v26.13.1, Bun 1.4.4, TypeScript 6.0.3; every tier, 150 ms, 5 rounds, sizes 10 and 1000 (`bun run bench:emit`, output in `results/emit-2026-11-20.txt`). Each case is one TS source emitted at two or more settings; the ratio is the faster form's time ÷ the other's, so here under 1.00x means the emitted form is slower.
+
+- **Downlevelled `async` (target ES2015, `__awaiter` + generator): 2–14x slower** on every tier (0.07–0.50x): calling an async function 6–14x, awaiting plain values 2–7x, an async cache hit 5–10x. → `downlevel-async`.
+- **Class fields as `Object.defineProperty` (`useDefineForClassFields: true`, target ES2020): 4–100x slower** to construct (0.01–0.22x; TurboFan 0.01x). Native fields and plain assignment are even at the peak tiers; at the interpreter and baseline tiers assignment is 1.09–1.24x faster than native fields. → `define-class-fields`.
+- **Downlevelled `#private` (target ES2021, WeakMap helpers): 5x to over 200x slower** (0.00–0.21x; TurboFan and FTL 0.00–0.02x). → `downlevel-private-fields`.
+- **`enum` is free at the top tiers, mostly.** Numeric enum vs literals: 0.92–1.06x on TurboFan and FTL; lower tiers down to 0.59x (JSC Baseline). String enum: 0.81–0.87x on TurboFan, 1.00–1.03x on FTL, 0.28–0.38x on JSC Baseline. An `as const` object costs the same as the enum (0.55–1.03x), so the cost is the property load, and only inlined literals avoid it. No rule: the faster form changes the module's API, and the gain is mostly on cold tiers.
+- **`namespace` is free** (0.88–1.20x, noise both ways). No rule.
+
 ## 2026-11-19: `foreach-to-for` hole test, objects, closures and proxies
 
 Apple M4, Node v26.13.1, Bun 1.4.4; every tier, 150 ms, 5 rounds, sizes 10, 1000 and 100 000. A one-off driver timed hand-written `forEach`, the loop with the hole test (`if (x === undefined && !(i in xs)) continue;`) and the loop without it, with `child.ts` and the inputs of the four `foreach-to-for` cases (numbers, `objects`, `closures`, `proxy`).

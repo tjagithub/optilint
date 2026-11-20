@@ -9,6 +9,7 @@
 | Strings and regex | `split-join-to-replaceall`, `regex-to-string-method`, `match-to-test`, `indexof-to-startswith`, `regexp-constructor-literal`, `catastrophic-regex`, `string-flatten-in-loop`, `regexp-in-loop` |
 | Objects and shapes | `object-keys-in-loop`, `late-property`, `prototype-mutation` |
 | Browser and workers | `dom-in-loop`, `passive-listener`, `scroll-layout-read`, `gpu-sync-in-frame`, `per-frame-allocation`, `postmessage-transfer` |
+| TypeScript emit (tsconfig) | `downlevel-async`, `define-class-fields`, `downlevel-private-fields` |
 | Engine | `object-assign-to-spread`, `delete-property`, `large-object-literal` (JSON.parse trick), `math-pow-to-mul`, `bitwise-trunc`, `math-minmax-spread`, `arguments-object`, `dynamic-code` |
 
 `optilint --list-rules` shows each rule's impact and fix tiers. `optilint --explain <rule>` says why it is faster, and what it measured.
@@ -35,6 +36,11 @@ Some well-known "tricks" no longer pay off in modern engines, so there are no ru
 - try/catch in hot functions (optimizing compilers handle it).
 - `structuredClone` over `JSON.parse(JSON.stringify())` (it is often slower).
 - `x << 1` instead of `x * 2` (the JIT already does this).
+- `enum` and `namespace` → literals or module scope: free at the top tiers, except string enums on TurboFan (up to 20% slower), and an `as const` object costs the same as an enum, so the only faster form is inlined literals (`bench/FINDINGS.md`, 2026-11-20).
+
+## TypeScript emit
+
+The `typescript` rules report a cost of what tsc emits, not of the code itself, so they fire only when the project's tsc writes its JavaScript (no `noEmit`, no `emitDeclarationOnly`) with a low `target`. They report once per file, at the first case, and the fix is in tsconfig. A bundler build (esbuild, Vite, SWC) uses its own target, so these rules stay quiet under `noEmit`.
 
 ## Limitations
 

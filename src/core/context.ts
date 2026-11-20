@@ -24,6 +24,7 @@ export class FileContext implements RuleContext {
     readonly sf: ts.SourceFile,
     readonly checker: ts.TypeChecker,
     readonly options: ts.CompilerOptions,
+    readonly emits = false,
   ) {
     this.isTS = /\.[cm]?tsx?$/.test(sf.fileName);
     this.parseDirectives();

@@ -9,6 +9,7 @@ import { formatExplain, formatJson, formatPretty, formatRules, ruleMeta, TOOL } 
 import { allRules, retiredByName, ruleByName } from "./rules/index.ts";
 import { defaultWorkers, layer, runParallel, unifiedDiff, UsageError } from "./runner.ts";
 import { formatGithub } from "./github.ts";
+import { init } from "./init.ts";
 import { formatSarif } from "./sarif.ts";
 import { configSchema, outputSchema } from "./schema.ts";
 
@@ -30,6 +31,7 @@ Selecting:
   --max-slowdown PCT skip rules whose fix measured more than PCT slower on some
                      engine or tier (default: 10%; 0%: never slower; any: no limit)
   --ignore GLOB      skip matching paths (repeatable)
+  --init             write a starter optilint.json in this folder
   --config PATH      config file (default: nearest optilint.json(c) or package.json "optilint")
   --project PATH     tsconfig.json to read compiler options from
   --workers N        lint projects on N threads (default: up to 4; 0 or 1: none)
@@ -98,7 +100,7 @@ function parseOptions() {
       rule: { type: "string", multiple: true }, disable: { type: "string", multiple: true }, "min-impact": { type: "string" }, "max-slowdown": { type: "string" },
       format: { type: "string" }, project: { type: "string" }, config: { type: "string" },
       "list-rules": { type: "boolean" }, explain: { type: "string" }, "print-schema": { type: "string" },
-      help: { type: "boolean", short: "h" }, mcp: { type: "boolean" }, ui: { type: "boolean" }, version: { type: "boolean" },
+      help: { type: "boolean", short: "h" }, mcp: { type: "boolean" }, ui: { type: "boolean" }, version: { type: "boolean" }, init: { type: "boolean" },
       "stdin-filename": { type: "string" }, workers: { type: "string" }, cache: { type: "boolean" }, "cache-location": { type: "string" }, ignore: { type: "string", multiple: true },
       profile: { type: "string", multiple: true },
     },
@@ -117,6 +119,10 @@ async function main() {
   if (values.help) return console.log(HELP);
   if (values.version) return console.log(`${TOOL.name} ${TOOL.version}`);
   if (values.mcp) return serve(process.cwd());
+  if (values.init) {
+    const written = guard(() => init(process.cwd()));
+    return console.log(`Wrote ${written}: the recommended rules, fixes up to the typed tier.\nRun optilint to lint, or optilint --ui to review fixes in the browser.`);
+  }
   if (values["print-schema"]) {
     const kind = values["print-schema"];
     if (kind !== "config" && kind !== "output") fail(`invalid --print-schema: ${kind} (config | output)`);

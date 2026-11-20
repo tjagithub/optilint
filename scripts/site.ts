@@ -5,6 +5,7 @@ import os from "node:os";
 import path from "node:path";
 import { allRules, groups, retiredRules } from "../src/rules/index.ts";
 import { MEASURED, SPEEDUPS } from "../src/speedups.ts";
+import { configSchema } from "../src/schema.ts";
 import type { Rule } from "../src/core/types.ts";
 
 const root = path.join(import.meta.dir, "..");
@@ -86,4 +87,6 @@ const home = {
 fs.mkdirSync(gen, { recursive: true });
 fs.writeFileSync(path.join(gen, "home.json"), JSON.stringify(home, null, 2) + "\n");
 fs.writeFileSync(path.join(docs, "reference.md"), reference());
+// optilint --init points $schema here (SCHEMA_URL in src/init.ts).
+fs.writeFileSync(path.join(docs, "public", "schema.json"), JSON.stringify(configSchema(), null, 2) + "\n");
 console.log(`site: ${home.stats.rules} rules, demo and reference written`);

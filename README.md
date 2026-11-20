@@ -21,6 +21,7 @@ npx @optilint/cli                # report on the current folder (or bunx, pnpm d
 npx @optilint/cli src --diff     # preview fixes
 npx @optilint/cli src --fix      # apply exact and typed fixes
 npx @optilint/cli --ui           # review in the browser
+npx @optilint/cli --init         # write a starter optilint.json
 ```
 
 To pin a version, add it as a dev dependency (`npm i -D @optilint/cli`); it installs an `optilint` command.

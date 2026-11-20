@@ -39,6 +39,7 @@ docs/.vitepress/dist
 docs/.vitepress/cache
 docs/.vitepress/gen
 docs/reference.md
+docs/public/schema.json
 
 # IntelliJ based IDEs
 .idea

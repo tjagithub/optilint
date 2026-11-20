@@ -1,10 +1,10 @@
 # Configuration
 
-optilint uses the nearest `optilint.json` or `optilint.jsonc` (or an `"optilint"` key in `package.json`) from the working directory upward, or `--config PATH`. With `--stdin-filename`, it searches from that file's folder. Both files may have comments and trailing commas, as `tsconfig.json` does.
+optilint uses the nearest `optilint.json` or `optilint.jsonc` (or an `"optilint"` key in `package.json`) from the working directory upward, or `--config PATH`. With `--stdin-filename`, it searches from that file's folder. Both files may have comments and trailing commas, as `tsconfig.json` does. `optilint --init` writes a starter `optilint.json` in the current folder (extending a parent folder's config, if there is one).
 
 ```jsonc
 {
-  "$schema": "./node_modules/optilint/schema.json",
+  "$schema": "https://optilint.pages.dev/schema.json",
   "extends": ["./optilint.base.json"],
   "files": { "include": ["src/**"], "ignore": ["src/generated/**"] },
   "tier": "typed",
@@ -33,7 +33,7 @@ optilint uses the nearest `optilint.json` or `optilint.jsonc` (or an `"optilint"
 - `maxSlowdown` (default `"10%"`) drops rules whose fix was measured more than that much slower than the original code on some engine, compiler tier or input size. The 10% allows for measurement noise. `"0%"` drops every fix that was slower anywhere, and `"any"` runs them all. Rules without a measured fix (report-only ones) always run. `optilint --explain <rule>` shows its measured range.
 - `domains` are groups for one library or tool: `typescript` (package `typescript`) and `react` (`react` or `preact`). With `"auto"` (the default), a domain joins the presets only for files where a `package.json` in the file's folder or above depends on one of its packages, so monorepo packages get their own. `"on"` and `"off"` ignore the dependencies. The presets also leave out rules that a dependency makes redundant: `inline-prop-to-memo` and `inline-context-value` with React Compiler (`babel-plugin-react-compiler`). Naming a group or rule under `rules` turns it on anyway.
 - Globs are relative to the file that declares them; a folder name also covers what is inside it. `extends` paths are relative too, and later files win.
-- Unknown keys, rules and groups are errors with a suggestion. `schema.json` (also printed by `optilint --print-schema config`) gives editors completion and hover docs.
+- Unknown keys, rules and groups are errors with a suggestion. The schema at `https://optilint.pages.dev/schema.json` (also in the package as `schema.json`, and printed by `optilint --print-schema config`) gives editors completion and hover docs.
 
 The command line overrides the config: `--rule a,b` and `--disable a,b` (rules or groups), `--tier`, `--obscure`, `--min-impact`, `--max-slowdown`, `--ignore GLOB` (repeatable), `--project tsconfig.json`. `--rule` and `--disable` can repeat. `--workers N` lints projects on N threads (default: up to 4); it pays off in monorepos with many tsconfig projects and is skipped when one project holds most files, since one program cannot be split. `--fix-unsafe` is short for `--fix --tier assumed`.
 

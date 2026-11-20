@@ -22,18 +22,52 @@ const EXTENSIONS = /\.(?:[cm]?[jt]sx?)$/;
 const SKIP = new Set(SKIP_DIRS);
 const IMPACT_RANK: Record<Impact, number> = { low: 0, medium: 1, high: 2 };
 
+const isSource = (name: string) => EXTENSIONS.test(name) && !/\.d\.[cm]?ts$|\.min\.js$/.test(name);
+const skipDir = (name: string) => SKIP.has(name) || name.startsWith(".");
+
+/** Files and directories named on the command line; a directory gives its source files, as git lists them when it can. */
 export function collect(target: string, cwd: string, out: string[]) {
-  const abs = path.resolve(cwd, target);
+  const abs = within(cwd, path.resolve(cwd, target));
   const stat = fs.statSync(abs, { throwIfNoEntry: false });
   if (!stat) throw new UsageError(`no such file or directory: ${target}`);
   if (stat.isFile()) return void out.push(abs);
-  for (const entry of fs.readdirSync(abs, { withFileTypes: true })) {
-    const full = path.join(abs, entry.name);
+  const listed = gitFiles(abs)?.filter((rel) => isSource(rel) && !rel.split("/").slice(0, -1).some(skipDir));
+  // An ignored directory named outright (git lists nothing in it) is walked instead.
+  if (!listed?.length) return walk(abs, out);
+  for (const rel of listed) {
+    const full = path.join(abs, rel);
+    if (fs.statSync(full, { throwIfNoEntry: false })?.isFile()) out.push(full);
+  }
+}
+
+function walk(dir: string, out: string[]) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
     if (entry.isDirectory()) {
-      if (!SKIP.has(entry.name) && !entry.name.startsWith(".")) collect(full, cwd, out);
-    } else if (EXTENSIONS.test(entry.name) && !/\.d\.[cm]?ts$|\.min\.js$/.test(entry.name)) {
+      if (!skipDir(entry.name)) walk(full, out);
+    } else if (isSource(entry.name)) {
       out.push(full);
     }
+  }
+}
+
+/** The files git has under `dir`: tracked ones, and untracked ones that .gitignore lets through. Like git, it leaves out
+ * submodules and what symlinked directories hold. Undefined outside a work tree or without git. */
+function gitFiles(dir: string): string[] | undefined {
+  const r = spawnSync("git", ["ls-files", "-z", "--cached", "--others", "--exclude-standard"], { cwd: dir, encoding: "utf8", maxBuffer: 1 << 30 });
+  if (r.status !== 0) return undefined;
+  return [...new Set(r.stdout.split("\0").filter(Boolean))];
+}
+
+/** A path outside `cwd` that is inside it once symlinks resolve (/tmp is /private/tmp on macOS), rebased onto `cwd`. */
+function within(cwd: string, abs: string): string {
+  const outside = (rel: string) => rel === ".." || rel.startsWith(`..${path.sep}`) || path.isAbsolute(rel);
+  if (!outside(path.relative(cwd, abs))) return abs;
+  try {
+    const rel = path.relative(fs.realpathSync(cwd), fs.realpathSync(abs));
+    return outside(rel) ? abs : path.join(cwd, rel);
+  } catch {
+    return abs;
   }
 }
 

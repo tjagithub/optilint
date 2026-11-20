@@ -11,11 +11,17 @@ A linter for JavaScript and TypeScript that only cares about speed. It finds slo
 
 ## Installation
 
-```bash
-npm install @optilint/cli
+No install needed. Run it with your package runner:
+
+```sh
+npx @optilint/cli src     # or: bunx @optilint/cli, pnpm dlx @optilint/cli, yarn dlx @optilint/cli
 ```
 
+To pin a version for a project or CI, add it as a dev dependency (`npm i -D @optilint/cli`); it installs an `optilint` command.
+
 ## Usage
+
+The examples call it `optilint`; with a runner, write `npx @optilint/cli` instead.
 
 ```sh
 optilint                         # report on the current folder

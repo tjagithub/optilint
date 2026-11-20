@@ -5,6 +5,7 @@ export const PAGE = `<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>optilint</title>
+<link rel="icon" href="data:,">
 <style>
 :root { color-scheme: light dark; --bg: #f6f7f9; --panel: #fff; --line: #dde1e6; --text: #1d2125; --dim: #66707a; --accent: #1f8f4e; --warn: #b26a00; --bad: #c0392b; --del: #fdecea; --add: #e8f6ec; }
 @media (prefers-color-scheme: dark) { :root { --bg: #16191c; --panel: #1f2327; --line: #343a40; --text: #e4e7ea; --dim: #9aa3ab; --del: #3a1f1f; --add: #1c3326; } }
@@ -83,6 +84,8 @@ function speed(s) {
   const r = (e) => e.worst.toFixed(2) + "–" + e.best.toFixed(2) + "×";
   return "measured V8 " + r(s.v8) + ", JSC " + r(s.jsc);
 }
+function n(count, one, many) { return count + " " + (count === 1 ? one : many || one + "s"); }
+
 function finding(f) {
   return h("div", { class: "finding" },
     h("div", { class: "head" }, f.fix ? box([f.id]) : null, h("span", { class: "loc" }, f.file + ":" + f.line + ":" + f.col), h("span", {}, f.message),
@@ -123,7 +126,7 @@ async function scan() {
     for (const f of data.findings) if (f.fix && f.fix.tier !== "assumed" && !f.fix.obscure) picked.add(f.id);
     render();
     const files = new Set(data.findings.map((f) => f.file)).size;
-    status(data.findings.length + " findings in " + files + " files" + (data.errors.length ? "; " + data.errors.length + " rule errors (see the terminal)" : ""));
+    status(n(data.findings.length, "finding") + " in " + n(files, "file") + (data.errors.length ? "; " + n(data.errors.length, "rule error") + " (see the terminal)" : ""));
     for (const e of data.errors) console.error(e);
   } catch (e) {
     status(e.message, true);
@@ -138,7 +141,7 @@ async function fix() {
   try {
     const r = await api("/api/apply", { scan: data.scan, ids: [...picked] });
     await scan();
-    const parts = ["Applied " + r.applied + " fixes in " + r.files.length + " files."];
+    const parts = ["Applied " + n(r.applied, "fix", "fixes") + " in " + n(r.files.length, "file") + "."];
     if (r.skipped) parts.push(r.skipped + " overlapped another fix; apply again to get them.");
     if (r.stale.length) parts.push("Changed on disk since the scan, so left alone: " + r.stale.join(", ") + ".");
     status(parts.join(" "), r.stale.length > 0);

@@ -1,0 +1,15 @@
+{
+  "name": "optilint-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "gen": "bun ../scripts/site.ts",
+    "dev": "bun run gen && vitepress dev",
+    "build": "bun run gen && vitepress build",
+    "preview": "vitepress preview"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.4",
+    "vue": "^3.5.13"
+  }
+}

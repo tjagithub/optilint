@@ -34,6 +34,12 @@ playwright-report
 blob-report
 test-results
 
+# Website (docs/): VitePress output and what scripts/site.ts generates
+docs/.vitepress/dist
+docs/.vitepress/cache
+docs/.vitepress/gen
+docs/reference.md
+
 # IntelliJ based IDEs
 .idea
 

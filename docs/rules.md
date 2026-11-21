@@ -3,7 +3,7 @@
 | Area | Rules |
 |---|---|
 | Complexity (O(n²)) | `spread-in-accumulator`, `accumulate-by-copy-in-loop`, `lookup-in-loop`, `quadratic-array-mutation`, `sort-for-extremum` |
-| Async | `await-in-loop`, `sequential-await` |
+| Async and servers | `await-in-loop`, `sequential-await`, `sync-io-in-handler` |
 | Allocation | `filter-first`, `filter-length-to-some`, `map-flat-to-flatmap`, `unused-map`, `redundant-array-copy`, `typed-array-subarray`, `typed-array-round-trip`, `chained-array-methods`, `array-literal-lookup`, `object-entries-iteration`, `object-keys-emptiness`, `date-now` |
 | Loops | `foreach-to-for`, `for-of-to-indexed`, `for-in-array`, `cache-array-length` |
 | Strings and regex | `split-join-to-replaceall`, `regex-to-string-method`, `match-to-test`, `indexof-to-startswith`, `regexp-constructor-literal`, `catastrophic-regex`, `string-flatten-in-loop`, `regexp-in-loop` |
@@ -11,7 +11,7 @@
 | Browser and workers | `dom-in-loop`, `passive-listener`, `scroll-layout-read`, `gpu-sync-in-frame`, `per-frame-allocation`, `postmessage-transfer` |
 | TypeScript emit (tsconfig) | `downlevel-async`, `define-class-fields`, `downlevel-private-fields` |
 | React | `inline-prop-to-memo`, `inline-context-value`, `unstable-key` |
-| Engine | `object-assign-to-spread`, `delete-property`, `large-object-literal` (JSON.parse trick), `math-pow-to-mul`, `bitwise-trunc`, `math-minmax-spread`, `arguments-object`, `dynamic-code` |
+| Engine | `object-assign-to-spread`, `delete-property` (V8 only), `large-object-literal` (JSON.parse trick), `math-pow-to-mul`, `bitwise-trunc`, `math-minmax-spread`, `arguments-object`, `dynamic-code` |
 
 `optilint --list-rules` shows each rule's impact and fix tiers. `optilint --explain <rule>` says why it is faster, and what it measured.
 
@@ -25,7 +25,7 @@
 
 ## Measured, not guessed
 
-Every fix is benchmarked before and after on Node (V8) and Bun (JavaScriptCore), at each of their compiler tiers, from the interpreter up to the top optimizing compiler. A rule whose fix measured more than `maxSlowdown` (default 10%) slower anywhere does not run by default ([configuration](configuration.md)).
+Every fix is benchmarked before and after on Node (V8) and Bun (JavaScriptCore), at each of their compiler tiers, from the interpreter up to the top optimizing compiler. A rule whose fix measured more than `maxSlowdown` (default 10%) slower anywhere does not run by default ([configuration](configuration.md)). Set `targets` to count only the engines you ship to; a rule that wins on one engine alone, like `delete-property` on V8, runs only when a target uses that engine.
 
 Retired rules never run at all, because their fix was slower nearly everywhere: `array-from-map` and `object-entries-pair` (`[k, v]` from `Object.entries`). They are kept so a later run on newer engines can bring them back; `--explain` gives the reason.
 

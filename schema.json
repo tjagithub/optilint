@@ -280,7 +280,7 @@
           ]
         },
         "async": {
-          "description": "The async group: await-in-loop, sequential-await. A level for all of them, or settings per rule.",
+          "description": "The async group: await-in-loop, sequential-await, sync-io-in-handler. A level for all of them, or settings per rule.",
           "anyOf": [
             {
               "$ref": "#/$defs/Level"
@@ -295,6 +295,10 @@
                 "sequential-await": {
                   "$ref": "#/$defs/RuleValue",
                   "markdownDescription": "Back-to-back independent `await`s → `Promise.all`\n\n`const a = await f(); const b = await g();` waits for f before starting g, even though g never reads `a`. Promise.all overlaps them. (Unsafe: g now starts before f settles, and a rejection in f no longer prevents g from running.)\n\nhigh impact. Fixes: assumed."
+                },
+                "sync-io-in-handler": {
+                  "$ref": "#/$defs/RuleValue",
+                  "markdownDescription": "`readFileSync` and other `*Sync` calls of fs, child_process, zlib or crypto inside a request handler\n\nA sync call blocks the event loop, so every other request waits until it returns. Measured on Node and Bun with 16 concurrent reads of a 16 MB file, other requests took 16–33 ms instead of 0.1–0.2 ms; with 1 KB files, sync reads still halved their throughput, and the reads themselves were slower than `await readFile`. Startup code and CLIs are not handlers, so they are left alone.\n\nhigh impact. Report only."
                 }
               },
               "additionalProperties": false
@@ -614,6 +618,10 @@
         "sequential-await": {
           "$ref": "#/$defs/RuleValue",
           "markdownDescription": "Back-to-back independent `await`s → `Promise.all`\n\n`const a = await f(); const b = await g();` waits for f before starting g, even though g never reads `a`. Promise.all overlaps them. (Unsafe: g now starts before f settles, and a rejection in f no longer prevents g from running.)\n\nhigh impact. Fixes: assumed."
+        },
+        "sync-io-in-handler": {
+          "$ref": "#/$defs/RuleValue",
+          "markdownDescription": "`readFileSync` and other `*Sync` calls of fs, child_process, zlib or crypto inside a request handler\n\nA sync call blocks the event loop, so every other request waits until it returns. Measured on Node and Bun with 16 concurrent reads of a 16 MB file, other requests took 16–33 ms instead of 0.1–0.2 ms; with 1 KB files, sync reads still halved their throughput, and the reads themselves were slower than `await readFile`. Startup code and CLIs are not handlers, so they are left alone.\n\nhigh impact. Report only."
         },
         "filter-first": {
           "$ref": "#/$defs/RuleValue",

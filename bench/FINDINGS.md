@@ -4,6 +4,14 @@ What `bench/` measured, per rule, and what to do about it. Newest run first; whe
 
 Ratios are before time ÷ after time: above 1.00x the fix is faster. "Every tier" means all eight: V8 TurboFan, Maglev, Sparkplug, Ignition and JSC FTL, DFG, Baseline, LLInt. Causes marked *unverified* are guesses that still need a look at the engine source (`proposals/README.md`, Sources). Ranges leave out unsteady cells (`?`, spread over 1.2), as `src/speedups.ts` does.
 
+## 2026-11-21: sync I/O in a request handler (`bench/server`)
+
+Apple M4, Node v26.13.1, Bun 1.4.4. `bun bench/server/run.ts` (output in `results/server-2026-11-21.txt`, two runs that agree within a few percent) starts `server.mjs` on each runtime, whose `/file` handler reads a file with `readFileSync` or `await fs.promises.readFile`, and loads it for 3 s from a Node client: 16 requests in flight on `/file` and 4 on `/ping`, which answers at once. The file stays in the page cache, the best case for sync reads; a slow disk would only widen the gap.
+
+- **Other requests wait.** `/ping` median latency with sync reads vs async: 1 KB 0.33 vs 0.17 ms (and half the throughput), 1 MB 1.2 vs 0.15–0.21 ms, 16 MB 16–33 vs 0.11–0.15 ms. This is the cost `sync-io-in-handler` reports.
+- **The reads themselves are faster async** under concurrency, on both runtimes: `/file` throughput 1.2–1.3x at 1 KB, 1.1–1.3x at 1 MB, 1.6–1.9x at 16 MB.
+- **Real code:** Playwright 1.65 `utils/httpServer.ts` (`readFileSync` and `statSync` while serving a file) and `server/trace/viewer/traceViewer.ts` (`existsSync` in a route). Its sync calls at startup are not handlers and are not reported.
+
 ## 2026-11-20: `Buffer.concat` in a loop (`bench/emit`)
 
 Same setup as below (`bun run bench:emit buffer-concat-loop`, output in `results/buffer-concat-2026-11-20.txt`). A hand-written pair for `accumulate-by-copy-in-loop`'s report-only Buffer branch: `out = Buffer.concat([out, chunk])` per iteration, or push the chunks and concat once.

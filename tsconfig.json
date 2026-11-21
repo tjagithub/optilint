@@ -6,6 +6,7 @@
     { "path": "src/core" },
     { "path": "src/rules/shared" },
     { "path": "src/rules/browser" },
+    { "path": "src/rules/node" },
     { "path": "src" },
     { "path": "bench" },
     { "path": "test" },

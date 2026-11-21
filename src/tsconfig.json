@@ -3,5 +3,5 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": { "types": ["node"], "tsBuildInfoFile": "../.tsbuild/app.tsbuildinfo" },
   "include": ["*.ts", "rules/index.ts", "../package.json"],
-  "references": [{ "path": "core" }, { "path": "rules/shared" }, { "path": "rules/browser" }]
+  "references": [{ "path": "core" }, { "path": "rules/shared" }, { "path": "rules/browser" }, { "path": "rules/node" }]
 }

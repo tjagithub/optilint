@@ -1,0 +1,7 @@
+{
+  // Rules for Node's APIs (Bun and Deno implement them too). They may import core only.
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": { "tsBuildInfoFile": "../../../.tsbuild/rules-node.tsbuildinfo" },
+  "include": ["*.ts"],
+  "references": [{ "path": "../../core" }]
+}

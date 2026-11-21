@@ -16,12 +16,13 @@ import { emitRules } from "./shared/emit.ts";
 import { reactRules } from "./shared/react.ts";
 import { passiveListener, scrollLayoutRead } from "./browser/events.ts";
 import { gpuSyncInFrame, perFrameAllocation } from "./browser/frames.ts";
+import { syncIoInHandler } from "./node/handlers.ts";
 
 // Group names share the config namespace with rule names, so none may equal a rule name.
 const GROUPS: Record<string, readonly RuleDef[]> = {
   accumulate: accumulateRules,
   lookup: lookupRules,
-  async: asyncRules,
+  async: [...asyncRules, syncIoInHandler],
   arrays: [...arrayRules, typedArraySubarray, typedArrayRoundTrip],
   loops: [forEachToFor, ...indexedRules],
   strings: [...stringRules, stringFlattenInLoop, regexpInLoop],

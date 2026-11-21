@@ -1,0 +1,11 @@
+# bun bench/emit/run.ts --tiers all buffer-concat-loop
+........
+tier           case               ratio (under 1: the right side is slower)            @10   @1000
+node:turbofan  buffer-concat-loop concat each time ÷ collect, concat once            1.62x   3.89x
+node:maglev    buffer-concat-loop concat each time ÷ collect, concat once            1.61x   2.93x
+node:sparkplug buffer-concat-loop concat each time ÷ collect, concat once            1.69x   2.40x
+node:ignition  buffer-concat-loop concat each time ÷ collect, concat once            1.78x   2.33x
+bun:ftl        buffer-concat-loop concat each time ÷ collect, concat once            1.56x   6.09x
+bun:dfg        buffer-concat-loop concat each time ÷ collect, concat once            1.51x   5.54x
+bun:baseline   buffer-concat-loop concat each time ÷ collect, concat once            1.30x   3.87x
+bun:llint      buffer-concat-loop concat each time ÷ collect, concat once            1.21x   4.40x

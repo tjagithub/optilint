@@ -4,6 +4,13 @@ What `bench/` measured, per rule, and what to do about it. Newest run first; whe
 
 Ratios are before time ÷ after time: above 1.00x the fix is faster. "Every tier" means all eight: V8 TurboFan, Maglev, Sparkplug, Ignition and JSC FTL, DFG, Baseline, LLInt. Causes marked *unverified* are guesses that still need a look at the engine source (`proposals/README.md`, Sources). Ranges leave out unsteady cells (`?`, spread over 1.2), as `src/speedups.ts` does.
 
+## 2026-11-20: `Buffer.concat` in a loop (`bench/emit`)
+
+Same setup as below (`bun run bench:emit buffer-concat-loop`, output in `results/buffer-concat-2026-11-20.txt`). A hand-written pair for `accumulate-by-copy-in-loop`'s report-only Buffer branch: `out = Buffer.concat([out, chunk])` per iteration, or push the chunks and concat once.
+
+- **Collecting wins on every tier of both engines:** 1.2–1.8x at 10 chunks, 2.3–3.9x (V8) and 3.9–6.1x (JSC) at 1000. The cost is the copying, not the engine, so the branch is shared.
+- **Left out:** the same append in a stream's `data` handler (Playwright `pipeTransport.ts`, `socksProxy.ts`, `backendAdb.ts`; Biome `transport.ts`). Those parsers cut each complete message off the front, so the buffer only grows while one large message arrives in many chunks, and the fix is a chunk list with a running length.
+
 ## 2026-11-20: `delete-property` (`bench/emit`)
 
 Apple M4, Node v26.13.1, Bun 1.4.4; every tier, 150 ms, 5 rounds, sizes 10 and 1000 (`bun run bench:emit delete-first,delete-last,delete-dictionary,delete-dict-1024`, output in `results/delete-2026-11-20.txt`). The rule is report-only, so each case is a hand-written pair: what it finds, then what it advises. Two runs agreed within a few percent.

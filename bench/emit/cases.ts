@@ -96,4 +96,9 @@ export const CASES: EmitCase[] = [
     id: "delete-dict-1024", inputs: "numbers", sizes: [1000],
     variants: [{ label: "object + delete", code: "export function run(xs: number[]) {\n  const d: Record<string, number> = {};\n  for (const x of xs) { d[\"k\" + (x % 1024)] = x; if (x % 3 === 0) delete d[\"k\" + ((x + 7) % 1024)]; }\n  let n = 0;\n  for (const k in d) n += d[k]!;\n  return n;\n}", options: at(T.ES2022) }, { label: "Map", code: "export function run(xs: number[]) {\n  const d = new Map<string, number>();\n  for (const x of xs) { d.set(\"k\" + (x % 1024), x); if (x % 3 === 0) d.delete(\"k\" + ((x + 7) % 1024)); }\n  let n = 0;\n  for (const v of d.values()) n += v;\n  return n;\n}", options: at(T.ES2022) }],
   },
+  // accumulate-by-copy-in-loop's report-only Buffer branch: concat onto itself each iteration, or collect and concat once.
+  {
+    id: "buffer-concat-loop", inputs: "numbers", sizes: [10, 1000],
+    variants: [{ label: "concat each time", code: "export function run(xs: number[]) {\n  let out = Buffer.alloc(0);\n  for (const x of xs) out = Buffer.concat([out, Buffer.from(\"chunk \" + x)]);\n  return [out.length, out[out.length - 1]];\n}", options: at(T.ES2022) }, { label: "collect, concat once", code: "export function run(xs: number[]) {\n  const parts: Buffer[] = [];\n  for (const x of xs) parts.push(Buffer.from(\"chunk \" + x));\n  const out = Buffer.concat(parts);\n  return [out.length, out[out.length - 1]];\n}", options: at(T.ES2022) }],
+  },
 ];

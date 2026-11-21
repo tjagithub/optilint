@@ -246,7 +246,7 @@
                 },
                 "accumulate-by-copy-in-loop": {
                   "$ref": "#/$defs/RuleValue",
-                  "markdownDescription": "`xs = [...xs, x]` / `xs = xs.concat(x)` / `o = {...o, k: v}` inside a loop\n\nRebuilding the collection on each iteration copies everything gathered so far: O(n²) time and garbage. Push or assign in place.\n\nhigh impact. Fixes: assumed."
+                  "markdownDescription": "`xs = [...xs, x]` / `xs = xs.concat(x)` / `b = Buffer.concat([b, x])` / `o = {...o, k: v}` inside a loop\n\nRebuilding the collection on each iteration copies everything gathered so far: O(n²) time and garbage. Push or assign in place.\n\nhigh impact. Fixes: assumed."
                 }
               },
               "additionalProperties": false
@@ -593,7 +593,7 @@
         },
         "accumulate-by-copy-in-loop": {
           "$ref": "#/$defs/RuleValue",
-          "markdownDescription": "`xs = [...xs, x]` / `xs = xs.concat(x)` / `o = {...o, k: v}` inside a loop\n\nRebuilding the collection on each iteration copies everything gathered so far: O(n²) time and garbage. Push or assign in place.\n\nhigh impact. Fixes: assumed."
+          "markdownDescription": "`xs = [...xs, x]` / `xs = xs.concat(x)` / `b = Buffer.concat([b, x])` / `o = {...o, k: v}` inside a loop\n\nRebuilding the collection on each iteration copies everything gathered so far: O(n²) time and garbage. Push or assign in place.\n\nhigh impact. Fixes: assumed."
         },
         "lookup-in-loop": {
           "$ref": "#/$defs/RuleValue",

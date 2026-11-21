@@ -148,6 +148,14 @@ describe("accumulate-by-copy-in-loop", () => {
     const code = `${ARR}let out: number[] = [];\nfor (const x of xs) { out = [...out, x]; }`;
     expect(fixed(code, "accumulate-by-copy-in-loop", "assumed")).toBe(`${ARR}let out: number[] = [];\nfor (const x of xs) { out.push(x); }`);
   });
+  test("Buffer.concat onto itself reported, in loops only", () => {
+    const loop = "declare const parts: Uint8Array[];\nlet out = Buffer.alloc(0);\nfor (const p of parts) out = Buffer.concat([out, p]);";
+    expect(rulesHit(loop, { rule: "accumulate-by-copy-in-loop" })).toEqual(["accumulate-by-copy-in-loop"]);
+    const once = "declare const parts: Uint8Array[];\nlet out = Buffer.alloc(0);\nout = Buffer.concat([out, ...parts]);";
+    expect(rulesHit(once, { rule: "accumulate-by-copy-in-loop" })).toEqual([]);
+    const other = "declare const parts: Uint8Array[];\nlet out = Buffer.alloc(0);\nfor (const p of parts) out = Buffer.concat([p, out]);";
+    expect(rulesHit(other, { rule: "accumulate-by-copy-in-loop" })).toEqual([]);
+  });
   test("concat reported", () => {
     expect(rulesHit(`${ARR}let out: number[] = [];\nwhile (true) { out = out.concat(xs); }`, { rule: "accumulate-by-copy-in-loop" }))
       .toEqual(["accumulate-by-copy-in-loop"]);

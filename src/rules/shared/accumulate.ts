@@ -1,5 +1,5 @@
 import ts from "typescript";
-import { isFunction, methodCall, repeatingAncestor, unwrap, walk } from "../../core/ast.ts";
+import { isFunction, methodCall, repeatingAncestor, staticCall, unwrap, walk } from "../../core/ast.ts";
 import { fix } from "../../core/fix.ts";
 import { fewIterations } from "../../core/size.ts";
 import type { Edit, RuleContext, RuleDef } from "../../core/types.ts";
@@ -106,7 +106,7 @@ export const copyInLoop: RuleDef = {
   name: "accumulate-by-copy-in-loop",
   impact: "high",
   tiers: ["assumed"],
-  description: "`xs = [...xs, x]` / `xs = xs.concat(x)` / `o = {...o, k: v}` inside a loop",
+  description: "`xs = [...xs, x]` / `xs = xs.concat(x)` / `b = Buffer.concat([b, x])` / `o = {...o, k: v}` inside a loop",
   why: "Rebuilding the collection on each iteration copies everything gathered so far: O(n²) time and garbage. Push or assign in place.",
   kinds: [K.BinaryExpression],
   check(node, ctx) {
@@ -119,6 +119,12 @@ export const copyInLoop: RuleDef = {
     const concat = methodCall(right, "concat");
     if (concat && isRef(unwrap(concat.object), name)) {
       ctx.report(n, `\`${name} = ${name}.concat(...)\` copies the array every iteration; push instead.`);
+      return;
+    }
+    const joined = staticCall(right, "Buffer", "concat")?.args[0];
+    const first = joined && ts.isArrayLiteralExpression(unwrap(joined)) ? (unwrap(joined) as ts.ArrayLiteralExpression).elements[0] : undefined;
+    if (first && isRef(unwrap(first as ts.Expression), name)) {
+      ctx.report(n, `\`Buffer.concat([${name}, ...])\` copies every byte gathered so far on each iteration (O(n²)); collect the chunks in an array and concat once after the loop.`);
       return;
     }
     const text = mutatingRewrite(right, name, ctx);
